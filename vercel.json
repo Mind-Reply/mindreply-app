@@ -48,15 +48,5 @@
   ],
   "regions": [
     "iad1"
-  ],
-  "functions": {
-    "api/**": {
-      "maxDuration": 300,
-      "memory": 1024
-    },
-    "api/webhooks/**": {
-      "maxDuration": 300,
-      "memory": 512
-    }
-  }
+  ]
 }

@@ -5,6 +5,7 @@ import "./globals.css";
 import "./mission-control.css";
 import "./frontend-polish.css";
 import "./flow-premium.css";
+import "../../app/dashboard/dashboard.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://mind-reply.com"),

@@ -1,5 +1,4 @@
 import type { NextConfig } from 'next';
-import { withSentryConfig } from '@sentry/nextjs';
 
 const config: NextConfig = {
   // Optimization
@@ -31,7 +30,7 @@ const config: NextConfig = {
     formats: ['image/avif', 'image/webp'],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
+    minimumCacheTTL: 60 * 60 * 24 * 365,
   },
 
   // Internationalization (if needed)
@@ -46,39 +45,18 @@ const config: NextConfig = {
       {
         source: '/:path*',
         headers: [
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
-          },
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
         ],
       },
       {
         source: '/api/(.*)',
         headers: [
-          {
-            key: 'Cache-Control',
-            value: 'no-cache, no-store, must-revalidate',
-          },
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
         ],
       },
     ];
@@ -99,14 +77,8 @@ const config: NextConfig = {
   async rewrites() {
     return {
       beforeFiles: [
-        {
-          source: '/sitemap.xml',
-          destination: '/api/sitemap',
-        },
-        {
-          source: '/robots.txt',
-          destination: '/api/robots',
-        },
+        { source: '/sitemap.xml', destination: '/api/sitemap' },
+        { source: '/robots.txt', destination: '/api/robots' },
       ],
       afterFiles: [
         {
@@ -143,7 +115,6 @@ const config: NextConfig = {
         },
       });
     }
-
     return config;
   },
 
@@ -153,7 +124,7 @@ const config: NextConfig = {
     optimizeCss: true,
     parallelServerCompiles: true,
     parallelServerBuildTraces: true,
-    isrMemoryCacheSize: 52 * 1024 * 1024, // 52MB
+    isrMemoryCacheSize: 52 * 1024 * 1024,
     ppr: true,
   },
 
@@ -178,16 +149,26 @@ const config: NextConfig = {
   },
 };
 
-// Sentry configuration
-const withSentry = withSentryConfig(config, {
-  org: 'mind-reply',
-  project: 'mind-reply-core',
-  silent: true,
-  widenClientFileUpload: true,
-  transpileClientSDK: true,
-  tunnelRoute: '/monitoring',
-  disableLogger: true,
-  autoSessionTracking: true,
-});
+// Keep Sentry optional at build time. The repository contains its own lightweight
+// Sentry integration helpers, while the Next.js wrapper is only applied when the
+// optional @sentry/nextjs package is actually installed in the deployment.
+let withSentryConfig: ((nextConfig: NextConfig, options: Record<string, unknown>) => NextConfig) | null = null;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  withSentryConfig = require('@sentry/nextjs').withSentryConfig;
+} catch {
+  withSentryConfig = null;
+}
 
-export default withSentry;
+export default withSentryConfig
+  ? withSentryConfig(config, {
+      org: 'mind-reply',
+      project: 'mind-reply-core',
+      silent: true,
+      widenClientFileUpload: true,
+      transpileClientSDK: true,
+      tunnelRoute: '/monitoring',
+      disableLogger: true,
+      autoSessionTracking: true,
+    })
+  : config;

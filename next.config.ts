@@ -6,6 +6,7 @@ const config: NextConfig = {
   poweredByHeader: false,
   generateEtags: true,
   output: 'standalone',
+  turbopack: {},
 
   images: {
     remotePatterns: [
@@ -42,13 +43,7 @@ const config: NextConfig = {
   },
 
   async redirects() {
-    return [
-      {
-        source: '/old-pricing',
-        destination: '/pricing',
-        permanent: true,
-      },
-    ];
+    return [{ source: '/old-pricing', destination: '/pricing', permanent: true }];
   },
 
   async rewrites() {
@@ -82,11 +77,7 @@ const config: NextConfig = {
               priority: 10,
               reuseExistingChunk: true,
             },
-            common: {
-              minChunks: 2,
-              priority: 5,
-              reuseExistingChunk: true,
-            },
+            common: { minChunks: 2, priority: 5, reuseExistingChunk: true },
           },
         },
       });

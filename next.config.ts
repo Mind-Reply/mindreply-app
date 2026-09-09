@@ -1,31 +1,17 @@
 import type { NextConfig } from 'next';
 
 const config: NextConfig = {
-  // Optimization
-  swcMinify: true,
   reactStrictMode: true,
   compress: true,
   poweredByHeader: false,
   generateEtags: true,
-
-  // Build output
   output: 'standalone',
 
-  // Images optimization
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '*.vercel.app',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.mind-reply.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'cdn.*.vercel.com',
-      },
+      { protocol: 'https', hostname: '*.vercel.app' },
+      { protocol: 'https', hostname: '*.mind-reply.com' },
+      { protocol: 'https', hostname: 'cdn.*.vercel.com' },
     ],
     formats: ['image/avif', 'image/webp'],
     dangerouslyAllowSVG: true,
@@ -33,13 +19,6 @@ const config: NextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 365,
   },
 
-  // Internationalization (if needed)
-  i18n: {
-    locales: ['en', 'de', 'fr'],
-    defaultLocale: 'en',
-  },
-
-  // Headers
   async headers() {
     return [
       {
@@ -62,7 +41,6 @@ const config: NextConfig = {
     ];
   },
 
-  // Redirects
   async redirects() {
     return [
       {
@@ -73,7 +51,6 @@ const config: NextConfig = {
     ];
   },
 
-  // Rewrites
   async rewrites() {
     return {
       beforeFiles: [
@@ -90,10 +67,9 @@ const config: NextConfig = {
     };
   },
 
-  // Webpack optimization
-  webpack: (config, { dev, isServer }) => {
+  webpack: (webpackConfig, { dev, isServer }) => {
     if (!dev && !isServer) {
-      Object.assign(config.optimization, {
+      Object.assign(webpackConfig.optimization, {
         runtimeChunk: 'single',
         splitChunks: {
           chunks: 'all',
@@ -115,43 +91,10 @@ const config: NextConfig = {
         },
       });
     }
-    return config;
-  },
-
-  // Experimental features
-  experimental: {
-    optimizePackageImports: ['@radix-ui/*', 'lucide-react'],
-    optimizeCss: true,
-    parallelServerCompiles: true,
-    parallelServerBuildTraces: true,
-    isrMemoryCacheSize: 52 * 1024 * 1024,
-    ppr: true,
-  },
-
-  // Environment variables
-  env: {
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
-  },
-
-  // Custom server config
-  serverRuntimeConfig: {
-    DATABASE_URL: process.env.DATABASE_URL,
-    REDIS_URL: process.env.REDIS_URL,
-    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
-    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-  },
-
-  publicRuntimeConfig: {
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    return webpackConfig;
   },
 };
 
-// Keep Sentry optional at build time. The repository contains its own lightweight
-// Sentry integration helpers, while the Next.js wrapper is only applied when the
-// optional @sentry/nextjs package is actually installed in the deployment.
 let withSentryConfig: ((nextConfig: NextConfig, options: Record<string, unknown>) => NextConfig) | null = null;
 try {
   // eslint-disable-next-line @typescript-eslint/no-require-imports

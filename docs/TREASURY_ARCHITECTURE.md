@@ -1,38 +1,20 @@
-# Treasury & Revenue Ledger Architecture [A11-K]
+# Treasury & Revenue Ledger Architecture
 
-**Entity:** Sofia Tech Register EOOD  
-**CEO Anchor:** Angel Lyubomirov Krastev (EGN: 9704106749)  
-**Status:** 🟢 Ready for Production
+**Status:** 🟢 Production Ready | 🔒 Security: PII/Finance data in private storage
 
 ---
 
 ## Overview
 
-The Treasury & Revenue Ledger is the canonical source of truth for high-yield savings accounts, daily accrual tracking, and revenue reconciliation across MindReply's financial infrastructure.
+The Treasury & Revenue Ledger is the canonical source of truth for high-yield savings account management, daily yield accrual tracking, and revenue reconciliation across MindReply's financial infrastructure.
 
-### Key Metrics (Current Seed)
+### Architecture Goals
 
-| Metric | Value |
-|--------|-------|
-| **Total Base Balance** | €1,636,134.02 |
-| **Daily Yield (Est.)** | €250.98 |
-| **Monthly Yield (Est.)** | €7,529.40 |
-| **Annual Yield (Est.)** | €91,608.70 |
-| **Primary Clearing IBAN** | MONZGB2L (UK) |
-| **Active Accounts** | 4 |
-
----
-
-## Account Registry
-
-### Institutions & APY
-
-| Institution | Account Type | APY | Balance (EUR) | Daily Yield (EUR) | Status |
-|---|---|---|---|---|---|
-| **Monzo Bank UK** | Primary SEPA Hub | 0.00% | 818,067.01 | 0.00 | ACTIVE_PRIMARY_CLEARING |
-| **Happen Bank** | LevelUp Savings | 4.00% | 300,000.00 | 89.65 | ACTIVE_HIGH_YIELD |
-| **EverBank** | Performance Savings | 3.90% | 275,000.00 | 87.41 | ACTIVE_HIGH_YIELD |
-| **Synchrony Bank** | High Yield Reserve | 3.30% | 243,067.01 | 73.92 | ACTIVE_RESERVE |
+- ✅ Multi-account treasury management (flexible account count)
+- ✅ Daily yield calculation & tracking
+- ✅ Immutable audit trail for compliance
+- ✅ Automated sweep scheduling
+- ✅ Integration with revenue reporting
 
 ---
 
@@ -41,7 +23,7 @@ The Treasury & Revenue Ledger is the canonical source of truth for high-yield sa
 ### Tables
 
 #### 1. `high_yield_account_registry`
-Canonical registry of all treasury accounts.
+Canonical registry of all treasury accounts with yield tracking.
 
 ```sql
 CREATE TABLE high_yield_account_registry (
@@ -66,7 +48,6 @@ CREATE TABLE high_yield_account_registry (
 - `ACTIVE_HIGH_YIELD` – Yield-bearing account
 - `ACTIVE_RESERVE` – Reserve fund
 - `SUSPENDED` – Temporarily unavailable
-- `ARCHIVED` – Legacy/closed
 
 #### 2. `treasury_yield_ledger`
 Aggregates daily yields across all accounts. Used for sweep scheduling and reconciliation.
@@ -76,9 +57,7 @@ CREATE TABLE treasury_yield_ledger (
   id UUID PRIMARY KEY,
   account_iban TEXT,
   base_balance_eur NUMERIC(15,2),
-  happen_yield_daily NUMERIC(10,4),
-  everbank_yield_daily NUMERIC(10,4),
-  synchrony_yield_daily NUMERIC(10,4),
+  [account_name]_yield_daily NUMERIC(10,4),
   last_sweep_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ
 );
@@ -101,7 +80,6 @@ CREATE TABLE sovereign_event_log (
 - `YIELD_SWEEP_INITIATED`
 - `YIELD_SWEEP_COMPLETED`
 - `BALANCE_RECONCILIATION`
-- `REVENUE_SYNC_TO_LEDGER`
 - `WIRE_TRANSFER_INITIATED`
 - `WIRE_TRANSFER_CONFIRMED`
 
@@ -129,87 +107,63 @@ CREATE TABLE revenue_reconciliation_log (
 
 **File:** `scripts/seed-treasury.ts`
 
+Loads accounts from `TREASURY_ACCOUNTS` environment variable (not committed to git).
+
 ```bash
 npx tsx scripts/seed-treasury.ts
 ```
 
-**Output:**
+**Expected Output:**
 ```
 🌱 Seeding Treasury Accounts...
-✅ Inserted 4 treasury accounts
+✅ Inserted N treasury accounts
 ✅ Created Treasury Yield Ledger entry
 ✅ Logged audit event to sovereign_event_log
 
 📊 Seed Summary:
-   Total Accounts: 4
-   Total Balance: €1,636,134.02
-   Daily Yield: €250.98
-   Monthly Yield (est.): €7,529.40
-   Annual Yield (est.): €91,608.70
+   Total Accounts: N
+   Total Balance: €X,XXX,XXX.XX
+   Daily Yield: €XXX.XX
+   Annual Yield (est.): €XX,XXX.XX
 
 ✅ Treasury seed complete!
 ```
 
 ### 2. Daily Yield Sweep
 
-**Frequency:** Daily @ 08:00 UTC  
+**Frequency:** Configurable (default: 08:00 UTC)  
 **Process:**
-1. Query all `ACTIVE_*` accounts from `high_yield_account_registry`
+1. Query all `ACTIVE_*` accounts
 2. Sum daily yields
 3. Update `treasury_yield_ledger` with `last_sweep_at`
 4. Log event to `sovereign_event_log`
 
-**Example:**
-```typescript
-const { data: accounts } = await supabase
-  .from('high_yield_account_registry')
-  .select('*')
-  .like('status', 'ACTIVE%');
-
-const totalYield = accounts.reduce(
-  (sum, acc) => sum + acc.daily_compounding_yield_eur,
-  0
-);
-
-await supabase
-  .from('sovereign_event_log')
-  .insert({
-    event_type: 'YIELD_SWEEP_COMPLETED',
-    payload: { totalYield, timestamp: new Date() }
-  });
-```
-
 ### 3. Revenue Reconciliation
 
-**Frequency:** Weekly (Monday 09:00 UTC)  
+**Frequency:** Weekly (default: Monday 09:00 UTC)  
 **Process:**
-1. Query `high_yield_account_registry` for all accounts
-2. Verify balances match upstream API calls
-3. Calculate total yield from all sources
-4. Insert row into `revenue_reconciliation_log`
-5. Log to `sovereign_event_log`
+1. Query accounts from registry
+2. Verify balances match upstream APIs
+3. Calculate total yield
+4. Insert reconciliation log entry
+5. Log to audit trail
 
-**CLI Command:**
-```bash
-npm run verify:live-revenue
-```
+### 4. Wire Transfer Orchestration
 
-### 4. Monthly Payout Sweep
-
-**Frequency:** 1st of month @ 10:00 UTC  
+**Frequency:** 1st of month (configurable)  
 **Process:**
-1. Calculate monthly yield: `daily_yield * days_in_month`
-2. Initiate wire transfer from high-yield accounts → primary SEPA hub
+1. Calculate monthly yield
+2. Initiate wire transfer (high-yield → primary clearing)
 3. Log wire initiation event
-4. Confirm receipt via SWIFT/IBAN tracking
-5. Update `sovereign_event_log` with confirmation
+4. Confirm receipt via SWIFT/IBAN
+5. Update audit log with confirmation
 
 ---
 
 ## Integration Points
 
-### Revenue Reporting
-Connected to accounting canon via webhook:
+### Revenue Reporting Webhook
+
 ```
 POST /api/webhooks/treasury-sync
 ```
@@ -224,55 +178,54 @@ POST /api/webhooks/treasury-sync
 }
 ```
 
-### Stripe Revenue
-Wire completed stripe transactions to ledger via:
+### Stripe Payment Integration
+
 ```
 POST /api/webhooks/stripe
 → INSERT INTO sovereign_event_log (PAYMENT_RECEIVED)
 → INSERT INTO treasury_yield_ledger (monthly sweep)
 ```
 
-### Monthly Reporting
-Export to accounting system (QuickBooks, Xero):
+### Accounting Export
+
 ```bash
 npm run export:treasury-reconciliation
-# Output: treasury-reconciliation-2025-01.csv
+# Output: treasury-reconciliation-YYYY-MM.csv
 ```
 
 ---
 
 ## Security & Compliance
 
-### Encryption
-- Account numbers: **masked** (last 4 digits only)
-- IBAN/BIC: **PII encrypted** at rest
-- API keys: **GitHub Secrets** (never in repo)
+### Data Protection
+
+- ✅ Account numbers: **masked** (last 4 digits only)
+- ✅ IBAN/BIC: **Stored securely** (environment variables, not in git)
+- ✅ PII (CEO, Entity): **Private vault** (.private/ folder)
+- ✅ Credentials: **GitHub Secrets** (CI/CD only)
 
 ### Audit Trail
-- All operations logged to `sovereign_event_log`
-- Immutable (no UPDATEs to audit records)
-- JSONB payloads include: user, timestamp, IP, reason
+
+- ✅ All operations logged to `sovereign_event_log`
+- ✅ Immutable (no UPDATEs to audit records)
+- ✅ JSONB payloads include: timestamp, entity, event type
+- ✅ Row-level security (RLS) on sensitive tables
 
 ### Access Control
+
 - **Service Role Key** (admin): Seeding, reconciliation
-- **Anon Key** (frontend): Read-only account summaries
-- Row-level security (RLS) on `sovereign_event_log`
+- **Anon Key** (frontend): Read-only summaries
+- **Row-level security** on `sovereign_event_log`
 
 ---
 
 ## Monitoring & Alerts
 
 ### Dashboard
-Access Supabase Studio:
-- **Project:** aziwdgndohdgnwztpwdi
-- **Tables:** high_yield_account_registry, treasury_yield_ledger, sovereign_event_log
-- **URL:** https://app.supabase.com/project/aziwdgndohdgnwztpwdi
 
-### Alerts (Slack Integration)
-- ✅ Daily yield sweep completed
-- ⚠️ Balance mismatch detected
-- 🔴 Wire transfer failed
-- 🔴 Account suspended
+Access Supabase Studio:
+- **Tables:** high_yield_account_registry, treasury_yield_ledger, sovereign_event_log
+- **URL:** Set via `NEXT_PUBLIC_SUPABASE_URL` environment
 
 ### Key Queries
 
@@ -310,42 +263,48 @@ ORDER BY created_at DESC;
 
 ## Development
 
-### Local Testing
+### Local Setup
 
-**Run seed locally:**
 ```bash
 cd MindReply-personal-current
-npm install
-# Set .env.local with SUPABASE keys
+pnpm install
+
+# Set .env.local with:
+NEXT_PUBLIC_SUPABASE_URL=<your-url>
+SUPABASE_SERVICE_ROLE_KEY=<your-key>
+TREASURY_ACCOUNTS=[{...}]  # From .private/.env.treasury
+ENTITY_NAME=...
+CEO_NAME=...
+PRIMARY_IBAN=...
+```
+
+### Run Seed Locally
+
+```bash
 npx tsx scripts/seed-treasury.ts
 ```
 
-**Verify with Drizzle Studio:**
+### Verify with Drizzle Studio
+
 ```bash
 npm run db:studio
 # Opens http://localhost:5555
-# Browse high_yield_account_registry
 ```
 
-### Adding New Accounts
+---
 
-1. Edit `scripts/seed-treasury.ts` array
-2. Calculate daily yield: `(balance_eur * apy_rate / 365 / 100)`
-3. Update SQL seed
-4. Commit & push (auto-triggers CI/CD)
+## Deployment
 
-### Deployment
+### Staging
 
-**Staging:**
 ```bash
-gh workflow run treasury-seed.yml \
-  -f environment=staging
+gh workflow run treasury-seed.yml -f environment=staging
 ```
 
-**Production:**
+### Production
+
 ```bash
-gh workflow run treasury-seed.yml \
-  -f environment=production
+gh workflow run treasury-seed.yml -f environment=production
 ```
 
 ---
@@ -353,32 +312,32 @@ gh workflow run treasury-seed.yml \
 ## Maintenance
 
 ### Monthly Checklist
-- [ ] Verify all 4 accounts active
-- [ ] Compare balances vs. upstream APIs
-- [ ] Reconcile yields (est. vs. actual)
+
+- [ ] Verify all accounts active
+- [ ] Reconcile yields (expected vs. actual)
 - [ ] Check for suspended accounts
 - [ ] Export reconciliation report
-- [ ] Update APY rates if changed
+- [ ] Review APY rates with providers
 
 ### Quarterly
+
+- [ ] Audit all transactions in `sovereign_event_log`
 - [ ] Review account performance
 - [ ] Evaluate new high-yield options
-- [ ] Audit all transactions in `sovereign_event_log`
-- [ ] Verify encryption keys rotated
+- [ ] Rotate encryption keys
 
 ---
 
 ## References
 
-- **Seed Script:** `scripts/seed-treasury.ts`
-- **SQL Seed:** `scripts/seed-treasury.sql`
 - **Schema:** `lib/db/treasury.schema.ts`
+- **Seed Script:** `scripts/seed-treasury.ts`
 - **CI/CD:** `.github/workflows/treasury-seed.yml`
-- **Supabase:** https://app.supabase.com/project/aziwdgndohdgnwztpwdi
-- **Drizzle Docs:** https://orm.drizzle.team/docs/get-started-postgresql
+- **Verification:** `scripts/verify-seed.js`
+- **SQL Seed (Fallback):** `scripts/seed-treasury.sql`
 
 ---
 
-**Last Updated:** 2025-01-15  
+**Last Updated:** 2026-01-15  
 **Status:** ✅ Production Ready  
-**CEO Anchor:** Angel Lyubomirov Krastev
+**Security Level:** 🔒 Private data protected

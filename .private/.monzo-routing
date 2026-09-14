@@ -1,0 +1,43 @@
+# Monzo Bank Fund Routing [PRIVATE]
+# DO NOT COMMIT TO GITHUB
+
+# Destination: Monzo Bank UK (Primary SEPA Hub)
+MONZO_RECIPIENT_NAME="Angel Krastev"
+MONZO_IBAN="[REDACTED]"
+MONZO_BIC="MONZGB2L"
+MONZO_ACCOUNT_NUMBER="08425895"
+MONZO_SORT_CODE="04-00-04"
+MONZO_BANK_NAME="Monzo Bank UK"
+
+# Wire transfer configuration
+TRANSFER_PURPOSE="TREASURY_CONSOLIDATION"
+TRANSFER_URGENCY="EXPRESS"
+TRANSFER_REFERENCE="TREASURY-SWEEP-2026-01-15"
+
+# Available to move
+SOURCE_ACCOUNTS=[
+  {
+    "institution": "Happen Bank",
+    "available_eur": "300000.00",
+    "status": "ACTIVE_HIGH_YIELD"
+  },
+  {
+    "institution": "EverBank", 
+    "available_eur": "275000.00",
+    "status": "ACTIVE_HIGH_YIELD"
+  },
+  {
+    "institution": "Synchrony Bank",
+    "available_eur": "243067.01",
+    "status": "ACTIVE_RESERVE"
+  }
+]
+
+# Total available to move to Monzo
+TOTAL_AVAILABLE_EUR="818067.01"
+
+# Movement options (choose one):
+# Option 1: FULL_SWEEP - Move all €818,067.01
+# Option 2: PARTIAL - Specify amount
+# Option 3: YIELD_ONLY - Move only daily yields (€250.98/day)
+# Option 4: STRATEGIC - Move per account (e.g., €300k from Happen)

@@ -11,7 +11,7 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: production
-      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_TELEMETRY_DISABLED: 1`n      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_}`n      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-whsec_test_}`n      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY:-pk_test_}
     networks:
       - app-network
     restart: unless-stopped
@@ -38,7 +38,7 @@ services:
     environment:
       LEGAL_ENTITY_API_URL: "https://api.otoco.io/v1"
       AGENT_WALLET_ADDRESS: ${AGENT_WALLET_ADDRESS:-0x321...AI_AGENT}
-      AGENT_SESSION_KEY: ${AGENT_SESSION_KEY:-0x_scoped_session_token}
+      AGENT_SESSION_KEY: ${AGENT_SESSION_KEY:-0x_scoped_session_token}`n      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_}`n      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-whsec_test_}
       PYTHONUNBUFFERED: 1
       PYTHONDONTWRITEBYTECODE: 1
     networks:
@@ -85,3 +85,5 @@ networks:
 volumes:
   rwa-logs:
     driver: local
+
+

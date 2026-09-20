@@ -1,0 +1,62 @@
+:root {
+  --pf-bg: #f7f7f5;
+  --pf-surface: #ffffff;
+  --pf-ink: #151515;
+  --pf-muted: #686863;
+  --pf-line: #deded8;
+  --pf-accent: #5b46f0;
+  --pf-accent-strong: #4732d8;
+  --pf-danger: #b42318;
+  --pf-success: #157347;
+
+  --pf-radius-sm: 10px;
+  --pf-radius-md: 16px;
+  --pf-radius-lg: 24px;
+  --pf-radius-pill: 999px;
+
+  --pf-space-1: 4px;
+  --pf-space-2: 8px;
+  --pf-space-3: 12px;
+  --pf-space-4: 16px;
+  --pf-space-5: 20px;
+  --pf-space-6: 24px;
+  --pf-space-8: 32px;
+  --pf-space-10: 40px;
+  --pf-space-12: 48px;
+
+  --pf-shadow-soft: 0 8px 30px rgb(21 21 21 / 0.06);
+  --pf-focus: 0 0 0 3px rgb(91 70 240 / 0.28);
+
+  --pf-motion-fast: 120ms;
+  --pf-motion-normal: 180ms;
+  --pf-motion-slow: 280ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --pf-motion-fast: 0ms;
+    --pf-motion-normal: 0ms;
+    --pf-motion-slow: 0ms;
+  }
+}
+
+.pf-focus:focus-visible {
+  outline: none;
+  box-shadow: var(--pf-focus);
+}
+
+.pf-safe-area-bottom {
+  padding-bottom: max(var(--pf-space-4), env(safe-area-inset-bottom));
+}
+
+.pf-thumb-action {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.pf-decision {
+  font-size: clamp(2rem, 9vw, 4.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  font-weight: 700;
+}

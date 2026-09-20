@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A11 Studio · Say only what you can defend</title>
+<link rel="stylesheet" href="https://a11-k.space/estate.css">
+<style>:root{--accent:#57d2a7;--soft:#0c503a}</style>
+</head>
+<body>
+<nav class="shell nav">
+  <a class="brand" href="https://a11-k.space">A11<i>-K</i> / STUDIO</a>
+  <div class="navlinks">
+    <a href="https://chat.a11-k.space">Chat</a>
+    <a href="https://nexus.a11-k.space">Nexus</a>
+    <a href="https://forge.a11-k.space">Forge</a>
+    <a href="https://studio.a11-k.space">Studio</a>
+  </div>
+  <span class="status">AURELIA · DEFENSIBLE</span>
+</nav>
+<main class="shell">
+  <section class="hero">
+    <div>
+      <span class="ey">Aurelia · public language</span>
+      <h1>Say only what you can defend.</h1>
+      <p class="lede">Compose positioning from verified proof, an explicit boundary, and one useful next action. Aspiration stays in a different drawer. Clarity before amplification.</p>
+    </div>
+    <aside class="proof"><b>The strongest story is the one the product can already stand behind.</b></aside>
+  </section>
+  <section class="workspace">
+    <aside class="rail">
+      <h2>Narrative room</h2>
+      <button class="active" data-pane="compose">Compose</button>
+      <button data-pane="preview">Preview</button>
+      <button data-pane="boundarypane">Boundary</button>
+    </aside>
+    <div class="work">
+      <div id="compose" class="pane active">
+        <div class="workhead">
+          <h2>Separate true-now from intended-next</h2>
+          <p>Readers can tell the difference. So can you.</p>
+        </div>
+        <div class="field"><label>POSITIONING</label><input id="positioning" placeholder="One line you are willing to be held to"></div>
+        <div class="split">
+          <div class="field"><label>VERIFIED PROOF</label><textarea id="proof" placeholder="What already exists and can be checked"></textarea></div>
+          <div class="field"><label>EXPLICIT BOUNDARY</label><textarea id="boundary" placeholder="What this is not, and will not claim"></textarea></div>
+        </div>
+        <div class="field"><label>ONE ACTION</label><input id="cta" placeholder="A single useful next step for the reader"></div>
+        <button class="btn" id="render">Render narrative</button>
+        <button class="btn alt" id="copy">Copy Markdown</button>
+      </div>
+      <div id="preview" class="pane"><div class="output" id="out">Nothing rendered.</div></div>
+      <div id="boundarypane" class="pane">
+        <div class="output">Local copy only. Does not verify claims, publish, or approve private information.\n\nElysium: Studio = Aurelia narrative. For next visual generation see docs/ELYSIUM_FRONTEND_V0.md and docs/HUMAN_SIGNAL_LEXICON.md.</div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="shell">
+  <span>© 2026 A11-K · MindReply</span>
+  <span>PROOF · BOUNDARY · ONE ACTION</span>
+</footer>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+$('.rail').onclick=e=>{const b=e.target.closest('button');if(!b)return;$$('.rail button,.pane').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#'+b.dataset.pane).classList.add('active')};
+let current='';
+render.onclick=()=>{if(!positioning.value)return;current=`# ${positioning.value}\n\n## Verified proof\n${proof.value||'Not supplied.'}\n\n## Explicit boundary\n${boundary.value||'Not supplied.'}\n\n## One action\n${cta.value||'Define one action.'}`;out.textContent=current;$$('.rail button')[1].click()};
+copy.onclick=()=>navigator.clipboard.writeText(current);
+</script>
+</body>
+</html>

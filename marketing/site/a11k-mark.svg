@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title id="title">A11-K mark</title>
+  <desc id="desc">A dark geometric mark with a blue point of attention.</desc>
+  <rect width="96" height="96" rx="24" fill="#0A0A0A"/>
+  <path d="M24 67 43.5 23h9L72 67h-10l-4.2-10.1H38.2L34 67H24Zm17.3-18.4h13.2L48 32.8l-6.7 15.8Z" fill="#FAFAFA"/>
+  <circle cx="69" cy="25" r="6" fill="#3B82F6"/>
+</svg>

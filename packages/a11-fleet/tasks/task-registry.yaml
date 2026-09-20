@@ -1,0 +1,7 @@
+version: 1
+fleet: A11
+source: agent-control-plane
+expected_tasks: 42
+
+# T-series migration placeholders
+# T001-T042 will be restored during repository import

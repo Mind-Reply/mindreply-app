@@ -1,0 +1,52 @@
+name: Validate Pull Request
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/web-replycontrol/**"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".github/workflows/validate-pr.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-pr-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web-replycontrol:
+    name: web-replycontrol
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+          run_install: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - name: Validate package manifest
+        run: node -e "JSON.parse(require('fs').readFileSync('apps/web-replycontrol/package.json', 'utf8'))"
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+      - name: Type check
+        run: pnpm --filter web-replycontrol typecheck
+      - name: Production build
+        run: pnpm --filter web-replycontrol build
+      - name: Verify revenue and health routes
+        shell: bash
+        run: |
+          test -f apps/web-replycontrol/app/page.tsx
+          test -f apps/web-replycontrol/app/api/health/route.ts
+          grep -Fq "https://book.stripe.com/8x2aER4owd8c1TG4Ku63K00" apps/web-replycontrol/app/page.tsx
+          grep -Fq "GitHub + Python Profit Audit" apps/web-replycontrol/app/page.tsx

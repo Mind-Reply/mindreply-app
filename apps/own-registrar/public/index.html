@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="OWN Registrar — E2E branded client registration and reseller. Wired to OWN Studio.">
+<title>OWN Registrar · A11</title>
+<style>
+:root{
+  --bg:#070a09;--panel:#0d1412;--line:#1a2a24;--text:#e8f0ec;--muted:#8aa396;
+  --accent:#57d2a7;--accent2:#3a9b7a;--warn:#c4a35a;
+  --font:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:var(--font)}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--accent);text-decoration:none}
+.wrap{max-width:960px;margin:0 auto;padding:1.25rem}
+header{display:flex;align-items:center;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line);margin-bottom:1.25rem}
+.brand{font-weight:700}.brand i{color:var(--accent);font-style:normal}
+.badge{font-size:.65rem;border:1px solid var(--accent);color:var(--accent);padding:.15rem .5rem;border-radius:999px}
+.nav{margin-left:auto;display:flex;gap:.75rem;font-size:.85rem;color:var(--muted)}
+h1{font-size:1.35rem;margin:0 0 .35rem}p.lede{color:var(--muted);margin:0 0 1.25rem}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1rem}
+.field{margin-bottom:.75rem}label{display:block;font-size:.7rem;letter-spacing:.06em;color:var(--muted);margin-bottom:.3rem}
+input,select,textarea{width:100%;background:#0a100e;border:1px solid var(--line);border-radius:8px;padding:.55rem .65rem}
+textarea{min-height:64px;resize:vertical}
+.btn{background:var(--accent);color:#04140e;border:none;border-radius:8px;padding:.6rem 1rem;font-weight:600;cursor:pointer}
+.btn:hover{filter:brightness(1.05)}
+.btn.alt{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn.ghost{background:transparent;border:1px dashed var(--line);color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+.hint{font-size:.75rem;color:var(--muted);margin-top:.5rem}
+.list{list-style:none;padding:0;margin:0}
+.list li{border:1px solid var(--line);border-radius:8px;padding:.65rem .75rem;margin-bottom:.5rem;font-size:.9rem}
+.list li strong{display:block}
+.meta{font-size:.75rem;color:var(--muted)}
+.pill{display:inline-block;font-size:.65rem;padding:.1rem .4rem;border-radius:999px;border:1px solid var(--line);color:var(--muted);margin-left:.35rem}
+.pill.reseller{border-color:var(--warn);color:var(--warn)}
+.pill.client{border-color:var(--accent);color:var(--accent)}
+.out{font-family:var(--mono);font-size:.75rem;white-space:pre-wrap;background:#0a100e;border:1px solid var(--line);border-radius:8px;padding:.75rem;max-height:220px;overflow:auto}
+.tabs{display:flex;gap:.35rem;margin-bottom:1rem;flex-wrap:wrap}
+.tabs button{background:transparent;border:1px solid var(--line);color:var(--muted);padding:.4rem .7rem;border-radius:8px;cursor:pointer}
+.tabs button.active{border-color:var(--accent);color:var(--text)}
+.pane{display:none}.pane.active{display:block}
+.banner{background:#0f1a16;border:1px solid var(--line);border-radius:10px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand" id="brandMark">OWN <i>Registrar</i> <span class="badge" id="modeBadge">E2E</span></div>
+    <nav class="nav">
+      <a href="../a11k-studio/" id="linkStudio">OWN Studio</a>
+      <a href="https://a11-k.space">Estate</a>
+    </nav>
+  </header>
+
+  <div class="banner">
+    <strong>E2E branded registrar.</strong> Register clients under your brand. Reseller mode issues client workspaces linked to OWN Studio. Local-first records export as JSON for your CRM / Stripe / backend. No secrets stored.
+  </div>
+
+  <div class="tabs">
+    <button class="active" data-tab="register">Register client</button>
+    <button data-tab="reseller">Reseller setup</button>
+    <button data-tab="clients">Client registry</button>
+    <button data-tab="export">Export / handoff</button>
+  </div>
+
+  <div id="tab-register" class="pane active">
+    <div class="grid">
+      <div class="card">
+        <h1>Client registration</h1>
+        <p class="lede">Creates a branded client record and Studio workspace brief.</p>
+        <div class="field"><label>CLIENT NAME / COMPANY</label><input id="clientName" placeholder="Acme Labs"></div>
+        <div class="field"><label>CONTACT EMAIL</label><input id="clientEmail" type="email" placeholder="cto@acme.example"></div>
+        <div class="field"><label>PRIMARY DOMAIN (optional)</label><input id="clientDomain" placeholder="acme.example"></div>
+        <div class="field"><label>PLAN</label>
+          <select id="clientPlan">
+            <option value="audit">€3k Profit Audit</option>
+            <option value="studio">OWN Studio seat</option>
+            <option value="reseller-client">Reseller client seat</option>
+          </select>
+        </div>
+        <div class="field"><label>NOTES</label><textarea id="clientNotes" placeholder="Repo access, goals, constraints"></textarea></div>
+        <div class="actions">
+          <button class="btn" id="btnRegister">Register client</button>
+          <button class="btn alt" id="btnOpenStudio">Open OWN Studio for client</button>
+        </div>
+        <p class="hint">Registration is local until you export and load into your billing / auth stack (Clerk, Supabase, Stripe).</p>
+      </div>
+      <div class="card">
+        <h1>Last registration</h1>
+        <div class="out" id="lastReg">None yet.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-reseller" class="pane">
+    <div class="grid">
+      <div class="card">
+        <h1>Reseller brand</h1>
+        <p class="lede">White-label identity applied to client-facing surfaces.</p>
+        <div class="field"><label>RESELLER / AGENCY NAME</label><input id="resellerName" placeholder="Your Agency"></div>
+        <div class="field"><label>BRAND ACCENT (hex)</label><input id="resellerAccent" value="#57d2a7"></div>
+        <div class="field"><label>SUPPORT EMAIL</label><input id="resellerEmail" type="email" placeholder="hello@agency.example"></div>
+        <div class="field"><label>STUDIO BASE URL</label><input id="studioBase" value="../a11k-studio/"></div>
+        <div class="actions">
+          <button class="btn" id="btnSaveReseller">Save reseller profile</button>
+          <button class="btn alt" id="btnApplyBrand">Apply brand now</button>
+        </div>
+      </div>
+      <div class="card">
+        <h1>Resell model</h1>
+        <div class="out">You sell:
+• €3k Profit Audit (or your price)
+• OWN Studio seats under your brand
+• Optional managed residual Radar
+
+Flow:
+1. Set reseller brand
+2. Register each client
+3. Export registry JSON → your CRM/Stripe
+4. Open Studio with client brief prefilled via query params
+
+Backend swap later: map records to Clerk orgs / Supabase tenants.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-clients" class="pane">
+    <div class="card">
+      <h1>Client registry</h1>
+      <p class="lede">Stored in this browser. Export before clearing.</p>
+      <ul class="list" id="clientList"></ul>
+      <div class="actions">
+        <button class="btn alt" id="btnRefresh">Refresh</button>
+        <button class="btn ghost" id="btnClear">Clear all local clients</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-export" class="pane">
+    <div class="card">
+      <h1>Export / handoff</h1>
+      <p class="lede">JSON ready for CRM, Stripe customer create, or your API.</p>
+      <div class="out" id="exportOut">{}</div>
+      <div class="actions">
+        <button class="btn" id="btnExport">Refresh export</button>
+        <button class="btn alt" id="btnCopyExport">Copy JSON</button>
+        <button class="btn alt" id="btnDownloadExport">Download .json</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const KEY_C = 'own-registrar-clients-v1';
+  const KEY_R = 'own-registrar-reseller-v1';
+
+  function loadClients(){
+    try { return JSON.parse(localStorage.getItem(KEY_C) || '[]'); } catch(e){ return []; }
+  }
+  function saveClients(arr){ localStorage.setItem(KEY_C, JSON.stringify(arr)); }
+  function loadReseller(){
+    try { return JSON.parse(localStorage.getItem(KEY_R) || '{}'); } catch(e){ return {}; }
+  }
+  function saveReseller(o){ localStorage.setItem(KEY_R, JSON.stringify(o)); }
+
+  function uid(){ return 'cli_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,7); }
+
+  function applyBrand(){
+    const r = loadReseller();
+    if (r.accent) document.documentElement.style.setProperty('--accent', r.accent);
+    if (r.name) {
+      $('#brandMark').innerHTML = esc(r.name) + ' <i>Registrar</i> <span class="badge">RESELLER</span>';
+      $('#modeBadge') && ($('#modeBadge').textContent = 'RESELLER');
+    }
+    if (r.studioBase) $('#linkStudio').href = r.studioBase;
+    if (r.name) { $('#resellerName').value = r.name; }
+    if (r.accent) $('#resellerAccent').value = r.accent;
+    if (r.email) $('#resellerEmail').value = r.email;
+    if (r.studioBase) $('#studioBase').value = r.studioBase;
+  }
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function renderClients(){
+    const list = loadClients();
+    const ul = $('#clientList');
+    ul.innerHTML = list.length ? '' : '<li class="meta">No clients yet.</li>';
+    list.forEach(c => {
+      const li = document.createElement('li');
+      li.innerHTML = '<strong>' + esc(c.name) + ' <span class="pill client">' + esc(c.plan) + '</span></strong>' +
+        '<span class="meta">' + esc(c.email || '') + (c.domain ? ' · ' + esc(c.domain) : '') + ' · ' + new Date(c.createdAt).toLocaleString() + '</span>';
+      ul.appendChild(li);
+    });
+    $('#exportOut').textContent = JSON.stringify({ reseller: loadReseller(), clients: list }, null, 2);
+  }
+
+  $$ = s => [...document.querySelectorAll(s)];
+  $$('.tabs button').forEach(b => b.onclick = () => {
+    $$('.tabs button').forEach(x => x.classList.toggle('active', x === b));
+    $$('.pane').forEach(p => p.classList.toggle('active', p.id === 'tab-' + b.dataset.tab));
+    if (b.dataset.tab === 'clients' || b.dataset.tab === 'export') renderClients();
+  });
+
+  $('#btnSaveReseller').onclick = () => {
+    const o = {
+      name: ($('#resellerName').value || '').trim(),
+      accent: ($('#resellerAccent').value || '#57d2a7').trim(),
+      email: ($('#resellerEmail').value || '').trim(),
+      studioBase: ($('#studioBase').value || '../a11k-studio/').trim()
+    };
+    saveReseller(o);
+    applyBrand();
+    alert('Reseller profile saved locally.');
+  };
+
+  $('#btnApplyBrand').onclick = () => { $('#btnSaveReseller').click(); };
+
+  $('#btnRegister').onclick = () => {
+    const name = ($('#clientName').value || '').trim();
+    if (!name) { alert('Client name required'); return; }
+    const rec = {
+      id: uid(),
+      name,
+      email: ($('#clientEmail').value || '').trim(),
+      domain: ($('#clientDomain').value || '').trim(),
+      plan: $('#clientPlan').value,
+      notes: ($('#clientNotes').value || '').trim(),
+      createdAt: new Date().toISOString(),
+      reseller: loadReseller().name || null
+    };
+    const all = loadClients();
+    all.unshift(rec);
+    saveClients(all);
+    $('#lastReg').textContent = JSON.stringify(rec, null, 2);
+    renderClients();
+  };
+
+  $('#btnOpenStudio').onclick = () => {
+    const r = loadReseller();
+    const base = (r.studioBase || '../a11k-studio/').replace(/\/$/, '') + '/';
+    const purpose = encodeURIComponent(($('#clientName').value || 'Client').trim() + ' · Profit surface');
+    const audience = encodeURIComponent(($('#clientName').value || 'Client').trim());
+    // Studio reads hash params if present (optional enhancement); always open Studio
+    window.open(base + '?purpose=' + purpose + '&audience=' + audience, '_blank');
+  };
+
+  $('#btnRefresh').onclick = renderClients;
+  $('#btnClear').onclick = () => { if (confirm('Clear all local clients?')) { localStorage.removeItem(KEY_C); renderClients(); } };
+  $('#btnExport').onclick = renderClients;
+  $('#btnCopyExport').onclick = async () => {
+    renderClients();
+    await navigator.clipboard.writeText($('#exportOut').textContent);
+    alert('Copied');
+  };
+  $('#btnDownloadExport').onclick = () => {
+    renderClients();
+    const blob = new Blob([$('#exportOut').textContent], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'own-registrar-export.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
+  applyBrand();
+  renderClients();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+import { AuthGuard } from "@/components/AuthGuard";
+import { requireAuth } from "@/lib/clerk";
+import { prisma } from "@/lib/prisma";
+import { createPortal } from "@/server/actions/subscription";
+export default async function Settings(){const clerkId=await requireAuth();const user=await prisma.user.findUnique({where:{clerkId}});const sub=user?.organizationId?await prisma.subscription.findUnique({where:{organizationId:user.organizationId}}):null;return <AuthGuard><section className="max-w-xl space-y-6"><h1 className="text-3xl font-bold">Settings</h1><div className="rounded-2xl border bg-white p-5"><p className="text-sm text-slate-500">Role</p><p className="font-semibold">{user?.role??"USER"}</p><p className="mt-4 text-sm text-slate-500">Subscription</p><p className="font-semibold">{sub?.status??"Not subscribed"}</p></div><form action={createPortal}><button className="min-h-11 rounded-xl border bg-white px-5 font-semibold">Open Stripe Customer Portal</button></form></section></AuthGuard>}

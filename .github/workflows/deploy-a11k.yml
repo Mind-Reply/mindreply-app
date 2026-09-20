@@ -1,0 +1,44 @@
+name: Deploy A11-K to Vercel (a11-k.space)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/a11k/**"
+      - "packages/shared-*/**"
+      - ".github/workflows/deploy-a11k.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production-a11k
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel
+
+      - name: Pull Vercel environment information
+        run: vercel pull --yes --environment=production
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_A11K_PROJECT_ID }}
+
+      - name: Build and deploy to Vercel
+        run: vercel deploy --prod
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_A11K_PROJECT_ID }}
+
+      - name: Health check
+        run: |
+          sleep 15
+          curl -f https://a11-k.space/health || exit 1

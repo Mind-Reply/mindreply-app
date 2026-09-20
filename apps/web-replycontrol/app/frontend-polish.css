@@ -1,0 +1,16 @@
+/* MindReply frontend polish: additive, responsive, reduced-motion safe. */
+.mc-page{min-height:100vh;background:radial-gradient(circle at 78% 12%,rgba(143,183,255,.08),transparent 30rem),radial-gradient(circle at 12% 58%,rgba(184,255,106,.045),transparent 24rem)}
+.mc-nav{backdrop-filter:blur(14px);background:rgba(5,7,10,.72);position:sticky;top:0;z-index:20}
+.mc-brand{transition:opacity .2s ease,transform .2s ease}.mc-brand:hover{opacity:.9;transform:translateY(-1px)}
+.mc-hero{position:relative}.mc-hero:after{content:"";position:absolute;left:0;right:0;bottom:22px;height:1px;background:linear-gradient(90deg,transparent,var(--mc-line),transparent);opacity:.7}
+.mc-console{position:relative;overflow:hidden}.mc-console:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 25%,rgba(143,183,255,.07) 48%,transparent 72%);transform:translateX(-120%);animation:mc-scan 8s ease-in-out infinite}.mc-console>*{position:relative}
+.mc-module{will-change:transform}.mc-module .num{display:inline-flex;align-items:center;gap:7px}.mc-module .num:before{content:"";width:18px;height:1px;background:currentColor;opacity:.55}
+.mc-section-head h2{ text-wrap:balance }
+.mc-hero .lead,.mc-section-head,.mc-module,.mc-principle,.mc-substrate>div,.mc-closing{animation:mc-section-in .65s cubic-bezier(.2,.8,.2,1) both}
+.mc-module:nth-child(2){animation-delay:.05s}.mc-module:nth-child(3){animation-delay:.1s}.mc-module:nth-child(4){animation-delay:.15s}.mc-module:nth-child(5){animation-delay:.2s}.mc-module:nth-child(6){animation-delay:.25s}
+.mc-page a,.mc-page button{touch-action:manipulation}
+.mc-page a:focus-visible,.mc-page button:focus-visible{outline:2px solid var(--mc-hot);outline-offset:4px}
+@keyframes mc-section-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes mc-scan{0%,20%{transform:translateX(-120%)}55%,100%{transform:translateX(120%)}}
+@media(max-width:900px){.mc-hero:after{bottom:10px}.mc-console:before{animation-duration:10s}}
+@media(prefers-reduced-motion:reduce){.mc-hero .lead,.mc-section-head,.mc-module,.mc-principle,.mc-substrate>div,.mc-closing,.mc-console:before{animation:none!important}.mc-module{will-change:auto}}

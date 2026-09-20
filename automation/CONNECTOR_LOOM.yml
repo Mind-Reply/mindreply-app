@@ -1,0 +1,42 @@
+version: 1
+name: connector-loom
+purpose: provider-neutral integration contract for the canonical estate
+
+connectors:
+  n8n:
+    capability_name: Relay Loom
+    transport: webhook
+    role: branching-workflows
+  zapier:
+    capability_name: Switchboard
+    transport: webhook
+    role: lightweight-cross-app-actions
+  vector:
+    capability_name: Memory Well
+    compatible_backends: [supabase-pgvector, postgres-pgvector, qdrant]
+    role: grounded-context-retrieval
+  github:
+    capability_name: Proofline Source
+    role: source-control-and-release-evidence
+  sentry:
+    capability_name: Witness
+    role: error-evidence
+
+boundary:
+  public: product-safe information only
+  workspace: tenant-scoped information only
+  owner: owner-authorized operational information
+  personal: explicit owner context only
+  secret: never indexed, logged or sent to external relays
+
+execution:
+  observe_before_mutate: true
+  idempotency_required: true
+  verify_after_external_action: true
+  owner_approval_required_for: [production-deploy, merge, billing-change, refund, external-message]
+
+hourly_goal:
+  - detect meaningful change
+  - reconcile expected versus actual state
+  - prepare concise owner signal
+  - create an open loop when human attention is needed

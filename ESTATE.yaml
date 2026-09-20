@@ -1,0 +1,28 @@
+schema_version: 1
+reviewed_at: "2026-09-10T00:00:00+03:00"
+owner: Mind-Reply
+
+products:
+  - id: mindreply
+    repo: Mind-Reply/mindreply-app
+    role: commercial-product
+    visibility: public
+    status: BUILT
+    note: Organisation target reconstructed from the current personal source; verification and cutover are pending.
+
+repositories:
+  canonical_target:
+    - Mind-Reply/mindreply-app
+  retained_for_rollback:
+    - angellllkr-eng/mind-reply-core
+  evidence_only:
+    - local/mind-reply-core-inspect
+    - OneDrive/MindReply
+
+architecture:
+  product_root: Mind-Reply/mindreply-app
+  rule: One canonical source per product capability; no credentials, customer data, or generated output in Git.
+
+production_truth:
+  evidence_required: true
+  rule: Source import is not deployment verification. Production is NO-GO until preview, health, route, API, authentication, payment, and rollback checks pass for one immutable commit.

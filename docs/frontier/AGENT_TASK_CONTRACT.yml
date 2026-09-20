@@ -1,0 +1,21 @@
+version: 1
+required:
+  - task_id
+  - agent_role
+  - repository
+  - branch
+  - owned_paths
+  - allowed_tools
+  - forbidden_actions
+  - validation_commands
+  - evidence_path
+  - approval_level
+  - cleanup_rule
+rules:
+  isolation: one task per branch_or_worktree
+  proof: evidence_must_reference_exact_commit_sha
+  overlap: detect_owned_path_overlap_before_parallel_execution
+  promotion: block_if_proof_missing_or_stale
+  production: owner_approval_required
+  destructive_actions: prohibited_in_experiments
+  secrets: never_copy_or_print_secret_values

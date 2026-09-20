@@ -1,0 +1,12 @@
+import Link from "next/link";
+import { regions, services } from "../services/catalog";
+
+export default function RegionsPage() {
+  return <main className="mc-page">
+    <nav className="mc-nav" aria-label="Primary navigation"><Link className="mc-brand" href="/">MindReply<small>OPERATING SYSTEM</small></Link><div className="mc-nav-center"><Link href="/platform">Platform</Link><Link href="/operations">Operations</Link><Link href="/services">Services</Link><Link href="/evidence">Evidence</Link></div><div className="mc-nav-right"><span className="mc-state"><i className="mc-dot"/>GLOBAL DELIVERY</span></div></nav>
+    <section className="mc-hero"><div><p className="mc-kicker"><i/>REGIONAL DELIVERY</p><h1>One delivery system.<br/><em>Local execution.</em></h1><p className="lead">A common engineering and evidence model that can be adapted to regional market, regulatory, language and operating requirements without creating a separate technology stack.</p></div><aside className="mc-console"><div className="mc-console-top"><span>NETWORK MODEL</span><b>GLOBAL</b></div><div className="mc-console-main"><div className="mc-verdict"><strong>Shared core. Regional delivery.</strong><span>3 INITIAL MARKETS</span></div><p>Global standards remain consistent while market-specific implementation, partners, language and commercial packaging can vary.</p></div></aside></section>
+    <section className="mc-section"><div className="mc-section-head"><span>MARKETS</span><h2>Start with markets where the need is visible.</h2></div><div className="mc-rail">{regions.map((region, i) => <article className="mc-module" key={region.slug}><span className="num">0{i + 1}</span><h3>{region.name}</h3><p>{region.mode}</p><Link className="mc-secondary" href={`/regions/${region.slug}`}>Open delivery view ↗</Link></article>)}</div></section>
+    <section className="mc-section"><div className="mc-section-head"><span>COMMON PLATFORM</span><h2>Eight capabilities can be deployed through the same control model.</h2></div><div className="mc-link-grid">{services.map(s => <Link className="mc-link-card" key={s.slug} href={`/services/${s.slug}`}><span>{s.number} · CAPABILITY</span><b>{s.title} ↗</b></Link>)}</div></section>
+    <section className="mc-closing"><p className="mc-kicker"><i/>EXECUTION MODEL</p><h2>Prove one market. Reuse the system. Expand.</h2><p>Regionalisation should multiply delivery capability, not multiply disconnected repositories, workflows and operating rules.</p><Link className="mc-primary" href="/audit">Establish the baseline ↗</Link></section>
+  </main>;
+}

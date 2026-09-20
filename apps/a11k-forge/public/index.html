@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A11 Forge · Give every release a way back</title>
+<link rel="stylesheet" href="https://a11-k.space/estate.css">
+<style>:root{--accent:#f0ad4e;--soft:#5c3608}</style>
+</head>
+<body>
+<nav class="shell nav">
+  <a class="brand" href="https://a11-k.space">A11<i>-K</i> / FORGE</a>
+  <div class="navlinks">
+    <a href="https://chat.a11-k.space">Chat</a>
+    <a href="https://nexus.a11-k.space">Nexus</a>
+    <a href="https://forge.a11-k.space">Forge</a>
+    <a href="https://studio.a11-k.space">Studio</a>
+  </div>
+  <span class="status">LUMENFORGE · REVERSIBLE</span>
+</nav>
+<main class="shell">
+  <section class="hero">
+    <div>
+      <span class="ey">Lumenforge · quality as a wall</span>
+      <h1>Give every release a way back.</h1>
+      <p class="lede">Build a small manifest: outcome, constraints, proof gates, ownership, observability, rollback. A manifest is not approval. Bad output should meet a barrier—not a post-mortem slide.</p>
+    </div>
+    <aside class="proof"><b>A manifest is not clearance.</b>Production and public moves still need a named human hand.</aside>
+  </section>
+  <section class="workspace">
+    <aside class="rail">
+      <h2>Release room</h2>
+      <button class="active" data-pane="manifest">Manifest</button>
+      <button data-pane="gates">Proof gates</button>
+      <button data-pane="boundary">Boundary</button>
+    </aside>
+    <div class="work">
+      <div id="manifest" class="pane active">
+        <div class="workhead">
+          <h2>Forge the smallest reversible slice</h2>
+          <p>Testable. Ownable. Undoable.</p>
+        </div>
+        <div class="split">
+          <div class="field"><label>PRODUCT / REPOSITORY</label><input id="product"></div>
+          <div class="field"><label>RELEASE TYPE</label>
+            <select id="type">
+              <option>Web platform</option>
+              <option>API or service</option>
+              <option>Automation workflow</option>
+              <option>Decision-support system</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>INTENDED OUTCOME</label><textarea id="outcome" placeholder="What must be true after this slice lands?"></textarea></div>
+        <div class="field"><label>CONSTRAINTS</label><input id="constraints" placeholder="Time, risk, systems we will not touch"></div>
+        <button class="btn" id="build">Forge manifest</button>
+        <button class="btn alt" id="copy">Copy Markdown</button>
+        <div class="output" id="out">No manifest yet.</div>
+      </div>
+      <div id="gates" class="pane">
+        <div class="workhead"><h2>Gates that block, not decorate</h2><p>Each one must pass before human clearance.</p></div>
+        <div class="nodes">
+          <div class="node">Evidence</div>
+          <div class="node">Security</div>
+          <div class="node">Ownership</div>
+          <div class="node">Rollback</div>
+          <div class="node">Observability</div>
+          <div class="node">Named approval</div>
+        </div>
+      </div>
+      <div id="boundary" class="pane">
+        <div class="output">Local planning only. Does not deploy, merge, bill, or certify safety.\n\nElysium: Forge = Lumenforge. Runtime gate: POST /api/elysium/gate (flagged).</div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="shell">
+  <span>© 2026 A11-K · MindReply</span>
+  <span>BAD OUTPUT MEETS A WALL</span>
+</footer>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+$('.rail').onclick=e=>{const b=e.target.closest('button');if(!b)return;$$('.rail button,.pane').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#'+b.dataset.pane).classList.add('active')};
+let current='';
+build.onclick=()=>{current=product.value&&outcome.value?`# ${product.value} — Release Manifest\n\nType: ${type.value}\nOutcome: ${outcome.value}\nConstraints: ${constraints.value||'None stated'}\n\n## Lumenforge gates\n1. Reality-check current state\n2. Define acceptance tests\n3. Ship the smallest reversible slice\n4. Evidence, security, ownership gates\n5. Verify rollback and observability\n6. Named human clearance`:'Add product and outcome.';out.textContent=current};
+copy.onclick=()=>navigator.clipboard.writeText(current);
+</script>
+</body>
+</html>

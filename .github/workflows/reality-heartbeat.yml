@@ -1,0 +1,47 @@
+name: Reality Heartbeat
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  reality-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify public commercial surfaces
+        env:
+          # Prefer repo variables when present; otherwise use known live public surfaces
+          BASE_URL: ${{ vars.PUBLIC_BASE_URL }}
+          REALITY_ROUTES: ${{ vars.REALITY_ROUTES }}
+          EXPECTED_RELEASE_SHA: ${{ vars.EXPECTED_RELEASE_SHA }}
+          RELEASE_SHA_URL: ${{ vars.RELEASE_SHA_URL }}
+        run: |
+          set -euo pipefail
+
+          # Always verify the two declared public surfaces after the
+          # 2026-08-12 commercial domain restoration.
+          echo "=== Baseline public surface check ==="
+          for url in "https://www.mind-reply.com" "https://a11-k.space"; do
+            status=$(curl -L -sS -o /dev/null -w '%{http_code}' --max-time 15 "$url" || echo "000")
+            echo "$url → HTTP $status"
+            if [[ "$status" != 2* && "$status" != 3* ]]; then
+              echo "CRITICAL: public surface $url is not healthy"
+              exit 1
+            fi
+          done
+          echo "Baseline public surfaces VERIFIED"
+
+          # Optional deeper gate when variables are configured
+          if [ -n "${BASE_URL:-}" ]; then
+            echo "=== Extended reality-gate (vars present) ==="
+            bash scripts/reality-gate.sh
+          else
+            echo "PUBLIC_BASE_URL not set — baseline check only. No claim beyond public surface reachability."
+          fi

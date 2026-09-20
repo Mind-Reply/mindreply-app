@@ -1,0 +1,102 @@
+/* MindReply Flow Premium — visual system layer
+   Inspired by cinematic storyboarding, depth, editorial pacing and deliberate motion.
+   Brand-safe: no third-party assets or copied visual identity.
+*/
+:root{
+  --mr-flow-glow: rgba(126,176,255,.18);
+  --mr-flow-glow-warm: rgba(232,201,160,.12);
+  --mr-flow-line: rgba(255,255,255,.10);
+  --mr-flow-ease: cubic-bezier(.22,1,.36,1);
+}
+
+html{background:#05070a}
+body{
+  overflow-x:hidden;
+  background:
+    radial-gradient(80rem 42rem at 8% -12%,rgba(61,107,179,.20),transparent 58%),
+    radial-gradient(60rem 38rem at 92% 4%,var(--mr-flow-glow-warm),transparent 54%),
+    radial-gradient(50rem 34rem at 50% 105%,rgba(80,120,180,.10),transparent 60%),
+    #05070a;
+}
+body:after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:999;
+  background:linear-gradient(115deg,transparent 0%,rgba(255,255,255,.025) 48%,transparent 52%);
+  background-size:220% 100%;animation:mr-sheen 14s var(--mr-flow-ease) infinite;
+  mix-blend-mode:screen;opacity:.35;
+}
+
+.nav{backdrop-filter:blur(18px);background:rgba(5,7,10,.68);position:sticky;top:0;z-index:20}
+.brand{transition:letter-spacing .35s var(--mr-flow-ease),transform .35s var(--mr-flow-ease)}
+.brand:hover{letter-spacing:-.02em;transform:translateY(-1px)}
+.navLinks a{position:relative;transition:color .25s ease}
+.navLinks a:after{content:"";position:absolute;left:0;right:100%;bottom:-9px;height:1px;background:var(--accent);transition:right .35s var(--mr-flow-ease)}
+.navLinks a:hover:after{right:0}
+
+.hero{position:relative}
+.hero:before{
+  content:"";position:absolute;width:38rem;height:38rem;right:-12rem;top:2rem;border-radius:50%;
+  background:radial-gradient(circle,var(--mr-flow-glow),transparent 68%);
+  filter:blur(10px);pointer-events:none;animation:mr-orbit 13s ease-in-out infinite alternate;
+}
+.hero>*{animation:mr-rise .9s var(--mr-flow-ease) both}
+.hero>*:nth-child(2){animation-delay:.12s}
+
+h1,h2,h3{ text-wrap:balance }
+h1{background:linear-gradient(105deg,#fff 12%,#bcd7ff 52%,#fff 86%);background-clip:text;-webkit-background-clip:text;color:transparent;}
+.eyebrow{display:inline-flex;align-items:center;gap:10px}
+.eyebrow:before{content:"";width:24px;height:1px;background:currentColor;opacity:.7}
+
+.button{position:relative;overflow:hidden;isolation:isolate;box-shadow:0 12px 40px rgba(126,176,255,.16);transition:transform .35s var(--mr-flow-ease),box-shadow .35s var(--mr-flow-ease),filter .35s ease}
+.button:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,.42) 48%,transparent 72%);transform:translateX(-120%);transition:transform .7s var(--mr-flow-ease)}
+.button:hover{transform:translateY(-3px);box-shadow:0 18px 55px rgba(126,176,255,.23)}
+.button:hover:before{transform:translateX(120%)}
+
+.signal,.estateCard,.closing,.match-panel,.operator-result{position:relative;overflow:hidden;transition:transform .5s var(--mr-flow-ease),border-color .35s ease,box-shadow .5s var(--mr-flow-ease)}
+.signal:before,.estateCard:before,.closing:before,.match-panel:before,.operator-result:before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.055),transparent 30%,transparent 70%,rgba(126,176,255,.035));
+}
+.signal:hover{transform:translateY(-6px);box-shadow:0 55px 130px rgba(0,0,0,.55)}
+.estateCard:hover{transform:translateY(-7px);box-shadow:0 30px 70px rgba(0,0,0,.32)}
+.estateCard:hover .code{letter-spacing:.20em}
+.code{transition:letter-spacing .4s var(--mr-flow-ease)}
+
+.section{position:relative}
+.sectionHead{animation:mr-rise .8s var(--mr-flow-ease) both}
+.estateGrid{perspective:1200px}
+.estateCard:nth-child(1){transform-origin:left center}
+.estateCard:nth-child(2){transform-origin:center center}
+.estateCard:nth-child(3){transform-origin:right center}
+
+.signalCore strong{font-variant-numeric:tabular-nums;letter-spacing:-.06em}
+.live{display:inline-flex;align-items:center;gap:7px}
+.live:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 0 0 currentColor;animation:mr-pulse 2s infinite}
+
+.principleList article{transition:padding-left .4s var(--mr-flow-ease),background .3s ease}
+.principleList article:hover{padding-left:12px;background:linear-gradient(90deg,rgba(126,176,255,.045),transparent)}
+
+.closing{background:
+  radial-gradient(50rem 25rem at 95% 0%,rgba(126,176,255,.14),transparent 60%),
+  radial-gradient(30rem 20rem at 0% 100%,rgba(232,201,160,.08),transparent 60%),var(--surface)}
+.closing:hover{transform:translateY(-4px)}
+
+/* Scroll-reveal hooks for components that opt in. */
+[data-flow-reveal]{opacity:0;transform:translateY(28px);transition:opacity .8s var(--mr-flow-ease),transform .8s var(--mr-flow-ease)}
+[data-flow-reveal].is-visible{opacity:1;transform:none}
+[data-flow-stagger="1"]{transition-delay:.08s}[data-flow-stagger="2"]{transition-delay:.16s}[data-flow-stagger="3"]{transition-delay:.24s}
+
+@keyframes mr-rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes mr-orbit{from{transform:translate3d(0,0,0) scale(.96)}to{transform:translate3d(-30px,20px,0) scale(1.05)}}
+@keyframes mr-sheen{0%,45%{background-position:220% 0}70%,100%{background-position:-220% 0}}
+@keyframes mr-pulse{70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+
+@media(max-width:620px){
+  body:after{display:none}
+  .hero:before{width:24rem;height:24rem;right:-14rem}
+  .button{box-shadow:0 10px 30px rgba(126,176,255,.13)}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}
+  body:after{display:none}
+  [data-flow-reveal]{opacity:1;transform:none}
+}

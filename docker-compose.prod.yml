@@ -1,0 +1,190 @@
+version: '3.9'
+
+services:
+  # REVENUE SERVICE 1: MindReply SaaS
+  mindreply-web:
+    image: node:18-alpine
+    container_name: mindreply-web
+    working_dir: /app
+    volumes:
+      - ./apps/web-replycontrol:/app
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - CLERK_SECRET_KEY=${CLERK_SECRET_KEY}
+      - DATABASE_URL=postgresql://mindreply:${DB_PASSWORD}@postgres:5432/mindreply
+    command: npm run start
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # REVENUE SERVICE 2: A11-K Platform
+  a11k-platform:
+    image: node:18-alpine
+    container_name: a11k-platform
+    working_dir: /app
+    volumes:
+      - ./apps/a11k-spaces:/app
+    ports:
+      - "3002:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://a11k:${DB_PASSWORD}@postgres:5432/a11k
+      - REDIS_URL=redis://redis:6379
+    command: npm run start
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # BACKEND: Python RWA Bridge
+  rwa-bridge:
+    build:
+      context: ./bridges/apex_titan_rwa
+      dockerfile: Dockerfile
+    container_name: rwa-bridge
+    ports:
+      - "8000:8000"
+    environment:
+      - AGENT_WALLET_ADDRESS=${AGENT_WALLET_ADDRESS}
+      - AGENT_SESSION_KEY=${AGENT_SESSION_KEY}
+      - DATABASE_URL=postgresql://rwa:${DB_PASSWORD}@postgres:5432/rwa
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./bridges/apex_titan_rwa:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # DATABASE: PostgreSQL
+  postgres:
+    image: postgres:17-alpine
+    container_name: mindreply-postgres
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_MULTIPLE_DATABASES: mindreply,a11k,rwa
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infrastructure/scripts/init-postgres.sh:/docker-entrypoint-initdb.d/init.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # CACHE: Redis
+  redis:
+    image: redis:7-alpine
+    container_name: mindreply-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # MONITORING: Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: mindreply-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infrastructure/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # VISUALIZATION: Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: mindreply-grafana
+    ports:
+      - "3100:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=redis-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infrastructure/grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # LOGGING: Loki (optional, for structured logs)
+  loki:
+    image: grafana/loki:latest
+    container_name: mindreply-loki
+    ports:
+      - "3200:3200"
+    volumes:
+      - loki_data:/loki
+      - ./infrastructure/loki-config.yml:/etc/loki/local-config.yml
+    command: -config.file=/etc/loki/local-config.yml
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3200/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  loki_data:
+    driver: local
+
+networks:
+  default:
+    name: mindreply-network
+    driver: bridge

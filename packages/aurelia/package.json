@@ -1,0 +1,17 @@
+{
+  "name": "@mind-reply/aurelia",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Aurelia — Domain Expert Sovereignty Layer (NL/visual → deterministic config compiler)",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mind-reply/elysium-core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

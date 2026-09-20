@@ -1,0 +1,39 @@
+name: Frontier Modernization
+on: { pull_request: {}, workflow_dispatch: {}, push: { branches: [main] } }
+permissions: { contents: read }
+concurrency: { group: frontier-${{ github.repository }}-${{ github.ref }}, cancel-in-progress: true }
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - id: detect
+        shell: bash
+        run: |
+          echo "node=$(test -f package.json && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          if [ -f package.json ]; then echo "pm=$(node -p "require('./package.json').packageManager?.split('@')[0] || 'npm'")" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/setup-node@v7
+        if: steps.detect.outputs.node == 'true'
+        with: { node-version: 24, package-manager-cache: false }
+      - name: Install and validate
+        if: steps.detect.outputs.node == 'true'
+        shell: bash
+        run: |
+          corepack enable; pm='${{ steps.detect.outputs.pm }}'
+          if [ "$pm" = pnpm ]; then if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; else pnpm install; fi; elif [ "$pm" = yarn ]; then if [ -f yarn.lock ]; then yarn install --immutable; else yarn install; fi; else if [ -f package-lock.json ]; then npm ci; else npm install; fi; fi
+          run(){ s="$1"; if node -e "process.exit(require('./package.json').scripts?.['$s'] ? 0 : 1)"; then case "$pm" in pnpm) pnpm run "$s";; yarn) yarn "$s";; *) npm run "$s";; esac; fi; }
+          if [ "$pm" = pnpm ] && [ -f apps/web-replycontrol/package.json ]; then
+            pnpm --filter web-replycontrol typecheck
+            pnpm --filter web-replycontrol build
+          else
+            run check
+            run lint
+            run test
+            run build
+          fi
+      - name: E2E if configured
+        if: steps.detect.outputs.node == 'true' && hashFiles('playwright.config.*') != ''
+        env:
+          PLAYWRIGHT_WEB_SERVER_COMMAND: pnpm --filter web-replycontrol dev
+        run: corepack pnpm exec playwright install --with-deps chromium && corepack pnpm exec playwright test

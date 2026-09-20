@@ -1,0 +1,24 @@
+# Helix Protocol — example constitutional contract
+# Compiled by Aurelia and enforced by Lumenforge at edge.
+id: helix/v1/profit-audit
+version: "1.0.0"
+description: >
+  Master quality gate for the live €3,000 GitHub + Python Profit Audit.
+  Enforces professional tone, token budget, latency, and banned claims.
+
+max_tokens: 4096
+required_tone: professional
+banned_vocabulary:
+  - guarantee
+  - risk-free
+  - "100%"
+  - "never fails"
+max_latency_ms: 8000
+hallucination_check: strict
+fallback_strategy: rewrite_once
+
+# Optional metadata for Veridex provenance
+metadata:
+  owner: angellllkr-eng
+  surface: profit-audit
+  commercial: true

@@ -1,0 +1,74 @@
+version: 2.1
+
+# Temporary CI replacement for the GitHub Actions billing-lock period.
+# This file intentionally validates the application only. It does not deploy
+# to Vercel, Railway, GHCR, or the SSH/Compose production host.
+
+jobs:
+  validate-web-replycontrol:
+    docker:
+      # MindReply's root package.json requires Node >=24 <25.
+      # Replace the minor tag with a pinned patch tag once the team standardizes it.
+      - image: cimg/node:24
+
+    resource_class: medium
+    working_directory: ~/mind-reply-core
+    steps:
+      - checkout
+
+      - run:
+          name: Verify Node runtime
+          command: |
+            node --version
+            npm --version
+
+      - run:
+          name: Install pnpm 10.32.1
+          command: |
+            sudo npm install --global pnpm@10.32.1
+            pnpm --version
+
+      - restore_cache:
+          keys:
+            - pnpm-store-v1-{{ checksum "pnpm-lock.yaml" }}
+            - pnpm-store-v1-
+
+      - run:
+          name: Install workspace dependencies
+          command: pnpm install --frozen-lockfile
+
+      - save_cache:
+          key: pnpm-store-v1-{{ checksum "pnpm-lock.yaml" }}
+          paths:
+            - ~/.local/share/pnpm/store
+
+      - run:
+          name: Type-check web-replycontrol
+          command: pnpm --filter web-replycontrol typecheck
+
+      - run:
+          name: Build web-replycontrol
+          environment:
+            NEXT_TELEMETRY_DISABLED: "1"
+          command: pnpm --filter web-replycontrol build
+
+      - run:
+          name: Install Chromium for Playwright
+          command: pnpm exec playwright install --with-deps chromium
+
+      - run:
+          name: Run frontend smoke tests
+          environment:
+            CI: "true"
+            NEXT_TELEMETRY_DISABLED: "1"
+            PLAYWRIGHT_WEB_SERVER_COMMAND: pnpm --filter web-replycontrol dev
+          command: pnpm exec playwright test
+
+      - store_artifacts:
+          path: playwright-report
+          destination: playwright-report
+
+workflows:
+  validate:
+    jobs:
+      - validate-web-replycontrol

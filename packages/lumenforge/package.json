@@ -1,0 +1,17 @@
+{
+  "name": "@mind-reply/lumenforge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lumenforge — Quality as Executable Law (Edge Middleware contract evaluator)",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mind-reply/elysium-core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

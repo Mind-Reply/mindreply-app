@@ -1,0 +1,82 @@
+name: Frontend E2E
+
+on:
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'hooks/**'
+      - 'public/**'
+      - 'apps/web-replycontrol/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'pnpm-workspace.yaml'
+      - 'playwright.config.ts'
+      - 'tests/e2e/**'
+      - '.github/workflows/frontend-e2e.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'hooks/**'
+      - 'public/**'
+      - 'apps/web-replycontrol/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'pnpm-workspace.yaml'
+      - 'playwright.config.ts'
+      - 'tests/e2e/**'
+      - '.github/workflows/frontend-e2e.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frontend-e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run frontend E2E
+        env:
+          CI: true
+          PLAYWRIGHT: ''
+          PLAYWRIGHT_WEB_SERVER_COMMAND: 'pnpm --filter web-replycontrol dev'
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: pnpm exec playwright test
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mindreply-playwright-report
+          path: playwright-report/
+          if-no-files-found: ignore
+          retention-days: 14

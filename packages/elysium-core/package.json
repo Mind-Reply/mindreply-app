@@ -1,0 +1,18 @@
+{
+  "name": "@mind-reply/elysium-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Elysium Core — shared types, Helix Protocol contracts, and orchestration primitives",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mind-reply/lumenforge": "workspace:*",
+    "@mind-reply/veridex": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

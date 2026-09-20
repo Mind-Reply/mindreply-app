@@ -1,0 +1,38 @@
+{
+  "tiers": {
+    "frontier": {
+      "description": "Complex reasoning, high-stakes decisions, code review, architecture",
+      "models": [
+        { "id": "claude-opus-4-6", "provider": "anthropic", "use_for": ["architecture review", "complex diagnosis", "code review"] },
+        { "id": "gpt-5", "provider": "openai", "use_for": ["fallback for frontier tasks"] },
+        { "id": "gemini-2.5-pro", "provider": "google", "use_for": ["multimodal / file-heavy tasks"] }
+      ]
+    },
+    "standard": {
+      "description": "Everyday ops tasks — summaries, status checks, routine advisory",
+      "models": [
+        { "id": "claude-sonnet-4-6", "provider": "anthropic", "use_for": ["daily ops chat", "summarization"] },
+        { "id": "gpt-5-mini", "provider": "openai", "use_for": ["fallback for standard tasks"] }
+      ]
+    },
+    "local": {
+      "description": "Cheap, fast, or sensitive-data tasks that shouldn't leave the machine",
+      "models": [
+        { "id": "llama3.2:latest", "provider": "docker-model-runner", "use_for": ["local drafts", "sensitive data", "offline fallback"] }
+      ]
+    },
+    "specialist": {
+      "description": "Narrow, task-specific — not general chat",
+      "models": [
+        { "id": "claude-haiku-4-5", "provider": "anthropic", "use_for": ["quick classification", "high-volume/low-cost calls"] }
+      ]
+    }
+  },
+  "routing_rules": [
+    { "when": "task=architecture_review OR task=incident_diagnosis", "use_tier": "frontier" },
+    { "when": "task=daily_status OR task=summary", "use_tier": "standard" },
+    { "when": "task=sensitive_data OR offline=true", "use_tier": "local" },
+    { "when": "task=classification OR high_volume=true", "use_tier": "specialist" }
+  ],
+  "notes": "Fill real provider API base URLs and auth env var names once keys are issued. Never hardcode key values — reference env var names only."
+}

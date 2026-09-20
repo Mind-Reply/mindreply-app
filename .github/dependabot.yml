@@ -1,0 +1,64 @@
+version: 2
+# Security-first maintenance. Security updates are handled as soon as Dependabot
+# detects them; grouped maintenance runs weekly to keep the estate current.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 20
+    labels: [dependencies, security]
+    groups:
+      production-deps:
+        dependency-type: production
+        patterns: ["*"]
+      development-deps:
+        dependency-type: development
+        patterns: ["*"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 20
+    labels: [dependencies, ci, security]
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    labels: [dependencies, docker, security]
+
+  - package-ecosystem: docker
+    directory: /apps/web-replycontrol
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    labels: [dependencies, docker, security]
+
+  - package-ecosystem: docker
+    directory: /services/rwa-bridge
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    labels: [dependencies, docker, security]
+
+  - package-ecosystem: npm
+    directory: /apps/a11k
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    labels: [dependencies, security]
+    groups:
+      a11k-deps:
+        patterns: ["*"]

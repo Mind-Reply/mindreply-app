@@ -1,0 +1,5 @@
+# Canonical owner for MindReply core and production frontend changes.
+* @angellllkr-eng
+
+# Production workflows and deployment configuration require explicit owner review.
+.github/workflows/ @angellllkr-eng

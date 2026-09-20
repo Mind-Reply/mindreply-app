@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A11 Nexus · See the route</title>
+<link rel="stylesheet" href="https://a11-k.space/estate.css">
+<style>:root{--accent:#a28bff;--soft:#2b1e63}</style>
+</head>
+<body>
+<nav class="shell nav">
+  <a class="brand" href="https://a11-k.space">A11<i>-K</i> / NEXUS</a>
+  <div class="navlinks">
+    <a href="https://chat.a11-k.space">Chat</a>
+    <a href="https://nexus.a11-k.space">Nexus</a>
+    <a href="https://forge.a11-k.space">Forge</a>
+    <a href="https://studio.a11-k.space">Studio</a>
+  </div>
+  <span class="status">VERIDEX · PLAN ONLY</span>
+</nav>
+<main class="shell">
+  <section class="hero">
+    <div>
+      <span class="ey">Veridex · visible routing</span>
+      <h1>See how a decision would move.</h1>
+      <p class="lede">Frame a scenario. Pick the lens that should govern the first pass. Get a specialist route with proof gates and one human decision node. A plan is not a dispatch—nothing leaves this room.</p>
+    </div>
+    <aside class="proof"><b>Routing is a sketch, not an order.</b>This surface does not contact agents, open tickets, or change systems.</aside>
+  </section>
+  <section class="workspace">
+    <aside class="rail">
+      <h2>Decision room</h2>
+      <button class="active" data-pane="routepane">Compose route</button>
+      <button data-pane="topology">Topology</button>
+      <button data-pane="boundary">Boundary</button>
+    </aside>
+    <div class="work">
+      <div id="routepane" class="pane active">
+        <div class="workhead">
+          <h2>Compose a route someone can refuse</h2>
+          <p>Choose the lens for the first honest pass.</p>
+        </div>
+        <div class="field"><label>SCENARIO</label><textarea id="scenario" placeholder="What is actually on the table?"></textarea></div>
+        <div class="field"><label>PRIMARY LENS</label>
+          <select id="lens">
+            <option>Profit and distribution</option>
+            <option>Engineering and release</option>
+            <option>Ownership and legal</option>
+            <option>Security and exposure</option>
+            <option>Funding and partnerships</option>
+          </select>
+        </div>
+        <button class="btn" id="route">Compose route</button>
+        <div class="output" id="out">No route yet.</div>
+      </div>
+      <div id="topology" class="pane">
+        <div class="metrics">
+          <div class="metric"><b>12</b><span>VISIBLE CELLS</span></div>
+          <div class="metric"><b>4</b><span>PROOF GATES</span></div>
+          <div class="metric"><b>1</b><span>HUMAN NODE</span></div>
+        </div>
+        <div class="nodes" id="nodes"></div>
+      </div>
+      <div id="boundary" class="pane">
+        <div class="output">Local composition only. No dispatch. No ledger write from this page.\n\nElysium: Nexus = Veridex (topology + trail). Intent in Chat. Gates in Forge.</div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="shell">
+  <span>© 2026 A11-K · MindReply</span>
+  <span>A PLAN IS NOT A DISPATCH</span>
+</footer>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const cells=['GitHub Advanced','Revenue Signal','Distribution','Automation Path','Security','Legal + Compliance','Financial Risk','IP + Trademark','Funding','Partnerships','Arbitrage','Red Team'];
+nodes.innerHTML=cells.map(x=>`<div class="node">${x}</div>`).join('');
+$('.rail').onclick=e=>{const b=e.target.closest('button');if(!b)return;$$('.rail button,.pane').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#'+b.dataset.pane).classList.add('active')};
+route.onclick=()=>out.textContent=scenario.value.trim()?`ROUTING PLAN\nLens: ${lens.value}\n\n1. Specialist pass under this lens\n2. Evidence gate\n3. Ownership and downside review\n4. One reversible recommendation\n5. Named human clearance\n\n[Veridex] Sketch only — no dispatch, no receipt written here.`:'Write the scenario first.';
+</script>
+</body>
+</html>

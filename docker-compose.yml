@@ -1,0 +1,87 @@
+version: '3.9'
+
+services:
+  # Next.js Reply Control Web App (canonical product surface + €3k audit CTA)
+  web-replycontrol:
+    build:
+      context: .
+      dockerfile: apps/web-replycontrol/Dockerfile
+    container_name: replycontrol-web
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: 1
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      interval: 30s
+      timeout: 5s
+      retries: 2
+      start_period: 20s
+    depends_on:
+      - rwa-bridge
+    labels:
+      - "com.app=mind-reply"
+      - "com.service=web"
+
+  # Python RWA Bridge Service
+  rwa-bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rwa-bridge
+    ports:
+      - "8000:8000"
+    environment:
+      LEGAL_ENTITY_API_URL: "https://api.otoco.io/v1"
+      AGENT_WALLET_ADDRESS: ${AGENT_WALLET_ADDRESS:-0x321...AI_AGENT}
+      AGENT_SESSION_KEY: ${AGENT_SESSION_KEY:-0x_scoped_session_token}
+      PYTHONUNBUFFERED: 1
+      PYTHONDONTWRITEBYTECODE: 1
+    networks:
+      - app-network
+    restart: unless-stopped
+    command: python apex_titan_rwa_bridge.py
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 5s
+      retries: 2
+      start_period: 5s
+    labels:
+      - "com.app=mind-reply"
+      - "com.service=rwa-bridge"
+    volumes:
+      - rwa-logs:/app/logs
+
+  # Optional: Monitoring helper
+  healthcheck-monitor:
+    image: curlimages/curl:latest
+    container_name: healthcheck-monitor
+    command: |
+      sh -c '
+      while true; do
+        echo "[$(date)] Checking web-replycontrol...";
+        curl -sf http://web-replycontrol:3000/api/health > /dev/null && echo "OK web-replycontrol" || echo "DOWN web-replycontrol";
+        echo "[$(date)] Checking rwa-bridge...";
+        curl -sf http://rwa-bridge:8000 > /dev/null && echo "OK rwa-bridge" || echo "DOWN rwa-bridge";
+        sleep 30;
+      done
+      '
+    networks:
+      - app-network
+    depends_on:
+      - web-replycontrol
+      - rwa-bridge
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  rwa-logs:
+    driver: local

@@ -1,0 +1,16 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+  - 'services/*'
+
+shamefully-hoist: false
+strict-peer-dependencies: true
+auto-install-peers: true
+node-linker: hoisted
+
+overrides:
+  'next@>16.0.0': 16.2.11
+  'react@>19.0.0': 19.2.7
+  'react-dom@>19.0.0': 19.2.7
+
+shared-workspace-lockfile: true

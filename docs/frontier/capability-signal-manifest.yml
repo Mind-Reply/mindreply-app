@@ -1,0 +1,39 @@
+version: 1
+updated: 2026-08-11
+policy: discovery-signals-are-not-production-evidence
+signals:
+  - id: har-agent-isolation
+    source: producthunt
+    capability: isolated-agent-workspaces-and-proof-bound-validation
+    action: prototype-native
+    target: operator-guild
+  - id: ngrok-ai-gateway
+    source: producthunt
+    capability: multi-provider-ai-routing-boundary
+    action: evaluate-adapter
+    target: mindreply-core
+  - id: coldtea-agentic-dev
+    source: producthunt
+    capability: agentic-coding-and-testing-workflows
+    action: evaluate-workflow-pattern
+    target: automation-mesh
+  - id: oqoqo-evals
+    source: producthunt
+    capability: task-specific-evaluation-and-benchmarking
+    action: prototype-evaluation-gate
+    target: proofline
+  - id: kubit-agent-optimization
+    source: producthunt
+    capability: behavior-informed-agent-evaluation
+    action: evaluate-telemetry-loop
+    target: operator-guild
+  - id: remix-sandbox
+    source: producthunt
+    capability: isolated-product-experimentation
+    action: evaluate-preview-sandbox
+    target: venture-foundry
+  - id: ai-group-call
+    source: producthunt
+    capability: multi-agent-live-voice-interaction
+    action: evaluate-product-pattern
+    target: a11k

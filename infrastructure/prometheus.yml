@@ -1,0 +1,42 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+rule_files: []
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'mindreply-web'
+    static_configs:
+      - targets: ['mindreply-web:3000']
+    metrics_path: '/metrics'
+
+  - job_name: 'a11k-platform'
+    static_configs:
+      - targets: ['a11k-platform:3000']
+    metrics_path: '/metrics'
+
+  - job_name: 'rwa-bridge'
+    static_configs:
+      - targets: ['rwa-bridge:8000']
+    metrics_path: '/metrics'
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres:5432']
+
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['localhost:9100']

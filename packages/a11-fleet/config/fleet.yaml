@@ -1,0 +1,11 @@
+fleet:
+  name: A11
+  heartbeat_interval: 60s
+  monitoring: enabled
+
+agents:
+  health_check: enabled
+
+tasks:
+  source: agent-control-plane
+  expected_count: 42

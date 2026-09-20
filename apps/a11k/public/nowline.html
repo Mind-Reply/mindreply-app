@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0a1628">
+  <meta name="description" content="Nowline — your private live briefing of the latest tech and AI moves that actually matter, plus the ones you can step into. Exclusive to Angel L. Krastev.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="author" content="Angel L. Krastev / A11-K">
+  <link rel="canonical" href="https://www.a11-k.space/nowline">
+  <link rel="manifest" href="/nowline.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nowline">
+  <title>Nowline · Exclusive for A.K.</title>
+  <style>
+    :root {
+      --bg: #070f1a;
+      --card: #0f1c2e;
+      --card-hover: #15263d;
+      --text: #eef4ff;
+      --muted: #8ba3c7;
+      --accent: #4d9fff;
+      --accent-soft: rgba(77, 159, 255, 0.15);
+      --border: #1c334f;
+      --success: #2dd4a8;
+      --warn: #f5a623;
+      --exclusive: #c084fc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100dvh;
+      padding: 1.25rem 1.25rem 3rem;
+    }
+    .wrap { max-width: 740px; margin: 0 auto; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      animation: fadeUp 0.5s ease both;
+    }
+    h1 {
+      font-size: 1.65rem;
+      font-weight: 740;
+      letter-spacing: -0.03em;
+    }
+    .meta { font-size: 0.82rem; color: var(--muted); margin-top: 0.2rem; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(45, 212, 168, 0.12);
+      color: var(--success);
+      font-size: 0.72rem;
+      font-weight: 650;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(45, 212, 168, 0.22);
+      white-space: nowrap;
+    }
+    .badge::before {
+      content: "";
+      width: 6px; height: 6px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 1.7s infinite;
+    }
+
+    .intro {
+      color: var(--muted);
+      font-size: 0.94rem;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.55s ease 0.05s both;
+    }
+
+    /* Filters */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-bottom: 1.6rem;
+      animation: fadeUp 0.6s ease 0.08s both;
+    }
+    .filter {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .filter:hover, .filter.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: rgba(77, 159, 255, 0.35);
+    }
+
+    section { margin-bottom: 2.25rem; }
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section-title span {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.45rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.05rem 1.15rem;
+      margin-bottom: 0.7rem;
+      transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+      animation: fadeUp 0.5s ease both;
+    }
+    .card:hover {
+      background: var(--card-hover);
+      border-color: rgba(77, 159, 255, 0.25);
+      transform: translateY(-1px);
+    }
+    .card h3 {
+      font-size: 0.97rem;
+      font-weight: 650;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+    .tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .tag-exclusive { background: rgba(192, 132, 252, 0.15); color: var(--exclusive); }
+    .tag-grant { background: rgba(45, 212, 168, 0.12); color: var(--success); }
+    .tag-watch { background: rgba(245, 166, 35, 0.12); color: var(--warn); }
+
+    .one-liner { font-size: 0.88rem; color: var(--text); margin-bottom: 0.35rem; }
+    .explain {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.65rem;
+      line-height: 1.45;
+    }
+    .example {
+      font-size: 0.76rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 0.75rem;
+      padding-left: 0.6rem;
+      border-left: 2px solid var(--border);
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+    .btn {
+      font-size: 0.78rem;
+      font-weight: 650;
+      padding: 0.4rem 0.85rem;
+      border-radius: 9px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: var(--accent); }
+
+    .status-bar {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    footer {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 1.75rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 520px) {
+      body { padding: 1rem 0.9rem 2.5rem; }
+      h1 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Nowline</h1>
+        <div class="meta">Your private live board · only what can actually move for you</div>
+      </div>
+      <div class="badge">Live pulse</div>
+    </header>
+
+    <p class="intro">
+      This is your exclusive surface. It shows the latest real tech and AI moves, then the smaller list of ones you can actually step into. Everything is filtered for solo-operator fit and any exclusivity angle. Short line first, then a natural explanation and a concrete example so it stays clear.
+    </p>
+
+    <div class="filters" id="filters">
+      <button class="filter active" data-filter="all">All</button>
+      <button class="filter" data-filter="involve">Can involve</button>
+      <button class="filter" data-filter="exclusive">Exclusivity</button>
+      <button class="filter" data-filter="grant">Grants</button>
+      <button class="filter" data-filter="watch">Watch only</button>
+    </div>
+
+    <!-- INVOLVE SECTION -->
+    <section id="involve-section">
+      <div class="section-title">Involve selected <span id="involve-count">4</span></div>
+
+      <!-- PULSE_INVOLVE_START -->
+      <article class="card" data-tags="involve exclusive grant" style="animation-delay:0.1s">
+        <h3>Digital Science Catalyst Grant 2026 <span class="tag tag-exclusive">Exclusive fit</span> <span class="tag tag-grant">Grant</span></h3>
+        <p class="one-liner">Up to £25k equity-free for trusted agentic workflows. Deadline 5 Oct.</p>
+        <p class="explain">This one likes early-stage ideas that already show how agents stay auditable and provenance-clean. It matches the way A11 already works with evidence and one-click packets.</p>
+        <p class="example">Example: you send the one-click and I return a complete application package ready to paste, including the exclusivity angle.</p>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="copyAction('one-click Catalyst Grant')">One-click AI package</button>
+          <button class="btn btn-ghost" onclick="copyAction('explain Catalyst more')">Explain more</button>
+        </div>
+      </article>
+
+      <article class="card" data-tags="involve exclusive grant" style="animation-delay:0.15s">
+        <h3>UK Sovereign AI Procurement · £100m <span class="tag tag-exclusive">Exclusivity</span> <span class="tag tag-grant">Grant</span></h3>
+        <p class="one-liner">Government becomes early customer for British AI start-ups (NHS, MoD, NCSC, business).</p>
+        <p class="explain">Built to open doors that usually stay closed for smaller or independent operators. Upfront payments are possible on some challenges.</p>
+        <p class="example">Example: pick one challenge, hit one-click, and receive a full positioning + eligibility packet you can act on in one go.</p>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="copyAction('one-click Sovereign AI UK')">One-click AI package</button>
+          <button class="btn btn-ghost" onclick="copyAction('list Sovereign challenges')">See challenges</button>
+        </div>
+      </article>
+
+      <article class="card" data-tags="involve grant" style="animation-delay:0.2s">
+        <h3>Class 20 · Mid Wales LoRaWAN grant <span class="tag tag-grant">Grant</span></h3>
+        <p class="one-liner">Up to £4,999 capital + support. EOI still open.</p>
+        <p class="explain">Low-capital, regional, already has a prepared EOI from earlier work. Good for a clean, fast entry.</p>
+        <p class="example">Example: one-click refreshes the EOI text so you only paste and submit.</p>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="copyAction('one-click LoRaWAN EOI')">One-click refresh EOI</button>
+        </div>
+      </article>
+
+      <article class="card" data-tags="involve exclusive" style="animation-delay:0.25s">
+        <h3>Sentient Open Source AGI Fund <span class="tag tag-exclusive">Exclusivity</span></h3>
+        <p class="one-liner">$42M mix of grants and founder-friendly capital for open components.</p>
+        <p class="explain">Flexible open-component rule. Strong asymmetry for anyone already building sovereign or evidence-first stacks.</p>
+        <p class="example">Example: one-click maps the A11 stack against their criteria and returns a ready path.</p>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="copyAction('one-click Sentient AGI')">One-click map & path</button>
+        </div>
+      </article>
+      <!-- PULSE_INVOLVE_END -->
+    </section>
+
+    <!-- LATEST SECTION -->
+    <section id="latest-section">
+      <div class="section-title">Latest verified moves <span>23</span></div>
+      <div id="launches">
+        <!-- PULSE_CONTENT_START -->
+        <article class="card" data-tags="watch" style="animation-delay:0.3s">
+          <h3>Pulse is ready <span class="tag tag-watch">Watch</span></h3>
+          <p class="one-liner">Full 23-item list lands on the next successful hourly sync after the page is live on your real domain.</p>
+          <p class="explain">Until the Vercel deploy finishes, this surface stays in standby. Once https://www.a11-k.space/nowline returns 200, the pulse fills the list automatically.</p>
+          <p class="example">Example: after deploy you will see short one-sentence headlines with a natural explanation and an example under each, exactly like the Involve cards above.</p>
+        </article>
+        <!-- PULSE_CONTENT_END -->
+      </div>
+    </section>
+
+    <div class="status-bar" id="status">
+      Exclusive to A.K. · Last sync: awaiting first live pulse · Europe/Sofia<br>
+      One-click actions work in this chat: just paste the phrase or say the button text.
+    </div>
+
+    <footer>
+      <a href="https://www.a11-k.space/">A11-K</a> · Nowline · PWA · Built only for you
+    </footer>
+  </div>
+
+  <script>
+    // Simple filter
+    document.querySelectorAll('.filter').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        document.querySelectorAll('.card').forEach(card => {
+          const tags = card.dataset.tags || '';
+          card.style.display = (f === 'all' || tags.includes(f)) ? '' : 'none';
+        });
+      });
+    });
+
+    // One-click helper: copies the action phrase so you can paste straight into chat
+    function copyAction(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const el = document.getElementById('status');
+        const old = el.innerHTML;
+        el.innerHTML = 'Copied: "' + text + '" — paste into the A11 chat for instant one-click.';
+        setTimeout(() => { el.innerHTML = old; }, 3200);
+      }).catch(() => {
+        alert('Action: ' + text + '\n\nPaste this into the A11 chat.');
+      });
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/nowline-sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

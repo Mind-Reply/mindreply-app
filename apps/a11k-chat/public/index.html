@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07090d">
+<meta name="description" content="Local-first brief room. Name what must become true—before anyone touches a tool.">
+<title>A11 Chat · Name the work</title>
+<link rel="stylesheet" href="https://a11-k.space/estate.css">
+<style>:root{--accent:#6ea8ff;--soft:#123361}</style>
+</head>
+<body>
+<nav class="shell nav">
+  <a class="brand" href="https://a11-k.space">A11<i>-K</i> / CHAT</a>
+  <div class="navlinks">
+    <a href="https://chat.a11-k.space">Chat</a>
+    <a href="https://nexus.a11-k.space">Nexus</a>
+    <a href="https://forge.a11-k.space">Forge</a>
+    <a href="https://studio.a11-k.space">Studio</a>
+  </div>
+  <span class="status">AURELIA · STAYS LOCAL</span>
+</nav>
+<main class="shell">
+  <section class="hero">
+    <div>
+      <span class="ey">Aurelia · before the tools</span>
+      <h1>Name what must become true.</h1>
+      <p class="lede">This room does not call a model. It forces a clear beginning: objective, verified context, proof standard, and the line a system must not cross. People write the brief. Machines wait.</p>
+    </div>
+    <aside class="proof"><b>Nothing leaves this browser.</b>Saved briefs stay on this device until you copy or export them. No keys. No silent calls.</aside>
+  </section>
+  <section class="workspace">
+    <aside class="rail">
+      <h2>Brief room</h2>
+      <button class="active" data-pane="compose">Compose</button>
+      <button data-pane="history">Local shelf</button>
+      <button data-pane="boundary">Boundary</button>
+    </aside>
+    <div class="work">
+      <div id="compose" class="pane active">
+        <div class="workhead">
+          <h2>Compose one accountable brief</h2>
+          <p>Specific enough for a named next move—not a wish list.</p>
+        </div>
+        <div class="field"><label>WHAT MUST BECOME TRUE</label><input id="o" placeholder="One outcome a person can own"></div>
+        <div class="split">
+          <div class="field"><label>VERIFIED CONTEXT</label><textarea id="c" placeholder="Only what is already known and checkable"></textarea></div>
+          <div class="field"><label>PROOF STANDARD</label><textarea id="e" placeholder="How will we know it worked?"></textarea></div>
+        </div>
+        <div class="field"><label>THE LINE WE WILL NOT CROSS</label><input id="r" placeholder="What stays human-approved"></div>
+        <button class="btn" id="save">Save on this device</button>
+        <button class="btn alt" id="copy">Copy brief</button>
+        <div class="output" id="out">No brief yet.</div>
+      </div>
+      <div id="history" class="pane">
+        <div class="workhead"><h2>Local shelf</h2><p>Recent briefs in this browser only.</p></div>
+        <div id="log" class="output"></div>
+        <button class="btn alt" id="clear">Clear this device</button>
+      </div>
+      <div id="boundary" class="pane">
+        <div class="output">No API keys. No model call. No transmission from this page.\n\nElysium: Chat = Aurelia (intent). Gates live in Forge. Receipts live in Nexus.</div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="shell">
+  <span>© 2026 A11-K · MindReply</span>
+  <span>PEOPLE WRITE · MACHINES WAIT</span>
+</footer>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+$('.rail').onclick=e=>{const b=e.target.closest('button');if(!b)return;$$('.rail button,.pane').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#'+b.dataset.pane).classList.add('active')};
+const brief=()=>`WHAT MUST BECOME TRUE\n${o.value||'[not set]'}\n\nVERIFIED CONTEXT\n${c.value||'[not set]'}\n\nPROOF STANDARD\n${e.value||'[not set]'}\n\nTHE LINE WE WILL NOT CROSS\n${r.value||'[not set]'}`;
+function render(){const h=JSON.parse(localStorage.a11chat||'[]');log.textContent=h.length?h.join('\n\n———\n\n'):'Shelf is empty.'}
+render();
+save.onclick=()=>{const h=JSON.parse(localStorage.a11chat||'[]');h.unshift(brief());localStorage.a11chat=JSON.stringify(h.slice(0,20));out.textContent=brief();render()};
+copy.onclick=()=>navigator.clipboard.writeText(brief());
+clear.onclick=()=>{delete localStorage.a11chat;render()}
+</script>
+</body>
+</html>

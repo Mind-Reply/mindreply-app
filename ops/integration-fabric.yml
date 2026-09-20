@@ -1,0 +1,37 @@
+version: 1
+name: mindreply-integration-fabric
+principles:
+  - core-truth-is-provider-neutral
+  - every-connector-has-health-and-owner
+  - every-write-is-auditable
+  - retries-use-backoff-and-idempotency
+  - external-events-never-bypass-validation
+adapters:
+  n8n:
+    role: workflow-orchestration
+    mode: webhook-or-scheduled
+    health: required-before-production
+  zapier:
+    role: lightweight-automation-adapter
+    mode: webhook
+    health: optional
+  vector:
+    role: retrieval-memory
+    mode: provider-neutral-interface
+    health: required-only-for-features-that-use-retrieval
+  stripe:
+    role: billing-events
+    mode: signed-webhook
+    idempotency: required
+  github:
+    role: source-and-release-control
+    mode: app-or-token
+    writes: approval-gated
+  supabase:
+    role: relational-storage-and-object-storage
+    mode: direct-or-server-adapter
+    service_role_client_exposure: forbidden
+health_contract:
+  states: [healthy, degraded, unavailable, unknown]
+  stale_after_minutes: 15
+  never_claim_healthy_without_recent_evidence: true

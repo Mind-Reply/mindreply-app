@@ -2,27 +2,26 @@
 
 ## Current source of truth
 
-The actively maintained production implementation is currently:
+- Repository: `Mind-Reply/mindreply-app`
+- Default branch: `main`
+- Reconciliation branch: `chore/mindreply-app-reconstruction-2026-09-10`
+- Product: MindReply Proofline
 
-- `angellllkr-eng/mind-reply-core`
-- default branch: `main`
-
-This organization repository is the public organizational application identity and should not be treated as a production source until it contains the complete validated application.
-
-## Vercel alignment requirement
-
-The production Vercel project serving `mind-reply.com` should ultimately be linked to the validated canonical production repository, not an archived repository or recovery snapshot.
+`angellllkr-eng/mind-reply-core` was the verified migration source for this reconstruction. It is retained as a rollback and provenance source until this repository passes the migration gate and the owner explicitly approves its retirement or archival.
 
 ## Migration gate
 
-Before moving production source into this repository:
+This repository is **not production-approved merely because code has been copied here**. Before a production source switch, all of the following must be recorded against the same immutable commit:
 
-1. Preserve all working routes and APIs.
-2. Copy/migrate application code and tests.
-3. Verify environment configuration without exposing secrets.
-4. Compare production behavior route-by-route.
-5. Run build, test and security checks.
-6. Verify `mind-reply.com` against the new deployment.
-7. Keep the previous deployment as a rollback candidate.
+1. dependency installation, type checks, tests, and build pass;
+2. secret and generated-artifact review passes;
+3. public routes, APIs, authentication, and payments are smoke-tested in a preview environment;
+4. the production deployment is associated with this repository and its exact commit;
+5. HTTPS, health, readiness, status, and rollback are verified; and
+6. owner approval is recorded for production promotion.
 
-No repository rename or production source switch should occur until these gates pass.
+Until then, this repository is **built but NO-GO for production cutover**.
+
+## Boundaries
+
+MindReply product code lives here. The private owner control plane, credentials, deployment controls, and evidence systems remain separate, authenticated systems. No secrets, customer data, or production credentials belong in this repository.

@@ -1,0 +1,74 @@
+name: A11 Live Evidence Monitor
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 */4 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: a11-live-evidence
+  cancel-in-progress: true
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check public surfaces and commercial route
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/a11-live
+          ts="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          out="evidence/a11-live/${ts//:/-}.md"
+
+          check_url() {
+            local label="$1"
+            local url="$2"
+            local status
+            status="$(curl -L -sS -o /dev/null -w '%{http_code}' --max-time 20 "$url" || true)"
+            echo "- $label: $status — $url" >> "$out"
+          }
+
+          {
+            echo '# A11 Live Evidence Check'
+            echo
+            echo "Timestamp: $ts"
+            echo "Commit: ${GITHUB_SHA}"
+            echo
+            echo '## Public surfaces'
+            check_url 'A11-K domain' 'https://a11-k.space'
+            check_url 'GitHub Pages A11-K' 'https://mind-reply.github.io/A11-K/'
+            check_url 'MindReply commercial surface' 'https://www.mind-reply.com/'
+            check_url 'AUREL' 'https://aurel.a11-k.space'
+            echo
+            echo '## Repository evidence'
+            echo '- Canonical A11 application: apps/a11k'
+            echo '- Public assets: apps/a11k/public'
+            echo '- Vercel configuration: apps/a11k/vercel.json'
+            echo '- Live execution contract: docs/A11_LIVE_EXECUTION.md'
+            echo
+            echo '## Commercial evidence'
+            echo '- Use only directly observed public offer/contact evidence.'
+            echo '- Do not infer sales, customers, revenue, or conversion from page availability.'
+            echo
+            echo '## Human-value measurement'
+            echo '- Capture time returned, qualified commercial signal, financial outcome, repeatability, and recovery only when directly evidenced.'
+            echo
+            echo '## Status'
+            echo 'REAL — automated observation/evidence capture. No billing, secrets, destructive changes, or automatic external outreach.'
+          } > "$out"
+
+      - name: Commit evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'A11 Evidence Monitor'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add evidence/a11-live/
+          git commit -m 'ops: record A11 live evidence' || exit 0
+          git push

@@ -1,0 +1,17 @@
+{
+  "name": "@mind-reply/veridex",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Veridex — Provenance-First Intelligence (immutable cryptographic ledger + .epack receipts)",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mind-reply/elysium-core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

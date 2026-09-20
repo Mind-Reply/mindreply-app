@@ -1,0 +1,30 @@
+name: Personal Estate Automation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '37 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  security:
+    uses: Mind-Reply/.github/.github/workflows/security-baseline.yml@main
+  receipt:
+    needs: [security]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Emit migration-source receipt
+        run: |
+          echo "repository=angellllkr-eng/mind-reply-core"
+          echo "role=MigrationSourceSentinel"
+          echo "run_id=${{ github.run_id }}"
+          echo "sha=${{ github.sha }}"
+          echo "security=${{ needs.security.result }}"
+          echo "policy=No automatic production promotion"

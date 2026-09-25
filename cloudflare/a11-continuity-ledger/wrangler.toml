@@ -1,0 +1,31 @@
+name = "a11-continuity-ledger"
+main = "src/index.ts"
+compatibility_date = "2026-09-25"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "a11-continuity-ledger"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+[[kv_namespaces]]
+binding = "PERSONAS"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "a11-persona-memory"
+
+[ai]
+binding = "AI"
+
+[vars]
+LEDGER_CHAIN_ID = "a11-estate"
+CHAT_TTL_DAYS = "90"
+
+# Create these resources before deployment:
+# npx wrangler d1 create a11-continuity-ledger
+# npx wrangler kv namespace create PERSONAS
+# npx wrangler vectorize create a11-persona-memory --dimensions=768 --metric=cosine
+# npx wrangler vectorize create-metadata-index a11-persona-memory --property-name=city_micro --type=string
+# npx wrangler vectorize create-metadata-index a11-persona-memory --property-name=purpose --type=string
+# npx wrangler d1 execute a11-continuity-ledger --remote --file=./migrations/0001_continuity.sql

@@ -1,3 +1,15 @@
+## Canonical repository identity
+
+**Canonical MindReply product repository:** `Mind-Reply/mindreply-app`
+
+This is the active product root for the public MindReply experience. Similarly named personal or historical repositories are **source material, not parallel production roots**, until their files are explicitly reconciled here.
+
+- Active product: `Mind-Reply/mindreply-app`
+- Private operational root: `angellllkr-eng/agent-control-plane`
+- A11 execution service: `a11-live-cloud-execution`
+- Historical/migration sources: preserve → reconcile → archive when repository administration is available
+- Rule: no blind cross-repository overwrite.
+
 # MindReply Proofline
 
 **Owner-governed automation, GitHub release engineering, and evidence-led Python systems.**

@@ -1,53 +1,17 @@
 import Link from "next/link";
-
 const surfaces = [
-  ["01", "Operations", "Observe work, releases and consequential actions from one operational surface.", "/operations"],
-  ["02", "Agents", "Give task-specific workers clear boundaries, handoffs and approval points.", "/agents"],
-  ["03", "Knowledge", "Ground execution in maintained context, retrieval and evidence.", "/knowledge"],
-  ["04", "Automations", "Connect repeatable workflows without hiding what they can change.", "/automations"],
-  ["05", "Evidence", "Keep a reviewable trail from intent through execution and release.", "/evidence"],
-  ["06", "Control", "Keep configuration, deployment and rollback decisions under explicit ownership.", "/control"],
+  ["01","Signal","Capture the request, constraints, evidence and desired outcome.","/knowledge"],
+  ["02","Vector","Normalize ambiguity into a concrete outcome contract.","/operations"],
+  ["03","Forge","Produce plans, decisions and artifacts with uncertainty exposed.","/agents"],
+  ["04","Rail","Move approved work through bounded tools and connected systems.","/automations"],
+  ["05","Proofline","Verify outputs from artifacts, logs and authoritative sources.","/evidence"],
+  ["06","Crownline","Keep ownership, permissions, approvals and rollback visible.","/control"],
 ];
-
-export function PlatformOverview() {
-  return (
-    <main className="mc-page">
-      <nav className="mc-nav" aria-label="Primary navigation">
-        <Link className="mc-brand" href="/">MindReply<small>OPERATING SYSTEM</small></Link>
-        <div className="mc-nav-center">
-          <Link href="/platform">Platform</Link><Link href="/operations">Operations</Link><Link href="/agents">Agents</Link><Link href="/knowledge">Knowledge</Link><Link href="/evidence">Evidence</Link>
-        </div>
-        <Link className="mc-secondary" href="/status">System status ↗</Link>
-      </nav>
-      <section className="mc-hero" aria-labelledby="platform-title">
-        <div>
-          <p className="mc-kicker"><i/>THE OPERATING LAYER</p>
-          <h1 id="platform-title">From intent to <em>verified outcome.</em></h1>
-          <p className="lead">MindReply connects people, agents, knowledge, automation and release controls into one accountable operating layer.</p>
-          <div className="mc-actions"><Link className="mc-primary" href="/agents">Explore agents ↗</Link><Link className="mc-secondary" href="/control">Open control</Link></div>
-        </div>
-        <aside className="mc-console" aria-label="Execution lifecycle">
-          <div className="mc-console-top"><span>EXECUTION GRAPH</span><b>CONTROLLED</b></div>
-          <div className="mc-console-main">
-            <span className="mc-console-label">Lifecycle</span>
-            <div className="mc-verdict"><strong>Intent → evidence → action → release</strong><span>READY</span></div>
-            <div className="mc-lanes">
-              {["Intent","Context","Execution","Evidence"].map((label, index) => <div className="mc-lane" key={label}><span>{label}</span><div className="mc-lane-bar"><i style={{ width: `${94 - index * 4}%` }} /></div><b>{["DEFINED","GROUNDED","GATED","RECORDED"][index]}</b></div>)}
-            </div>
-          </div>
-        </aside>
-      </section>
-      <section className="mc-section" aria-labelledby="surfaces-title">
-        <div className="mc-section-head"><span>ONE SYSTEM / SIX SURFACES</span><h2 id="surfaces-title">Use only the capabilities the work actually needs.</h2></div>
-        <div className="mc-rail">{surfaces.map(([code,title,body,href]) => <article className="mc-module" key={code}><span className="num">{code}</span><h3>{title}</h3><p>{body}</p><Link href={href}>{title} ↗</Link></article>)}</div>
-      </section>
-      <section className="mc-section" aria-labelledby="principles-title">
-        <div className="mc-section-head"><span>BUILT FOR ACCOUNTABILITY</span><h2 id="principles-title">Automation is useful when its boundaries are visible.</h2></div>
-        <div className="mc-principle-list">
-          {["Every consequential action has an owner.","Capabilities are selected by policy and context.","Evidence stays attached to the work.","Release paths remain observable and reversible."].map((text,index)=><article className="mc-principle" key={text}><span>{String(index+1).padStart(2,"0")}</span><div><h3>{text}</h3><p>Designed as an operating behavior rather than a promise.</p></div></article>)}
-        </div>
-      </section>
-      <footer className="mc-footer"><span>MindReply</span><span>OPERATE · EVIDENCE · RELEASE</span><Link href="/status">System status ↗</Link></footer>
-    </main>
-  );
-}
+export function PlatformOverview(){return <main className="mc-page a11pro-page">
+<nav className="mc-nav" aria-label="Primary navigation"><Link className="mc-brand a11pro-brand" href="/">A11pro<small>OUTCOME OPERATING LAYER</small></Link><div className="mc-nav-center"><Link href="/platform">Platform</Link><Link href="/agents">Agents</Link><Link href="/realtime">Realtime</Link><Link href="/evidence">Proof</Link><Link href="/control">Control</Link></div><Link className="mc-secondary" href="/status">System status ↗</Link></nav>
+<section className="mc-hero a11pro-hero"><div><p className="mc-kicker"><i/>A11PRO / SYSTEM MAP</p><h1>Make the <em>outcome</em> legible.</h1><p className="lead">A11pro connects people, context, agents, tools and evidence into one reviewable operating path.</p><div className="a11pro-path"><span>SIGNAL</span><b>→</b><span>VECTOR</span><b>→</b><span>FORGE</span><b>→</b><span>PROOF</span></div><div className="mc-actions"><Link className="mc-primary" href="/agents">Explore agents ↗</Link><Link className="mc-secondary" href="/control">Open control</Link></div></div>
+<aside className="mc-console a11pro-console" aria-label="A11pro execution lifecycle"><div className="mc-console-top"><span>EXECUTION GRAPH</span><b>BOUNDARY VISIBLE</b></div><div className="mc-console-main"><span className="mc-console-label">Lifecycle</span><div className="mc-verdict"><strong>Intent → context → action → proof</strong><span>REVIEWABLE</span></div><div className="mc-lanes">{["Intent","Context","Execution","Evidence"].map((label,index)=><div className="mc-lane" key={label}><span>{label}</span><div className="mc-lane-bar"><i style={{width:index===0?"94%":index===1?"90%":index===2?"86%":"82%"}}/></div><b>{["SHAPED","GROUNDED","BOUNDED","VERIFIED"][index]}</b></div>)}</div></div></aside></section>
+<section className="mc-section"><div className="mc-section-head"><span>ONE GRAPH / SIX LAYERS</span><h2>Each layer has a job. Each job has a boundary.</h2></div><div className="mc-rail">{surfaces.map(([code,title,body,href])=><article className="mc-module a11pro-module" key={code}><span className="num">{code}</span><h3>{title}</h3><p>{body}</p><Link href={href}>Open layer ↗</Link></article>)}</div></section>
+<section className="mc-section"><div className="mc-section-head"><span>PROOF-ORIENTED OPERATING MODEL</span><h2>The interface can feel unusual without becoming unclear.</h2></div><div className="mc-principle-list">{["Signal is input, not truth.","Vector defines the outcome before the work starts.","Forge exposes assumptions instead of hiding them.","Rail only exposes authorized execution paths.","Proofline reports what the system can actually support.","Crownline keeps consequential authority explicit."].map((text,index)=><article className="mc-principle" key={text}><span>{String(index+1).padStart(2,"0")}</span><div><h3>{text}</h3><p>A11pro design vocabulary; not a claim about an OpenAI product.</p></div></article>)}</div></section>
+<footer className="mc-footer"><span>A11pro / MindReply</span><span>SIGNAL · FORGE · PROOF</span><Link href="/status">System status ↗</Link></footer>
+</main>}

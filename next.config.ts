@@ -143,7 +143,9 @@ const config: NextConfig = {
     optimizePackageImports: ['@radix-ui/*', 'lucide-react'],
   },
 
-  turbopack: {},
+  turbopack: {
+    root: __dirname,
+  },
 
   // Environment variables
   env: {

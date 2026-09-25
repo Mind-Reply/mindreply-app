@@ -1,17 +1,68 @@
 import Link from "next/link";
-const surfaces = [
-  ["01","Signal","Capture the request, constraints, evidence and desired outcome.","/knowledge"],
-  ["02","Vector","Normalize ambiguity into a concrete outcome contract.","/operations"],
-  ["03","Forge","Produce plans, decisions and artifacts with uncertainty exposed.","/agents"],
-  ["04","Rail","Move approved work through bounded tools and connected systems.","/automations"],
-  ["05","Proofline","Verify outputs from artifacts, logs and authoritative sources.","/evidence"],
-  ["06","Crownline","Keep ownership, permissions, approvals and rollback visible.","/control"],
+
+const layers = [
+  ["01","SIGNAL","Capture the request, constraints, evidence and desired outcome.","/knowledge","INPUT"],
+  ["02","VECTOR","Normalize ambiguity into an explicit outcome contract.","/operations","SHAPE"],
+  ["03","FORGE","Compose plans, decisions and artifacts while exposing uncertainty.","/agents","CREATE"],
+  ["04","RAIL","Route approved work through bounded tools and release paths.","/automations","EXECUTE"],
+  ["05","PROOFLINE","Bind results to artifacts, logs and authoritative evidence.","/evidence","VERIFY"],
+  ["06","CROWNLINE","Keep ownership, permission, approval and rollback visible.","/control","AUTHORIZE"],
 ];
-export function PlatformOverview(){return <main className="mc-page a11pro-page">
-<nav className="mc-nav" aria-label="Primary navigation"><Link className="mc-brand a11pro-brand" href="/">A11pro<small>OUTCOME OPERATING LAYER</small></Link><div className="mc-nav-center"><Link href="/platform">Platform</Link><Link href="/agents">Agents</Link><Link href="/realtime">Realtime</Link><Link href="/evidence">Proof</Link><Link href="/control">Control</Link></div><Link className="mc-secondary" href="/status">System status ↗</Link></nav>
-<section className="mc-hero a11pro-hero"><div><p className="mc-kicker"><i/>A11PRO / SYSTEM MAP</p><h1>Make the <em>outcome</em> legible.</h1><p className="lead">A11pro connects people, context, agents, tools and evidence into one reviewable operating path.</p><div className="a11pro-path"><span>SIGNAL</span><b>→</b><span>VECTOR</span><b>→</b><span>FORGE</span><b>→</b><span>PROOF</span></div><div className="mc-actions"><Link className="mc-primary" href="/agents">Explore agents ↗</Link><Link className="mc-secondary" href="/control">Open control</Link></div></div>
-<aside className="mc-console a11pro-console" aria-label="A11pro execution lifecycle"><div className="mc-console-top"><span>EXECUTION GRAPH</span><b>BOUNDARY VISIBLE</b></div><div className="mc-console-main"><span className="mc-console-label">Lifecycle</span><div className="mc-verdict"><strong>Intent → context → action → proof</strong><span>REVIEWABLE</span></div><div className="mc-lanes">{["Intent","Context","Execution","Evidence"].map((label,index)=><div className="mc-lane" key={label}><span>{label}</span><div className="mc-lane-bar"><i style={{width:index===0?"94%":index===1?"90%":index===2?"86%":"82%"}}/></div><b>{["SHAPED","GROUNDED","BOUNDED","VERIFIED"][index]}</b></div>)}</div></div></aside></section>
-<section className="mc-section"><div className="mc-section-head"><span>ONE GRAPH / SIX LAYERS</span><h2>Each layer has a job. Each job has a boundary.</h2></div><div className="mc-rail">{surfaces.map(([code,title,body,href])=><article className="mc-module a11pro-module" key={code}><span className="num">{code}</span><h3>{title}</h3><p>{body}</p><Link href={href}>Open layer ↗</Link></article>)}</div></section>
-<section className="mc-section"><div className="mc-section-head"><span>PROOF-ORIENTED OPERATING MODEL</span><h2>The interface can feel unusual without becoming unclear.</h2></div><div className="mc-principle-list">{["Signal is input, not truth.","Vector defines the outcome before the work starts.","Forge exposes assumptions instead of hiding them.","Rail only exposes authorized execution paths.","Proofline reports what the system can actually support.","Crownline keeps consequential authority explicit."].map((text,index)=><article className="mc-principle" key={text}><span>{String(index+1).padStart(2,"0")}</span><div><h3>{text}</h3><p>A11pro design vocabulary; not a claim about an OpenAI product.</p></div></article>)}</div></section>
-<footer className="mc-footer"><span>A11pro / MindReply</span><span>SIGNAL · FORGE · PROOF</span><Link href="/status">System status ↗</Link></footer>
-</main>}
+
+const principles = [
+  ["01","OUTCOME","The result that must exist is defined before the machinery moves."],
+  ["02","BOUNDARY","Tools are capabilities; authority remains explicit."],
+  ["03","PROOF","A completed claim carries evidence or a visible uncertainty state."],
+  ["04","REVERSAL","Consequential release paths expose approval and rollback."],
+];
+
+export function PlatformOverview(){
+  return <main className="mc-page a11pro-page platform-atlas">
+    <nav className="mc-nav" aria-label="Primary navigation">
+      <Link className="mc-brand a11pro-brand" href="/">A11pro<small>OUTCOME OPERATING LAYER</small></Link>
+      <div className="mc-nav-center"><Link href="/platform">Platform</Link><Link href="/agents">Agents</Link><Link href="/realtime">Realtime</Link><Link href="/evidence">Proof</Link><Link href="/control">Control</Link></div>
+      <Link className="mc-secondary" href="/status">System status ↗</Link>
+    </nav>
+
+    <section className="atlas-hero">
+      <div className="atlas-copy">
+        <p className="mc-kicker"><i/>A11PRO / PLATFORM ATLAS</p>
+        <h1>Not another dashboard.<br/><em>A system you can see think.</em></h1>
+        <p className="lead">Six distinct surfaces turn a messy request into a bounded, reviewable path from signal to proof.</p>
+        <div className="a11pro-path"><span>SIGNAL</span><b>→</b><span>VECTOR</span><b>→</b><span>FORGE</span><b>→</b><span>RAIL</span><b>→</b><span>PROOF</span></div>
+        <div className="mc-actions"><Link className="mc-primary" href="/agents">Enter the forge ↗</Link><Link className="mc-secondary" href="/realtime">Talk to the outcome</Link></div>
+      </div>
+
+      <div className="atlas-orbit" aria-label="A11pro six-layer operating graph">
+        <div className="orbit-ring orbit-ring-one"/>
+        <div className="orbit-ring orbit-ring-two"/>
+        <div className="orbit-core"><span>A11</span><b>PRO</b><small>OWNER<br/>CONTROL</small></div>
+        {layers.map(([code,title,,href,label],index)=><Link key={code} href={href} className={"orbit-node orbit-node-"+(index+1)}><span>{code}</span><b>{title}</b><small>{label}</small></Link>)}
+      </div>
+    </section>
+
+    <section className="atlas-section">
+      <div className="atlas-section-head"><p className="mc-kicker"><i/>THE SIX SURFACES</p><h2>Each layer looks different because each layer does different work.</h2></div>
+      <div className="atlas-grid">
+        {layers.map(([code,title,body,href,label],index)=><article className={"atlas-card atlas-card-"+(index+1)} key={code}>
+          <div className="atlas-card-top"><span>{code}</span><small>{label}</small></div>
+          <div className="atlas-glyph" aria-hidden="true"><i/><i/><i/></div>
+          <h3>{title}</h3><p>{body}</p>
+          <Link href={href}>Open surface <span>↗</span></Link>
+        </article>)}
+      </div>
+    </section>
+
+    <section className="atlas-section atlas-split">
+      <div><p className="mc-kicker"><i/>OPERATING CONTRACT</p><h2>Strange on the surface. Precise underneath.</h2><p className="lead">The visual language is deliberately unlike generic enterprise software: mineral depth, signal lines, oversized type, hard edges and proof states. The interaction model stays disciplined.</p></div>
+      <div className="atlas-principles">{principles.map(([n,title,body])=><article key={n}><span>{n}</span><div><b>{title}</b><p>{body}</p></div></article>)}</div>
+    </section>
+
+    <section className="atlas-release">
+      <div><p className="mc-kicker"><i/>THE RELEASE LINE</p><h2>Work can move fast without becoming invisible.</h2><p>Understand → Protect → Execute → Verify → Record → Handoff → Continue.</p></div>
+      <Link className="mc-primary" href="/control">Open owner control ↗</Link>
+    </section>
+
+    <footer className="mc-footer"><span>A11pro / MindReply</span><span>OUTCOME · BOUNDARY · PROOF</span><Link href="/status">System status ↗</Link></footer>
+  </main>
+}

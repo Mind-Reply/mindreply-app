@@ -1,6 +1,4 @@
 import type { NextConfig } from 'next';
-import { withSentryConfig } from '@sentry/nextjs';
-
 const config: NextConfig = {
   // Optimization
   swcMinify: true,
@@ -178,16 +176,4 @@ const config: NextConfig = {
   },
 };
 
-// Sentry configuration
-const withSentry = withSentryConfig(config, {
-  org: 'mind-reply',
-  project: 'mind-reply-core',
-  silent: true,
-  widenClientFileUpload: true,
-  transpileClientSDK: true,
-  tunnelRoute: '/monitoring',
-  disableLogger: true,
-  autoSessionTracking: true,
-});
-
-export default withSentry;
+export default config;

@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "principle": "transaction -> offer -> buyer action -> proof -> delivery -> expansion -> retention",
+  "source": "Mind-Reply/mindreply-app",
+  "surfaces": [
+    "a11k",
+    "chat",
+    "nexus",
+    "forge",
+    "studio",
+    "registrar",
+    "replycontrol",
+    "ios"
+  ],
+  "guardrails": [
+    "no fabricated revenue",
+    "no fabricated conversion",
+    "no automatic real-money action",
+    "owner approval before irreversible action"
+  ]
+}

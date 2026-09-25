@@ -24,7 +24,7 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
       <div className="mc-nav-center">
         <a href="/platform">Platform</a><a href="/operations">Operations</a><a href="/agents">Agents</a><a href="/knowledge">Knowledge</a><a href="/evidence">Evidence</a>
       </div>
-      <div className="mc-nav-right"><span className="mc-state"><i className="mc-dot"/>SYSTEM LIVE</span><LocaleSwitcher locale={locale} /></div>
+      <div className="mc-nav-right"><span className="mc-state"><i className="mc-dot"/>OWNER CONTROL</span><LocaleSwitcher locale={locale} /></div>
     </nav>
 
     <section className="mc-hero" id="top" aria-labelledby="hero-title">
@@ -35,9 +35,9 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
         <div className="mc-actions"><a className="mc-primary" href="/platform">Explore the platform <span aria-hidden="true">↗</span></a><a className="mc-secondary" href={AUDIT_CHECKOUT} target="_blank" rel="noreferrer">Start a review</a></div>
       </div>
       <aside className="mc-console" aria-label="MindReply operating state">
-        <div className="mc-console-top"><span>PROOFLINE / CURRENT STATE</span><b>VERIFIED PATH</b></div>
-        <div className="mc-console-main"><span className="mc-console-label">Decision posture</span><div className="mc-verdict"><strong>Human authority retained.</strong><span>READY</span></div><div className="mc-lanes">
-          {[['Intent','96%','COMPILED'],['Evidence','91%','TRACEABLE'],['Release','88%','GATED'],['Rollback','100%','AVAILABLE']].map(([label,width,state]) => <div className="mc-lane" key={label}><span>{label}</span><div className="mc-lane-bar"><i style={{width}}/></div><b>{state}</b></div>)}
+        <div className="mc-console-top"><span>PROOFLINE / OPERATING POSTURE</span><b>CLAIMS VERIFIED BEFORE RELEASE</b></div>
+        <div className="mc-console-main"><span className="mc-console-label">Decision posture</span><div className="mc-verdict"><strong>Human authority retained.</strong><span>OWNER APPROVAL</span></div><div className="mc-lanes">
+          {[['Intent','EXPLICIT'],['Evidence','TRACEABLE'],['Release','REVIEWABLE'],['Rollback','REVERSIBLE']].map(([label,state]) => <div className="mc-lane" key={label}><span>{label}</span><div className="mc-lane-bar"><i/></div><b>{state}</b></div>)}
         </div></div>
       </aside>
     </section>

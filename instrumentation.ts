@@ -1,5 +1,3 @@
 export async function register() {
-  if (process.env.NEXT_RUNTIME === 'nodejs') {
-    await import('./instrumentation-client');
-  }
+  // Telemetry is intentionally deployment-neutral; production observability is configured by the host.
 }

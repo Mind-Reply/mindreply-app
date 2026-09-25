@@ -186,12 +186,12 @@ export default {
       }
 
       if (request.method === "POST" && url.pathname === "/v1/chat") {
-        const input = await request.json<ChatInput>();
+        const input = (await request.json()) as ChatInput;
         return json(await handleChat(env, input), 201);
       }
 
       if (request.method === "POST" && url.pathname === "/v1/research") {
-        const body = await request.json<{ query: string; city_micro?: string; purpose?: string }>();
+        const body = (await request.json()) as { query: string; city_micro?: string; purpose?: string };
         if (!body.query) return json({ error: "query is required" }, 400);
         return json({ matches: await research(env, body.query, body.city_micro, body.purpose) });
       }

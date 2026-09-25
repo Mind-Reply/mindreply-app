@@ -186,3 +186,59 @@ PROTECTED
 
 NEXT
 Repair the canonical CI/checkout estate, then reconcile the remaining high-value branches and duplicate-like repositories against `Mind-Reply/mindreply-app` without deleting unique history.
+
+## 12. Current-cycle update — 2026-09-25
+
+### CI — VERIFIED
+
+Post-repair canonical validation on `main` passed:
+- Frontier Modern — SUCCESS
+- Estate Evidence Check — SUCCESS
+- Code Quality: Push on main — SUCCESS
+
+The previous TypeScript build defect was confirmed as a TypeScript 7 / Next integration incompatibility. The web application was pinned to TypeScript 6.0.3 and the lockfile was reconciled. The repaired Frontier build completed successfully before promotion.
+
+### Profit-engineering reconciliation — BUILT / MERGED
+
+PR #9 `reconcile: recover profit engineering surface` passed:
+- Frontier Modern — SUCCESS
+- Estate Evidence Check — SUCCESS
+- Code Quality: PR #9 — SUCCESS
+
+Merged into `main`:
+`d4bd849d86041c245a5f50e331a40525f1d6be4c`
+
+Recovered:
+- `/profit-engineering` scenario surface
+- profit-engineering CSS
+- commercial methodology documentation
+
+Scenario math remains explicitly non-forecast.
+
+Superseded PR #6 was closed without merge; its unique work is preserved through PR #9 and its branch history.
+
+### Active authority docs — BUILT
+
+Updated active canonical references in:
+- `Mind-Reply/Aurel`
+- `Mind-Reply/mindreply-docs`
+- `Mind-Reply/mrproduction`
+- `Mind-Reply/.github/profile/README.md`
+- `Mind-Reply/.github/REPOSITORY_REGISTRY.md`
+
+Historical audit documents were intentionally not rewritten.
+
+### Public surface observation — VERIFIED / UNLINKED
+
+`https://mind-reply.com` currently returns a MindReply web page to an external HTTP fetch. This proves the domain serves content at check time, but does not by itself prove which repository or deployment pipeline produced it.
+
+### Remaining blockers
+
+- PR #9 merge triggered fresh post-merge validation; final post-merge green state is pending.
+- Three unresolved Gitlink entries remain preserved for provenance recovery:
+  `apps/experimental/brushworks`, `apps/experimental/forge`, `infrastructure/nexus`.
+- ResellerPro canonical personal source remains inaccessible through the connected GitHub installation.
+
+## 13. Next execution
+
+Re-verify the post-merge gates, then repair or classify the unresolved Gitlinks and continue high-value repository reconciliation. Do not delete unknown source pointers without provenance evidence.

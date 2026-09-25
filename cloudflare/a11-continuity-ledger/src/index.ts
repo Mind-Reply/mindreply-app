@@ -5,6 +5,7 @@ export interface Env {
   AI: Ai;
   LEDGER_CHAIN_ID?: string;
   CHAT_TTL_DAYS?: string;
+  COMMUNICATION_WEBHOOK_SECRET?: string;
 }
 
 type PersonaMemory = {
@@ -18,6 +19,44 @@ type PersonaMemory = {
   last_ledger_hash: string;
   updated_ts: number;
 };
+
+type CommunicationEvent = {
+  provider: string;
+  channel: "whatsapp" | "sms" | "viber";
+  provider_event_id: string;
+  status: "queued" | "sent" | "delivered" | "failed" | "read" | "unknown";
+  occurred_ts?: number;
+  recipient_ref?: string;
+  metadata?: Record<string, unknown>;
+};
+
+async function hmacSha256Hex(secret: string, value: string): Promise<string> {
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const signature = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(value));
+  return [...new Uint8Array(signature)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function verifyWebhook(request: Request, rawBody: string, secret?: string) {
+  if (!secret) throw new Error("communication webhook secret is not configured");
+  const provided = request.headers.get("x-a11-signature");
+  if (!provided) throw new Error("missing x-a11-signature");
+  const expected = await hmacSha256Hex(secret, rawBody);
+  if (provided.length !== expected.length) throw new Error("invalid webhook signature");
+  const a = new TextEncoder().encode(provided), b = new TextEncoder().encode(expected);
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+  if (diff !== 0) throw new Error("invalid webhook signature");
+}
+
+async function recordCommunicationEvent(env: Env, event: CommunicationEvent) {
+  if (!event.provider || !event.channel || !event.provider_event_id || !event.status) throw new Error("provider, channel, provider_event_id and status are required");
+  const occurredTs = event.occurred_ts ?? Date.now();
+  const result = await env.DB.prepare("INSERT OR IGNORE INTO communication_events (received_ts, provider, channel, provider_event_id, status, occurred_ts, recipient_ref, source, metadata_json) VALUES (?, ?, ?, ?, ?, ?, ?, 'webhook', ?)").bind(
+    Date.now(), event.provider, event.channel, event.provider_event_id, event.status, occurredTs, event.recipient_ref ?? null, event.metadata ? JSON.stringify(event.metadata) : null,
+  ).run();
+  const inserted = (result.meta?.changes || 0) > 0;
+  return { recorded: inserted, duplicate: !inserted, provider: event.provider, channel: event.channel, provider_event_id: event.provider_event_id, status: event.status, occurred_ts: occurredTs };
+}
 
 type ChatInput = {
   bot_id: string;
@@ -182,7 +221,7 @@ export default {
         const head = await env.DB.prepare(
           "SELECT chain_id, last_hash, last_id, updated_ts FROM ledger_chain_heads ORDER BY updated_ts DESC LIMIT 1",
         ).first();
-        return json({ status: "ok", ledger: head || { chain_id: env.LEDGER_CHAIN_ID || "a11-estate", last_hash: "genesis" } });
+        return json({ status: "ok", communications: { webhook_auth: Boolean(env.COMMUNICATION_WEBHOOK_SECRET) }, ledger: head || { chain_id: env.LEDGER_CHAIN_ID || "a11-estate", last_hash: "genesis" } });
       }
 
       if (request.method === "POST" && url.pathname === "/v1/chat") {
@@ -194,6 +233,21 @@ export default {
         const body = (await request.json()) as { query: string; city_micro?: string; purpose?: string };
         if (!body.query) return json({ error: "query is required" }, 400);
         return json({ matches: await research(env, body.query, body.city_micro, body.purpose) });
+      }
+
+      if (request.method === "POST" && url.pathname === "/v1/communications/webhook") {
+        const rawBody = await request.text();
+        await verifyWebhook(request, rawBody, env.COMMUNICATION_WEBHOOK_SECRET);
+        return json(await recordCommunicationEvent(env, JSON.parse(rawBody) as CommunicationEvent), 201);
+      }
+
+      if (request.method === "GET" && url.pathname === "/v1/communications") {
+        const channel = url.searchParams.get("channel");
+        const limit = Math.min(100, Math.max(1, Number(url.searchParams.get("limit") || 25)));
+        const result = channel
+          ? await env.DB.prepare("SELECT provider, channel, provider_event_id, status, occurred_ts, recipient_ref, source FROM communication_events WHERE channel = ? ORDER BY occurred_ts DESC LIMIT ?").bind(channel, limit).all()
+          : await env.DB.prepare("SELECT provider, channel, provider_event_id, status, occurred_ts, recipient_ref, source FROM communication_events ORDER BY occurred_ts DESC LIMIT ?").bind(limit).all();
+        return json({ events: result.results || [] });
       }
 
       if (request.method === "GET" && url.pathname === "/v1/memory") {

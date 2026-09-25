@@ -33,3 +33,11 @@ A memory record carries `last_ledger_hash`. If the memory projection is rebuilt 
 ## Deployment
 
 This repository contains the implementation and deployment configuration only. Cloudflare resources and credentials are not fabricated or silently created. Deploy only after the actual D1 database ID, KV namespace ID, and owner-approved Cloudflare account are available.
+
+## Communication evidence
+
+The worker accepts normalized provider delivery events at `POST /v1/communications/webhook`. Requests require an HMAC-SHA256 signature in `x-a11-signature`, calculated over the exact request body with the Cloudflare secret `COMMUNICATION_WEBHOOK_SECRET`. Provider event IDs are unique per provider, so retries are recorded as duplicates rather than creating false delivery events.
+
+The read-only `GET /v1/communications` route exposes recent evidence without message bodies. Recipient references should be masked or otherwise non-PII. Provider-specific webhook adapters must normalize their real provider callbacks before forwarding them here. This layer does not manufacture delivery evidence and does not claim provider connectivity until real callbacks are received.
+
+Set the secret with Cloudflare secret storage; do not place it in `wrangler.toml` or source control.

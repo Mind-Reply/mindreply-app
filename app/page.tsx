@@ -1,5 +1,5 @@
-import { PublicHome } from "../apps/web-replycontrol/app/components/PublicHome";
+import { PlatformOverview } from "../apps/web-replycontrol/app/components/PlatformOverview";
 
 export default function HomePage() {
-  return <PublicHome locale="en" />;
+  return <PlatformOverview />;
 }

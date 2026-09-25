@@ -141,8 +141,10 @@ const config: NextConfig = {
   // Experimental features
   experimental: {
     optimizePackageImports: ['@radix-ui/*', 'lucide-react'],
-    cacheComponents: true,
   },
+
+  cacheComponents: true,
+  turbopack: {},
 
   // Environment variables
   env: {

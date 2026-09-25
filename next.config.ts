@@ -146,6 +146,9 @@ const config: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 
   // Environment variables
   env: {

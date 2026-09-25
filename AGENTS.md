@@ -1,5 +1,10 @@
 # A11 Agent Contract
 
+## Deployment direction — MANDATORY
+
+ResellerPro is the designated deployment/control path for production releases where supported. Every agent must build and validate in GitHub first, prepare the release for ResellerPro, avoid new Vercel/Railway production dependencies, and never claim a ResellerPro deployment is live without provider-side evidence.
+
+
 Mission: improve the product without confusing configuration for reality.
 
 Before changing code: inspect architecture, tests, deployment assumptions and current evidence. Prefer small reversible changes. Preserve owner gates and trust-domain separation.

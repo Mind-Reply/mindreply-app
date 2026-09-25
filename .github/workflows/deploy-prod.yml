@@ -1,135 +1,21 @@
-name: Production Deploy — Mind-Reply Core
+# RETIRED / PROTECTED
+# Production deploy workflow disabled pending Cloudflare/ResellerPro canonicalisation.
+# This workflow is intentionally manual-only and guarded.
+# It does not run on repository pushes.
+
+name: Retired Production Deployment Guard
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  LEGACY_DEPLOY_ENABLED: 'false'
 
 jobs:
-  build-and-test:
+  guard:
+    if: vars.LEGACY_DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.32.1
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Type check web app
-        run: pnpm --filter web-replycontrol typecheck
-
-      - name: Build web app
-        run: pnpm --filter web-replycontrol build
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      
-      - name: Log in to Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=ref,event=branch
-            type=semver,pattern={{version}}
-            type=sha,prefix={{branch}}-
-      
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./apps/web-replycontrol/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-  deploy-to-vercel:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Deploy to Vercel (Production)
-        uses: vercel/action@v6
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_CORE }}
-          production: true
-      
-      - name: Deployment successful
-        run: echo "✓ Deployed to Vercel production"
-
-  deploy-to-railway:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Deploy to Railway
-        run: |
-          curl -X POST https://api.railway.app/graphql \
-            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d '{"query":"mutation { deploymentCreate(input: {projectId: \"${{ secrets.RAILWAY_PROJECT_ID }}\"}) { deployment { id } } }"}'
-
-  health-check:
-    needs: [deploy-to-vercel, deploy-to-railway]
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Health check Mind-Reply
-        run: curl -f https://mind-reply.com/health || exit 1
-        continue-on-error: true
-      
-      - name: Health check A11-K
-        run: curl -f https://a11-k.space/health || exit 1
-        continue-on-error: true
-      
-      - name: Slack notification
-        uses: slackapi/slack-github-action@v2
-        with:
-          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
-          payload: |
-            {
-              "text": "✓ Production deployment complete",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Deployment Status*\n✓ Vercel: Production\n✓ Railway: Live\n✓ Health checks: Passing"
-                  }
-                }
-              ]
-            }
+      - run: |
+          echo "Legacy production deployment is disabled. Use the verified Cloudflare/ResellerPro release path."
+          exit 1

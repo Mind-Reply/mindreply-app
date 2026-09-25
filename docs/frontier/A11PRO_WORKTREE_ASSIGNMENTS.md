@@ -3,7 +3,7 @@
 Status: ACTIVE / OWNER-GATED
 Repository: `Mind-Reply/mindreply-app`
 Base: `main`
-Base commit: `0627ef22b158aa59215cfef438377de300412ac4`
+Base commit: `bdf3b999e8b3b7d02c76acefbd1689d085af7446`
 Rule: one bounded task per branch/worktree; frontier branches never deploy production.
 
 ## Control rule
@@ -21,6 +21,23 @@ Every task carries: task ID, role, branch/worktree, owned paths, read-only paths
 | A11P-006 | Integration | `frontier/a11pro-integration` | `packages/config/lib/integrations.ts`, `packages/config/lib/cms-integration.ts`, `ops/integration-fabric.yml`, `docs/INTEGRATION_MESH.md`, `docs/integrations/*` | Normalize connectors and event boundaries; external mutation remains gated | contract tests + mocked integration tests | Owner approval |
 | A11P-007 | Research | `frontier/a11pro-research` | `docs/frontier/*` except assignment/coordination files, `docs/strategy/*` | Convert frontier signals into bounded experiments with source, timestamp, benefit and rejection/promotion evidence | evidence completeness + provenance check | Owner review |
 | A11P-008 | Verification / Red Team | `frontier/a11pro-verification` | `tests/*`, `lib/**/*.test.ts`, `docs/verification/*`, `.github/workflows/*` | Attack assumptions, negative paths, cross-task consistency and CI truth | full regression + negative-path suite | Owner release gate |
+
+## Active local worktrees
+
+All eight lanes are mounted on the connected Windows development device under:
+
+`C:\Users\Mindr\a11pro-frontier\`
+
+- `orchestrator` → `frontier/a11pro-orchestrator`
+- `frontend` → `frontier/a11pro-frontend`
+- `visual-systems` → `frontier/a11pro-visual-systems`
+- `security-proof` → `frontier/a11pro-security-proof`
+- `evidence-ledger` → `frontier/a11pro-evidence-ledger`
+- `integration` → `frontier/a11pro-integration`
+- `research` → `frontier/a11pro-research`
+- `verification` → `frontier/a11pro-verification`
+
+Activation means the bounded lane, worktree, branch, ownership contract and validation boundary are mounted and ready for an explicit task invocation. It does not create a recurring/background worker.
 
 ## Shared read-only paths
 

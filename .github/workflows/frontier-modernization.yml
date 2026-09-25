@@ -22,6 +22,7 @@ jobs:
         if: steps.detect.outputs.node == 'true'
         shell: bash
         run: |
+          npm install --global pnpm@10.32.1
           corepack enable; pm='${{ steps.detect.outputs.pm }}'
           if [ "$pm" = pnpm ]; then if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; else pnpm install; fi; elif [ "$pm" = yarn ]; then if [ -f yarn.lock ]; then yarn install --immutable; else yarn install; fi; else if [ -f package-lock.json ]; then npm ci; else npm install; fi; fi
           run(){ s="$1"; if node -e "process.exit(require('./package.json').scripts?.['$s'] ? 0 : 1)"; then case "$pm" in pnpm) pnpm run "$s";; yarn) yarn "$s";; *) npm run "$s";; esac; fi; }
@@ -38,4 +39,4 @@ jobs:
         if: steps.detect.outputs.node == 'true' && hashFiles('playwright.config.*') != ''
         env:
           PLAYWRIGHT_WEB_SERVER_COMMAND: pnpm --filter web-replycontrol dev
-        run: corepack pnpm exec playwright install --with-deps chromium && corepack pnpm exec playwright test
+        run: pnpm exec playwright install --with-deps chromium && corepack pnpm exec playwright test

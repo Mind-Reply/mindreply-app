@@ -1,7 +1,6 @@
 import type { NextConfig } from 'next';
 const config: NextConfig = {
   // Optimization
-  swcMinify: true,
   reactStrictMode: true,
   compress: true,
   poweredByHeader: false,
@@ -30,12 +29,6 @@ const config: NextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
-  },
-
-  // Internationalization (if needed)
-  i18n: {
-    locales: ['en', 'de', 'fr'],
-    defaultLocale: 'en',
   },
 
   // Headers
@@ -148,11 +141,7 @@ const config: NextConfig = {
   // Experimental features
   experimental: {
     optimizePackageImports: ['@radix-ui/*', 'lucide-react'],
-    optimizeCss: true,
-    parallelServerCompiles: true,
-    parallelServerBuildTraces: true,
-    isrMemoryCacheSize: 52 * 1024 * 1024, // 52MB
-    ppr: true,
+    cacheComponents: true,
   },
 
   // Environment variables
@@ -161,19 +150,6 @@ const config: NextConfig = {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
   },
 
-  // Custom server config
-  serverRuntimeConfig: {
-    DATABASE_URL: process.env.DATABASE_URL,
-    REDIS_URL: process.env.REDIS_URL,
-    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
-    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-  },
-
-  publicRuntimeConfig: {
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-  },
 };
 
 export default config;

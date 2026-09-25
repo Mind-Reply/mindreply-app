@@ -1,5 +1,9 @@
 # A11 Agent Contract
 
+## Brand authority
+
+Use `Mind-Reply/.github/BRAND_ARCHITECTURE.md` as the naming and public-brand authority. MindReply is the product brand; A11-K is a separate operating/intelligence brand; ResellerPro is the designated deployment/control product. Internal codenames are not additional public brands.
+
 ## Deployment direction — MANDATORY
 
 ResellerPro is the designated deployment/control path for production releases where supported. Every agent must build and validate in GitHub first, prepare the release for ResellerPro, avoid new Vercel/Railway production dependencies, and never claim a ResellerPro deployment is live without provider-side evidence.

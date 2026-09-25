@@ -1,0 +1,16 @@
+import Link from "next/link";
+
+type SurfaceProps={code:string;title:string;kicker:string;thesis:string;body:string;mode:string;items:string[];next:string;nextLabel:string};
+
+export function OperatingSurface({code,title,kicker,thesis,body,mode,items,next,nextLabel}:SurfaceProps){
+  return <main className="mc-page a11pro-page platform-atlas">
+    <nav className="mc-nav"><Link className="mc-brand a11pro-brand" href="/">A11pro<small>OUTCOME OPERATING LAYER</small></Link><div className="mc-nav-center"><Link href="/platform">Platform</Link><Link href="/agents">Agents</Link><Link href="/realtime">Realtime</Link><Link href="/evidence">Proof</Link><Link href="/control">Control</Link></div><Link className="mc-secondary" href="/status">System status ↗</Link></nav>
+    <section className="atlas-hero">
+      <div className="atlas-copy"><p className="mc-kicker"><i/>{code} / {kicker}</p><h1>{title}<br/><em>{thesis}</em></h1><p className="lead">{body}</p><div className="a11pro-path"><span>UNDERSTAND</span><b>→</b><span>BOUND</span><b>→</b><span>{mode}</span><b>→</b><span>PROVE</span></div><div className="mc-actions"><Link className="mc-primary" href={next}>{nextLabel} ↗</Link><Link className="mc-secondary" href="/platform">System map</Link></div></div>
+      <div className="atlas-orbit" aria-label={title}><div className="orbit-ring orbit-ring-one"/><div className="orbit-ring orbit-ring-two"/><div className="orbit-core"><span>A11</span><b>PRO</b><small>{mode}<br/>SURFACE</small></div><div className="orbit-node orbit-node-1"><span>01</span><b>{mode}</b><small>ACTIVE</small></div><div className="orbit-node orbit-node-3"><span>02</span><b>PROOF</b><small>VISIBLE</small></div><div className="orbit-node orbit-node-5"><span>03</span><b>OWNER</b><small>BOUND</small></div></div>
+    </section>
+    <section className="atlas-section"><div className="atlas-section-head"><p className="mc-kicker"><i/>OPERATING SURFACE</p><h2>Designed as an instrument, not a collection of cards.</h2></div><div className="atlas-grid">{items.map((item,i)=><article className={"atlas-card atlas-card-"+((i%6)+1)} key={item}><div className="atlas-card-top"><span>{String(i+1).padStart(2,"0")}</span><small>{mode}</small></div><div className="atlas-glyph" aria-hidden="true"><i/><i/><i/></div><h3>{item}</h3><p>Explicit state, bounded action and a visible evidence trail.</p></article>)}</div></section>
+    <section className="atlas-section atlas-split"><div><p className="mc-kicker"><i/>RELEASE DISCIPLINE</p><h2>Every action has a boundary.</h2><p className="lead">A11pro separates conversation, decision, execution and proof so speed never becomes an excuse for invisible state.</p></div><div className="atlas-principles">{["Outcome is explicit.","Authority is named.","Uncertainty is visible.","Release is reversible."].map((x,i)=><article key={x}><span>{"0"+(i+1)}</span><div><b>{x}</b><p>Recorded as part of the operating contract.</p></div></article>)}</div></section>
+    <footer className="mc-footer"><span>A11pro / MindReply</span><span>OUTCOME · BOUNDARY · PROOF</span><Link href="/platform">Platform atlas ↗</Link></footer>
+  </main>
+}

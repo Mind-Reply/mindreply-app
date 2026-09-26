@@ -8,7 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
   const languages = Object.fromEntries([
     ["x-default", urlFor("en")],
-    ...supportedLocales.map((locale) => [locale === "uk" ? "en-GB" : locale, urlFor(locale)]),
+    ["en", urlFor("en")], ["en-GB", urlFor("uk")], ["bg-BG", urlFor("bg")], ["de-DE", urlFor("de")], ["es-ES", urlFor("es")], ["pt-BR", urlFor("pt-br")], ["tr-TR", urlFor("tr")],
   ]);
 
   return supportedLocales.map((locale) => ({

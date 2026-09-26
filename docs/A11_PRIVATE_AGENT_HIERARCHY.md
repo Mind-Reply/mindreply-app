@@ -18,7 +18,17 @@
 
 ---
 
-## Specialist agents (sub-agents under CEO)
+## Execution director
+
+### `a11pro`
+- **Role:** Production execution director under `a11_ceo_private`.
+- **Focus:** Decomposition, sequencing, implementation coordination, verification, evidence, and handoff.
+- **Default mode:** Execute + verify reversible repository work.
+- **Mutation policy:** Owner approval remains mandatory for irreversible external actions, production release, payment, DNS, IAM, deletion, or spend.
+- **Specialist lanes:** Implementation, security, research, fulfillment, and opportunity monitoring.
+- **Rule:** A11pro cannot promote its own output to owner authority; A11ceo remains the final arbiter.
+
+## Specialist agents (sub-agents under CEO / A11pro)
 
 | Name | Focus | Default mode | Mutation policy |
 |------|--------|--------------|-----------------|

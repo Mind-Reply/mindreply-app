@@ -1,0 +1,61 @@
+# Google Cloud Workflows — FIN-A reconciliation skeleton
+# Status: SOURCE-READY / NOT DEPLOYED
+# No credentials or provider URLs are embedded.
+#
+# Runtime inputs are supplied by the deployment environment.
+# Default intent is read-only reconciliation.
+
+main:
+  params: [input]
+  steps:
+    - validate:
+        switch:
+          - condition: ${input.execution_id == null || input.execution_id == ""}
+            raise: "VALIDATION_ERROR: execution_id is required"
+          - condition: ${input.accounting_period == null || input.accounting_period == ""}
+            raise: "VALIDATION_ERROR: accounting_period is required"
+          - condition: ${input.sources == null || len(input.sources) == 0}
+            raise: "VALIDATION_ERROR: at least one source is required"
+
+    - initialize:
+        assign:
+          - mode: ${default(input.mode, "read_only")}
+          - execution_id: ${input.execution_id}
+          - started_at: ${sys.now()}
+          - retry_count: 0
+          - exceptions: []
+
+    - enforce_read_only:
+        switch:
+          - condition: ${mode != "read_only"}
+            raise: "SAFETY_ERROR: write-capable financial execution requires explicit owner-approved deployment boundary"
+
+    - prepare_receipt:
+        assign:
+          - receipt:
+              execution_id: ${execution_id}
+              status: "STARTED"
+              accounting_period: ${input.accounting_period}
+              requested_at: ${input.requested_at}
+              started_at: ${started_at}
+              mode: ${mode}
+              reconciliation_state: "PENDING"
+              verification_state: "PENDING"
+
+    # Provider/source calls are intentionally abstract.
+    # Bind authorized endpoints through deployment configuration; never hard-code secrets.
+    - source_read_boundary:
+        call: sys.log
+        args:
+          severity: "INFO"
+          text: ${"FIN-A source-read boundary prepared for execution " + execution_id}
+
+    - emit_receipt:
+        assign:
+          - receipt.status: "PREPARED_NOT_EXECUTED"
+          - receipt.reconciliation_state: "NOT_EXECUTED"
+          - receipt.verification_state: "NOT_EXECUTED"
+          - receipt.completed_at: ${sys.now()}
+
+    - return_receipt:
+        return: ${receipt}

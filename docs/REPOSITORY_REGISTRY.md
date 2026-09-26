@@ -5,93 +5,103 @@ Updated: 2026-09-26
 
 ## Rule
 
-One repository per real platform/project. Supporting material belongs inside that canonical repository unless there is a documented, technically necessary separation.
+One repository per real platform/project.
 
-Do not create `-copy`, `-new`, `-next`, `-app`, `-core`, `-platform`, `-control`, `-enterprise`, or similar variants for the same product without a written reason in this registry.
+A second repository is allowed only when it is a genuinely separate product or a documented security/authority boundary. Historical copies, naming variants, and personal mirrors are migration sources, not parallel production roots.
 
-Archived repositories are history, not active sources.
+Do not create `-copy`, `-new`, `-next`, `-app`, `-core`, `-platform`, `-control`, `-enterprise`, or similar variants for the same product without a written technical reason here.
 
-## Canonical active sources
+## Canonical estate
 
-| Platform / project | Canonical repository | Current role |
+| Platform / boundary | Canonical repository | Current state |
 |---|---|---|
-| A11pro / MindReply core operating layer | Mind-Reply/mindreply-app | Canonical implementation + governed frontier work |
-| ResellerPro | Mind-Reply/resellerpro | Canonical ResellerPro implementation |
-| NovaGaming | angellllkr-eng/novagaming | Canonical NovaGaming implementation |
-| A11-K organization surface | Mind-Reply/A11-K | Canonical A11-K organization repository pending deeper reconciliation |
-| PatchTalk | angellllkr-eng/patchtalk | Canonical PatchTalk implementation |
+| A11pro / MindReply product | `Mind-Reply/mindreply-app` | ACTIVE CANONICAL |
+| MindReply private owner-control / evidence boundary | `angellllkr-eng/agent-control-plane` | ACTIVE SEPARATE SECURITY/AUTHORITY BOUNDARY |
+| ResellerPro organization destination | `Mind-Reply/resellerpro` | CANONICAL DESTINATION; CONTENT MIGRATION IN PROGRESS |
+| ResellerPro current implementation source | `angellllkr-eng/resellerpro-platform` | SOURCE-FREEZE / MIGRATION SOURCE |
+| NovaGaming | `angellllkr-eng/novagaming` | ACTIVE CANONICAL |
+| A11-K organization surface | `Mind-Reply/A11-K` | ACTIVE ORGANIZATION SURFACE |
+| PatchTalk | `angellllkr-eng/patchtalk` | ACTIVE CANONICAL SOURCE |
 
-## Confirmed duplicate / legacy families
+The private control plane is deliberately separate from the product repository because it is an authority/evidence boundary. It is not a second product runtime.
 
-### MindReply family
+## MindReply duplicate family
 
-Active or legacy names found include:
+### Organization repositories
+- `Mind-Reply/mindreply-app` — ACTIVE CANONICAL.
+- `Mind-Reply/mind-reply-app` — ARCHIVED LEGACY.
+- `Mind-Reply/mindreply-suite-private` — ARCHIVED LEGACY.
+- `Mind-Reply/mindreply-next` — ARCHIVED LEGACY.
+- `Mind-Reply/mindreply-studio` — ARCHIVED LEGACY.
+- `Mind-Reply/mindreply-brands` — ARCHIVED LEGACY.
+- `Mind-Reply/mindreply-portfolio-control` — ARCHIVED LEGACY.
+- `Mind-Reply/mindreply-production-pack` — ARCHIVED LEGACY.
+- `Mind-Reply/mindreply-priority-dashboard` — ARCHIVED LEGACY.
+- `Mind-Reply/mindreply-org-site` — ARCHIVED LEGACY.
+- `Mind-Reply/mindreply-platform` — CONSOLIDATED; no production work.
+- `Mind-Reply/mindreply-docs` — CONSOLIDATED; documentation belongs in canonical repo.
+- `Mind-Reply/mind-reply-control` — ARCHIVED LEGACY.
 
-- Mind-Reply/mindreply-app — ACTIVE CANONICAL
-- Mind-Reply/mind-reply-app — ARCHIVED LEGACY
-- Mind-Reply/mindreply-suite-private — ARCHIVED LEGACY
-- Mind-Reply/mindreply-next — ARCHIVED LEGACY
-- Mind-Reply/mindreply-studio — ARCHIVED LEGACY
-- Mind-Reply/mindreply-brands — ARCHIVED LEGACY
-- Mind-Reply/mindreply-portfolio-control — ARCHIVED LEGACY
-- Mind-Reply/mindreply-production-pack — ARCHIVED LEGACY
-- Mind-Reply/mindreply-priority-dashboard — ARCHIVED LEGACY
-- Mind-Reply/mindreply-org-site — ARCHIVED LEGACY
-- Mind-Reply/mindreply-platform — ACTIVE, requires reconciliation before being treated as a separate product
-- Mind-Reply/mindreply-docs — ACTIVE, supporting repository; documentation should be reconciled into the canonical implementation where practical
-- Mind-Reply/mind-reply-control — ARCHIVED LEGACY
-- angellllkr-eng/mindreply — ACTIVE PERSONAL COPY / RECONCILIATION REQUIRED
-- angellllkr-eng/mind-reply — EMPTY PERSONAL REPOSITORY
-- angellllkr-eng/mind-reply-core — ACTIVE PERSONAL COPY / RECONCILIATION REQUIRED
-- angellllkr-eng/mindreply-org-site — ACTIVE PERSONAL COPY / RECONCILIATION REQUIRED
-- angellllkr-eng/mr-app-copy — EMPTY PERSONAL COPY
-- angelkrustevtopa-jpg/MindReply — EXTERNAL/PERSONAL OWNER; not an authoritative Mind-Reply organization source
+### Personal repositories
+- `angellllkr-eng/mindreply` — SOURCE-FREEZE / PERSONAL HISTORICAL COPY.
+- `angellllkr-eng/mindreply-org-site` — SOURCE-FREEZE / PERSONAL HISTORICAL COPY.
+- `angellllkr-eng/mindreply-control` — SOURCE-FREEZE / CONTROL-PLANE MIGRATION SOURCE.
+- `angellllkr-eng/mind-reply-core` — MISLABELED NOVAGAMING SOURCE; not a MindReply repo.
+- `angellllkr-eng/mind-reply` — EMPTY.
+- `angellllkr-eng/mr-app-copy` — EMPTY.
+- `angelkrustevtopa-jpg/MindReply` — EXTERNAL/PERSONAL OWNER; not an authoritative Mind-Reply source.
 
-### ResellerPro family
+## ResellerPro duplicate family
 
-Confirmed sources include:
+- `Mind-Reply/resellerpro` — CANONICAL ORGANIZATION DESTINATION.
+- `angellllkr-eng/resellerpro-platform` — CURRENT IMPLEMENTATION SOURCE; SOURCE-FROZEN for migration.
+- `angellllkr-eng/reseller-pro-enterprise` — LEGACY SOURCE; SOURCE-FROZEN.
+- `angellllkr-eng/reseller-pro` — LEGACY SOURCE; SOURCE-FROZEN.
 
-- Mind-Reply/resellerpro — CANONICAL
-- angellllkr-eng/resellerpro-platform — ACTIVE PERSONAL IMPLEMENTATION / RECONCILIATION REQUIRED
-- angellllkr-eng/reseller-pro — ACTIVE PERSONAL IMPLEMENTATION / RECONCILIATION REQUIRED
-- angellllkr-eng/reseller-pro-enterprise — ACTIVE PERSONAL IMPLEMENTATION / RECONCILIATION REQUIRED
+Important: the organization destination and the current implementation source are intentionally distinguished until the implementation is actually transferred. No second ResellerPro product is authorized.
 
-These must not evolve independently. Reconcile useful work into Mind-Reply/resellerpro and then archive/remove the redundant personal repositories through GitHub administration.
+Current verified source candidate commits:
+- `angellllkr-eng/resellerpro-platform` latest main: `126654afb58dd0d41594ef0749f0a98048938922`
+- `Mind-Reply/resellerpro` latest main: `b30b6a0358bc3225ed2086b9b07166677109e747`
 
-### Control-plane naming
+## NovaGaming naming correction
 
-Confirmed overlapping names:
+`angellllkr-eng/mind-reply-core` is not treated as a MindReply duplicate. Its package identity is `nova-gaming-digital-hall` and its source history references NovaGaming. Its repository notice now points to the actual NovaGaming canonical source:
 
-- angellllkr-eng/mindreply-control — ACTIVE
-- Mind-Reply/mind-reply-control — ARCHIVED
-- Mind-Reply/mindreply-portfolio-control — ARCHIVED
+`angellllkr-eng/novagaming`
 
-Only one control-plane implementation should remain active. Control-plane capability belongs with the canonical platform unless it is proven to be an independent deployable product.
+## Control-plane naming correction
+
+`angellllkr-eng/mindreply-control` is not an independent product. Its useful UI/runtime material is migration source only.
+
+The constitutional private owner-control and evidence boundary is:
+
+`angellllkr-eng/agent-control-plane`
+
+Application/product code belongs in:
+
+`Mind-Reply/mindreply-app`
 
 ## What is NOT a duplicate
 
-Repositories for genuinely separate products, third-party source mirrors, experiments, templates, or independent domains may remain separate. They must have a distinct product identity and an explicit owner.
+Separate product repositories may remain separate when their product identity is real and documented. Examples: NovaGaming and PatchTalk.
 
-Examples include NovaGaming and PatchTalk, which are separate product surfaces and therefore can retain their own canonical repositories.
+## Cleanup state
 
-## Required cleanup order
+Completed through the connected GitHub actions:
+1. Canonical MindReply registry created.
+2. Redundant MindReply repos explicitly labeled as consolidated/source-frozen where writable.
+3. ResellerPro authority conflict corrected.
+4. ResellerPro legacy repos labeled and pointed to the organization destination.
+5. Misnamed `mind-reply-core` corrected to NovaGaming provenance.
+6. Control-plane source clarified against the private owner-control boundary.
 
-1. Protect the canonical repository.
-2. Inventory active personal/org variants.
-3. Compare trees, commits, deployments, and external references.
-4. Absorb unique useful work into the canonical repository.
-5. Verify the canonical build and release path.
-6. Mark redundant repositories as legacy.
-7. Archive/delete redundant repositories through GitHub administration.
-8. Remove stale deployment integrations and references.
-9. Re-check GitHub search so duplicate active names no longer create ambiguity.
+Still requires GitHub repository administration not exposed by the current connector:
+- Archive or delete the final redundant repositories after reconciliation.
+- Rename repositories where a misleading name should be removed.
+- Transfer the ResellerPro implementation from the personal source into `Mind-Reply/resellerpro` (or otherwise complete the content absorption) before declaring the organization destination production-authoritative.
+- Remove stale external deployment integrations/references after the source move.
 
-## Current decision
+## Non-negotiable truth rule
 
-The existence of duplicate names is real and is caused by historical copies, migrations, personal/org splits, and renamed experiments—not by separate versions that should all remain active.
-
-The source of truth is the canonical repository listed above. No repository is considered production-authoritative merely because its name looks newer.
-
-## Safety rule
-
-Do not delete or overwrite repository data solely from a name match. Consolidation requires content/tree comparison and preservation of unique useful work before archival or deletion.
+A repository name is not evidence of production authority. Runtime/deployment claims require runtime evidence. Historical repositories remain provenance until their useful content is reconciled and the repository is archived or deleted.

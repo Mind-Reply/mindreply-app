@@ -27,16 +27,16 @@ jobs:
     environment: ${{ github.event.inputs.environment || 'staging' }}
     
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
       
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v6
         with:
           version: 10.32.1
       
@@ -73,7 +73,7 @@ jobs:
       
       - name: Notify Slack
         if: always()
-        uses: slackapi/slack-github-action@v1
+        uses: slackapi/slack-github-action@v4
         with:
           payload: |
             {

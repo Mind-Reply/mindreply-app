@@ -1,7 +1,7 @@
 # Competitive MindReply — 2026 Communication Infrastructure
 
 **Updated:** 2026-09-05  
-**Canonical:** `angellllkr-eng/mind-reply-core` + public `mindreply-org-site`
+**Canonical:** `Mind-Reply/mindreply-app` + public `mindreply-org-site`
 
 ---
 

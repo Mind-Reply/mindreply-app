@@ -1,6 +1,42 @@
 version: '3.9'
 
 services:
+  # ResellerPro Billing Engine (Node.js)
+  resellerpro-engine:
+    build:
+      context: .
+      dockerfile: services/resellerpro-engine/Dockerfile
+    container_name: resellerpro-engine
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-https://aziwdgndohdgnwztpwdi.supabase.co}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      IONOS_API_KEY: ${IONOS_API_KEY:-}
+      IONOS_API_SECRET: ${IONOS_API_SECRET:-}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8080/api/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    labels:
+      - "com.app=mind-reply"
+      - "com.service=resellerpro-engine"
+      - "com.version=1.0.0"
+    depends_on:
+      - rwa-bridge
+    volumes:
+      - resellerpro-logs:/app/logs
+
   # Next.js Reply Control Web App (canonical product surface + €3k audit CTA)
   web-replycontrol:
     build:
@@ -12,6 +48,9 @@ services:
     environment:
       NODE_ENV: production
       NEXT_TELEMETRY_DISABLED: 1
+      NEXT_PUBLIC_API_URL: http://resellerpro-engine:8080
+      NEXT_PUBLIC_RWA_BRIDGE_URL: http://rwa-bridge:8000
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-https://aziwdgndohdgnwztpwdi.supabase.co}
     networks:
       - app-network
     restart: unless-stopped
@@ -23,11 +62,13 @@ services:
       start_period: 20s
     depends_on:
       - rwa-bridge
+      - resellerpro-engine
     labels:
       - "com.app=mind-reply"
       - "com.service=web"
+      - "com.version=1.0.0"
 
-  # Python RWA Bridge Service
+  # Python RWA Bridge Service (Legal Entity API integration)
   rwa-bridge:
     build:
       context: .
@@ -36,52 +77,73 @@ services:
     ports:
       - "8000:8000"
     environment:
-      LEGAL_ENTITY_API_URL: "https://api.otoco.io/v1"
+      LEGAL_ENTITY_API_URL: ${LEGAL_ENTITY_API_URL:-https://api.otoco.io/v1}
       AGENT_WALLET_ADDRESS: ${AGENT_WALLET_ADDRESS:-0x321...AI_AGENT}
       AGENT_SESSION_KEY: ${AGENT_SESSION_KEY:-0x_scoped_session_token}
       PYTHONUNBUFFERED: 1
       PYTHONDONTWRITEBYTECODE: 1
+      PYTHON_LOG_LEVEL: ${PYTHON_LOG_LEVEL:-INFO}
     networks:
       - app-network
     restart: unless-stopped
     command: python apex_titan_rwa_bridge.py
     healthcheck:
-      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health', timeout=2)"]
       interval: 30s
       timeout: 5s
-      retries: 2
-      start_period: 5s
+      retries: 3
+      start_period: 10s
     labels:
       - "com.app=mind-reply"
       - "com.service=rwa-bridge"
+      - "com.version=1.0.0"
     volumes:
       - rwa-logs:/app/logs
+    stdin_open: true
+    tty: true
 
-  # Optional: Monitoring helper
+  # Optional: Monitoring helper (checks all service healthchecks)
   healthcheck-monitor:
     image: curlimages/curl:latest
     container_name: healthcheck-monitor
     command: |
       sh -c '
+      echo "[Monitor] Starting health checks for ResellerPro stack..."
       while true; do
-        echo "[$(date)] Checking web-replycontrol...";
-        curl -sf http://web-replycontrol:3000/api/health > /dev/null && echo "OK web-replycontrol" || echo "DOWN web-replycontrol";
-        echo "[$(date)] Checking rwa-bridge...";
-        curl -sf http://rwa-bridge:8000 > /dev/null && echo "OK rwa-bridge" || echo "DOWN rwa-bridge";
-        sleep 30;
+        echo "[$(date +"%Y-%m-%d %H:%M:%S")] === Health Check Cycle ===";
+        
+        echo "[$(date +"%Y-%m-%d %H:%M:%S")] Checking resellerpro-engine:8080/api/health...";
+        curl -sf http://resellerpro-engine:8080/api/health > /dev/null && echo "✓ resellerpro-engine OK" || echo "✗ resellerpro-engine DOWN";
+        
+        echo "[$(date +"%Y-%m-%d %H:%M:%S")] Checking web-replycontrol:3000/api/health...";
+        curl -sf http://web-replycontrol:3000/api/health > /dev/null && echo "✓ web-replycontrol OK" || echo "✗ web-replycontrol DOWN";
+        
+        echo "[$(date +"%Y-%m-%d %H:%M:%S")] Checking rwa-bridge:8000/health...";
+        curl -sf http://rwa-bridge:8000/health > /dev/null && echo "✓ rwa-bridge OK" || echo "✗ rwa-bridge DOWN";
+        
+        sleep 60;
       done
       '
     networks:
       - app-network
     depends_on:
       - web-replycontrol
+      - resellerpro-engine
       - rwa-bridge
     restart: unless-stopped
+    labels:
+      - "com.app=mind-reply"
+      - "com.service=monitoring"
 
 networks:
   app-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
 
 volumes:
   rwa-logs:
+    driver: local
+  resellerpro-logs:
     driver: local

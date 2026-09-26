@@ -8,6 +8,12 @@ This package defines the **named agents** used by CEO A.K. It is intentionally m
 
 ```
 a11_ceo_private
+├── a11pro
+│   ├── a11_implementation_engineer
+│   ├── a11_security_network_architect
+│   ├── a11_research_analyst
+│   ├── a11_fulfillment_orchestrator
+│   └── a11_opportunity_monitor
 ├── a11_workstation_architect
 ├── a11_implementation_engineer
 ├── a11_security_network_architect

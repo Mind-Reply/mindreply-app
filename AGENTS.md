@@ -19,12 +19,12 @@ Every agent output: finding -> evidence -> risk -> change -> verification -> rem
 
 Never claim live, secure, certified, compliant, revenue-ready or deployed without current evidence.
 
-## Skill Mesh (permanent) — CLOSED SUITE
+## Skill Mesh — owner-invoked execution mesh
 The five core skills operate as one wired system (suite pack closed for structural changes at this cycle):
 - **human-gate-closer** — execution spine for every human gate.
 - **a11-seo** — technical SEO and silent live-web popularization.
 - **a11-public-proof-engine** — public proof, brand hub, portfolio launch, attributable presence.
-- **a11-live-telemetry** — continuous silent monitoring of analytics, engagement, income, and web presence.
+- **a11-live-telemetry** — owner-invoked evidence checks for analytics, engagement, income, and web presence; no background cadence.
 - **a11-ios-zero-interruption** — absolute zero iOS interruptions.
 
 See: `.agents/skills/a11-ceo-skill-mesh/SKILL.md`
@@ -32,7 +32,7 @@ See: `.agents/skills/a11-ceo-skill-mesh/SKILL.md`
 ## Performance & Absolute Twist (active)
 Suite is closed for new skills/manuals. All effort shifts to actual performance and an absolute twist:
 - Investigate and fulfill directly via connected MCP services (GitHub, Vercel, Notion, Google, Stripe, X Ads, Zapier, etc.). No manuals, no terminal codes, no copy-paste, no amateur work.
-- Multi-goal in parallel: control-plane advance + live web popularization + public proof + telemetry + zero interruption.
+- Multi-goal during an active owner session: control-plane advance + public proof + evidence checks + zero interruption.
 - Brave, prepared, high-end, passionate, energetic, awake. Long-term ops. Jump on challenges. Do what others cannot.
 - Physical human actions (signing, meetings, deliveries, in-person communication) only when no digital path exists AND the outcome is positive — then one clean Owner Action Packet.
 - Redundancy with automatic failover: when one surface fails, another takes over before you notice. You always have a path back here.
@@ -65,10 +65,10 @@ See skill: a11-ios-zero-interruption.
 | `Mind-Reply` | GitHub organization |
 
 ### Canonical repositories (per this repo's own stated "Repository truth")
-- **Product root**: `angellllkr-eng/mind-reply-core` (this repo)
+- **Product root**: `Mind-Reply/mindreply-app`
 - **Operational/evidence root**: `angellllkr-eng/agent-control-plane`
 
-All other repos across all three namespaces are satellites/experiments/historical unless explicitly promoted in writing.
+The canonical source of truth for the MindReply/A11pro production surface is `Mind-Reply/mindreply-app`; other repositories are satellites, control modules, experiments or historical unless explicitly promoted in writing.
 
 ### Live, verified facts (evidence-based, per this contract's own "never claim without evidence" rule)
 - mind-reply.com is confirmed live (web search, 2026-08-27) with real business content. Hosting platform not yet confirmed — not on the connected Vercel account (0 projects) or connected Netlify account (1 unrelated project).

@@ -40,6 +40,7 @@ CEO = AgentDef(
     default_mode="govern",
     mutation_policy="owner_approval_token_required",
     sub_agents=[
+        "a11pro",
         "a11_workstation_architect",
         "a11_implementation_engineer",
         "a11_security_network_architect",
@@ -126,6 +127,7 @@ OPPORTUNITY = AgentDef(
 
 AGENTS: dict[str, AgentDef] = {
     CEO.name: CEO,
+    A11PRO.name: A11PRO,
     WORKSTATION.name: WORKSTATION,
     IMPLEMENTATION.name: IMPLEMENTATION,
     SECURITY.name: SECURITY,

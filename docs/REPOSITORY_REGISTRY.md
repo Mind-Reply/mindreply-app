@@ -3,31 +3,32 @@
 Status: CANONICAL REGISTRY
 Updated: 2026-09-26
 
-## Rule
+## Estate rule
 
-One repository per real platform/project.
+**Mind-Reply organization = production authority.**
 
-A second repository is allowed only when it is a genuinely separate product or a documented security/authority boundary. Historical copies, naming variants, and personal mirrors are migration sources, not parallel production roots.
+**Personal `angellllkr-eng` profile = development, recovery, migration and provenance source unless this registry explicitly designates a private/security boundary or a separate product.**
 
-Do not create `-copy`, `-new`, `-next`, `-app`, `-core`, `-platform`, `-control`, `-enterprise`, or similar variants for the same product without a written technical reason here.
+One product must have one active production repository. A repository name is not an authority claim.
 
-## Canonical estate
+## Canonical production map
 
-| Platform / boundary | Canonical repository | Current state |
+| Product / boundary | Canonical production repository | Profile/source handling |
 |---|---|---|
-| A11pro / MindReply product | `Mind-Reply/mindreply-app` | ACTIVE CANONICAL |
-| MindReply private owner-control / evidence boundary | `angellllkr-eng/agent-control-plane` | ACTIVE SEPARATE SECURITY/AUTHORITY BOUNDARY |
-| ResellerPro organization destination | `Mind-Reply/resellerpro` | CANONICAL DESTINATION; CONTENT MIGRATION IN PROGRESS |
-| ResellerPro current implementation source | `angellllkr-eng/resellerpro-platform` | SOURCE-FREEZE / MIGRATION SOURCE |
-| NovaGaming | `angellllkr-eng/novagaming` | ACTIVE CANONICAL |
-| A11-K organization surface | `Mind-Reply/A11-K` | ACTIVE ORGANIZATION SURFACE |
-| PatchTalk | `angellllkr-eng/patchtalk` | ACTIVE CANONICAL SOURCE |
-
-The private control plane is deliberately separate from the product repository because it is an authority/evidence boundary. It is not a second product runtime.
+| MindReply / A11pro | `Mind-Reply/mindreply-app` | Profile MindReply copies are migration/provenance only |
+| A11-K | `Mind-Reply/A11-K` | `angellllkr-eng/A11-K` is private migration source |
+| ResellerPro | `Mind-Reply/resellerpro` | `angellllkr-eng/resellerpro-platform` is source-freeze implementation source |
+| MindReply shared control module | `Mind-Reply/control-plane` | `angellllkr-eng/mindreply-control` is migration source; `agent-control-plane` is a separate private authority/evidence boundary |
+| PatchTalk | `angellllkr-eng/patchtalk` pending organization destination | `patchtalk-ux` is design satellite |
+| A11 RAG capability | `Mind-Reply/mindreply-app` | `angellllkr-eng/a11-rag-platform` is source-freeze capability source |
+| A11 cloud execution capability | `Mind-Reply/mindreply-app` | `angellllkr-eng/a11-live-cloud-execution` is source-freeze capability source |
+| FIN-A financial evidence boundary | `angellllkr-eng/fin-a-money-truth` | Separate private financial/evidence boundary; do not expose as public product |
+| Nowline DSL | Personal/source project | `angellllkr-eng/nowline` is not the A11 product and is not a MindReply duplicate |
+| Nowline/A11 regulated product surface | Separate product candidate | `angellllkr-eng/a11-nowline` remains separate until a distinct organizational destination is defined |
 
 ## MindReply duplicate family
 
-### Organization repositories
+### Organization
 - `Mind-Reply/mindreply-app` — ACTIVE CANONICAL.
 - `Mind-Reply/mind-reply-app` — ARCHIVED LEGACY.
 - `Mind-Reply/mindreply-suite-private` — ARCHIVED LEGACY.
@@ -38,70 +39,95 @@ The private control plane is deliberately separate from the product repository b
 - `Mind-Reply/mindreply-production-pack` — ARCHIVED LEGACY.
 - `Mind-Reply/mindreply-priority-dashboard` — ARCHIVED LEGACY.
 - `Mind-Reply/mindreply-org-site` — ARCHIVED LEGACY.
+- `Mind-Reply/mind-reply-control` — ARCHIVED LEGACY.
 - `Mind-Reply/mindreply-platform` — CONSOLIDATED; no production work.
 - `Mind-Reply/mindreply-docs` — CONSOLIDATED; documentation belongs in canonical repo.
-- `Mind-Reply/mind-reply-control` — ARCHIVED LEGACY.
+- `Mind-Reply/mind-reply-core` — MIGRATION SOURCE; actual product identity is A11-K surface material, not an independent MindReply production root.
 
-### Personal repositories
+### Personal
 - `angellllkr-eng/mindreply` — SOURCE-FREEZE / PERSONAL HISTORICAL COPY.
+- `angellllkr-eng/mindr` — PRIVATE ENGINEERING WORKSPACE / NOT CANONICAL.
+- `angellllkr-eng/mr` — LEGACY MIGRATION SOURCE.
 - `angellllkr-eng/mindreply-org-site` — SOURCE-FREEZE / PERSONAL HISTORICAL COPY.
 - `angellllkr-eng/mindreply-control` — SOURCE-FREEZE / CONTROL-PLANE MIGRATION SOURCE.
-- `angellllkr-eng/mind-reply-core` — MISLABELED NOVAGAMING SOURCE; not a MindReply repo.
 - `angellllkr-eng/mind-reply` — EMPTY.
 - `angellllkr-eng/mr-app-copy` — EMPTY.
-- `angelkrustevtopa-jpg/MindReply` — EXTERNAL/PERSONAL OWNER; not an authoritative Mind-Reply source.
+- `angelkrustevtopa-jpg/MindReply` — EXTERNAL/PERSONAL OWNER; not an authoritative organization source.
 
-## ResellerPro duplicate family
+## A11-K family
 
-- `Mind-Reply/resellerpro` — CANONICAL ORGANIZATION DESTINATION.
-- `angellllkr-eng/resellerpro-platform` — CURRENT IMPLEMENTATION SOURCE; SOURCE-FROZEN for migration.
-- `angellllkr-eng/reseller-pro-enterprise` — LEGACY SOURCE; SOURCE-FROZEN.
-- `angellllkr-eng/reseller-pro` — LEGACY SOURCE; SOURCE-FROZEN.
+- `Mind-Reply/A11-K` — ACTIVE CANONICAL.
+- `angellllkr-eng/A11-K` — PRIVATE MIGRATION SOURCE.
+- Personal `a11-*` repositories are not automatically production products. Each must be explicitly classified before promotion or consolidation.
 
-Important: the organization destination and the current implementation source are intentionally distinguished until the implementation is actually transferred. No second ResellerPro product is authorized.
+## ResellerPro family
 
-Current verified source candidate commits:
-- `angellllkr-eng/resellerpro-platform` latest main: `126654afb58dd0d41594ef0749f0a98048938922`
-- `Mind-Reply/resellerpro` latest main: `b30b6a0358bc3225ed2086b9b07166677109e747`
+- `Mind-Reply/resellerpro` — ORGANIZATION CANONICAL DESTINATION.
+- `angellllkr-eng/resellerpro-platform` — CURRENT IMPLEMENTATION SOURCE / SOURCE-FREEZE.
+- `angellllkr-eng/reseller-pro-enterprise` — LEGACY SOURCE / SOURCE-FREEZE.
+- `angellllkr-eng/reseller-pro` — LEGACY SOURCE / SOURCE-FREEZE.
 
-## NovaGaming naming correction
+The organization destination is not called production-complete until the actual implementation tree, build/release contracts and validation evidence are present there.
 
-`angellllkr-eng/mind-reply-core` is not treated as a MindReply duplicate. Its package identity is `nova-gaming-digital-hall` and its source history references NovaGaming. Its repository notice now points to the actual NovaGaming canonical source:
+Current transfer task:
+https://github.com/Mind-Reply/resellerpro/issues/3
 
-`angellllkr-eng/novagaming`
+## Control-plane boundary
 
-## Control-plane naming correction
+- `Mind-Reply/control-plane` — organization control-plane module.
+- `angellllkr-eng/agent-control-plane` — private constitutional owner-control/evidence boundary.
+- `angellllkr-eng/mindreply-control` — legacy application/control implementation awaiting reconciliation.
 
-`angellllkr-eng/mindreply-control` is not an independent product. Its useful UI/runtime material is migration source only.
+The private constitutional boundary is intentionally separate from the product runtime. It is not a second public product.
 
-The constitutional private owner-control and evidence boundary is:
+## A11 RAG / execution family
 
-`angellllkr-eng/agent-control-plane`
+### A11 RAG
+`angellllkr-eng/a11-rag-platform` is now SOURCE-FREEZE. Useful retrieval, evidence, signed-record and release-gate capabilities belong in `Mind-Reply/mindreply-app`.
 
-Application/product code belongs in:
+### A11 cloud execution
+`angellllkr-eng/a11-live-cloud-execution` is now SOURCE-FREEZE. Useful orchestration, governance, execution and evidence capabilities belong in `Mind-Reply/mindreply-app`.
 
-`Mind-Reply/mindreply-app`
+### A11 Sovereign Nowline
+`angellllkr-eng/a11-sovereign-nowline` is LEGACY/SOURCE-FREEZE and must not be treated as current deployment proof.
 
-## What is NOT a duplicate
+## PatchTalk
 
-Separate product repositories may remain separate when their product identity is real and documented. Examples: NovaGaming and PatchTalk.
+- `angellllkr-eng/patchtalk` — current canonical product source.
+- `angellllkr-eng/patchtalk-ux` — design satellite only.
+- `Mind-Reply/whatsapp-ai-router` — organization runtime/source that must be reconciled against PatchTalk before being designated as its production authority.
 
-## Cleanup state
+## What stays personal
 
-Completed through the connected GitHub actions:
-1. Canonical MindReply registry created.
-2. Redundant MindReply repos explicitly labeled as consolidated/source-frozen where writable.
-3. ResellerPro authority conflict corrected.
-4. ResellerPro legacy repos labeled and pointed to the organization destination.
-5. Misnamed `mind-reply-core` corrected to NovaGaming provenance.
-6. Control-plane source clarified against the private owner-control boundary.
+Not every personal repository should be moved into the organization. Third-party mirrors, generic templates, unrelated open-source work, experiments, private evidence boundaries and genuinely separate products can remain personal.
 
-Still requires GitHub repository administration not exposed by the current connector:
-- Archive or delete the final redundant repositories after reconciliation.
-- Rename repositories where a misleading name should be removed.
-- Transfer the ResellerPro implementation from the personal source into `Mind-Reply/resellerpro` (or otherwise complete the content absorption) before declaring the organization destination production-authoritative.
-- Remove stale external deployment integrations/references after the source move.
+The merge criterion is **business/product identity and operational authority**, not repository size.
 
-## Non-negotiable truth rule
+## Consolidation status
 
-A repository name is not evidence of production authority. Runtime/deployment claims require runtime evidence. Historical repositories remain provenance until their useful content is reconciled and the repository is archived or deleted.
+### COMPLETED
+- Organization-vs-profile authority rule established in `Mind-Reply/.github/README.md`.
+- MindReply canonical root established.
+- A11-K organization root established.
+- ResellerPro organization destination established; personal source frozen.
+- A11 RAG and A11 cloud-execution sources frozen for capability migration.
+- Major personal MindReply copies labelled.
+- Historical organization duplicates already archived where available.
+
+### PENDING
+- Transfer/synchronize the actual ResellerPro implementation tree into `Mind-Reply/resellerpro`.
+- Reconcile unique A11 RAG and cloud-execution capabilities into `Mind-Reply/mindreply-app`.
+- Reconcile `Mind-Reply/whatsapp-ai-router` and `angellllkr-eng/patchtalk` into one PatchTalk runtime authority.
+- Final GitHub archive/delete/rename/transfer administration for redundant repositories.
+
+## Connector limitation
+
+The connected GitHub toolset currently exposes repository reads and Git object/file writes but does **not** expose repository administration operations for transfer, rename, archive or delete.
+
+Those actions are therefore not falsely claimed as completed.
+
+## Truth rule
+
+**PRODUCTION AUTHORITY = canonical repository + verified implementation + validated release path + runtime evidence.**
+
+Never use an old README, repository name, or historical deployment claim as live proof.

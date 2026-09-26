@@ -7,7 +7,7 @@ const site = "https://mind-reply.com";
 const urlFor = (locale: string) => locale === "en" ? `${site}/` : `${site}/${locale}/`;
 const hreflang = Object.fromEntries([
   ["x-default", urlFor("en")],
-  ...supportedLocales.map((locale) => [locale === "uk" ? "en-GB" : locale, urlFor(locale)]),
+  ["en", urlFor("en")], ["en-GB", urlFor("uk")], ["bg-BG", urlFor("bg")], ["de-DE", urlFor("de")], ["es-ES", urlFor("es")], ["pt-BR", urlFor("pt-br")], ["tr-TR", urlFor("tr")],
 ]);
 
 export const dynamicParams = false;

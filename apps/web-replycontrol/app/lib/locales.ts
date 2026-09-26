@@ -125,6 +125,6 @@ export function normalizeLocale(value?: string | null): SupportedLocale {
   if (candidate === "en-gb" || candidate === "en-ie") return "uk";
   const base = candidate.split("-")[0];
   return supportedLocales.includes(base as SupportedLocale)
-    ? (candidate as SupportedLocale)
+    ? (base as SupportedLocale)
     : "en";
 }

@@ -2,7 +2,7 @@
 
 ## Canonical source
 
-`angellllkr-eng/mind-reply-core` is the active, non-archived source repository for the MindReply core application.
+`Mind-Reply/mindreply-app` is the active, non-archived source repository for the MindReply core application.
 
 ## Service contract
 

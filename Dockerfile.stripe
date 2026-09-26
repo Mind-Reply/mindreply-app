@@ -1,0 +1,60 @@
+# MindReply with Stripe Treasury Integration
+# Multi-stage Docker build
+
+# Stage 1: Dependencies
+FROM node:26-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+RUN npm install -g pnpm@10.32.1 --silent
+
+COPY pnpm-workspace.yaml pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod=false
+
+# Stage 2: Builder
+FROM node:26-alpine AS builder
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+RUN npm install -g pnpm@10.32.1 --silent
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Build the app
+RUN pnpm run build
+
+# Stage 3: Runtime (optimized)
+FROM node:26-alpine AS runner
+RUN apk add --no-cache libc6-compat dumb-init
+WORKDIR /app
+
+RUN npm install -g pnpm@10.32.1 --silent
+
+# Create non-root user
+RUN addgroup --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copy built app
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json package.json
+COPY --from=builder /app/pnpm-lock.yaml pnpm-lock.yaml
+COPY --from=builder /app/node_modules ./node_modules
+
+# Runtime config
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+USER nextjs
+
+EXPOSE 3000
+
+# Health check (include Stripe webhook endpoint)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/api/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+
+ENTRYPOINT ["/sbin/dumb-init", "--"]
+CMD ["pnpm", "start"]

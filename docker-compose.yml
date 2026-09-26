@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  # Next.js Reply Control Web App (canonical product surface + €3k audit CTA)
+  # Next.js Reply Control Web App
   web-replycontrol:
     build:
       context: .
@@ -12,6 +12,9 @@ services:
     environment:
       NODE_ENV: production
       NEXT_TELEMETRY_DISABLED: 1
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-whsec_test_}
+      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY:-pk_test_}
     networks:
       - app-network
     restart: unless-stopped
@@ -39,6 +42,8 @@ services:
       LEGAL_ENTITY_API_URL: "https://api.otoco.io/v1"
       AGENT_WALLET_ADDRESS: ${AGENT_WALLET_ADDRESS:-0x321...AI_AGENT}
       AGENT_SESSION_KEY: ${AGENT_SESSION_KEY:-0x_scoped_session_token}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-whsec_test_}
       PYTHONUNBUFFERED: 1
       PYTHONDONTWRITEBYTECODE: 1
     networks:
@@ -57,20 +62,11 @@ services:
     volumes:
       - rwa-logs:/app/logs
 
-  # Optional: Monitoring helper
+  # Health Monitor
   healthcheck-monitor:
     image: curlimages/curl:latest
     container_name: healthcheck-monitor
-    command: |
-      sh -c '
-      while true; do
-        echo "[$(date)] Checking web-replycontrol...";
-        curl -sf http://web-replycontrol:3000/api/health > /dev/null && echo "OK web-replycontrol" || echo "DOWN web-replycontrol";
-        echo "[$(date)] Checking rwa-bridge...";
-        curl -sf http://rwa-bridge:8000 > /dev/null && echo "OK rwa-bridge" || echo "DOWN rwa-bridge";
-        sleep 30;
-      done
-      '
+    command: sh -c 'while true; do echo "[$(date)] Checking services..."; curl -sf http://web-replycontrol:3000/api/health > /dev/null && echo "✓ Frontend OK" || echo "✗ Frontend DOWN"; curl -sf http://rwa-bridge:8000/health > /dev/null && echo "✓ Backend OK" || echo "✗ Backend DOWN"; sleep 30; done'
     networks:
       - app-network
     depends_on:

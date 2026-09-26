@@ -1,21 +1,97 @@
-# RETIRED / PROTECTED
-# Production deploy workflow disabled pending Cloudflare/ResellerPro canonicalisation.
-# This workflow is intentionally manual-only and guarded.
-# It does not run on repository pushes.
-
-name: Retired Production Deployment Guard
+name: Production Deploy — Mind-Reply Core
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 env:
-  LEGACY_DEPLOY_ENABLED: 'false'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  guard:
-    if: vars.LEGACY_DEPLOY_ENABLED == 'true'
+  build-and-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
     steps:
-      - run: |
-          echo "Legacy production deployment is disabled. Use the verified Cloudflare/ResellerPro release path."
-          exit 1
+      - uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build canonical web app
+        run: pnpm run build
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy-to-vercel:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Vercel (Production)
+        uses: vercel/action@v6
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_CORE }}
+          production: true
+
+      - name: Deployment successful
+        run: echo "Production deployment completed"
+
+  health-check:
+    needs: deploy-to-vercel
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Health check Mind-Reply
+        run: curl -fsS https://mind-reply.com/health
+        continue-on-error: true
+
+      - name: Health check A11-K
+        run: curl -fsS https://a11-k.space/health
+        continue-on-error: true

@@ -79,6 +79,7 @@
     "shiki": "^4.4.3",
     "sonner": "^2.0.7",
     "streamdown": "^2.3.0",
+    "stripe": "^16.17.0",
     "swr": "^2.4.2",
     "tailwind-merge": "^3.6.0",
     "tailwindcss-animate": "^1.0.7",
@@ -112,3 +113,4 @@
   },
   "packageManager": "pnpm@10.32.1"
 }
+

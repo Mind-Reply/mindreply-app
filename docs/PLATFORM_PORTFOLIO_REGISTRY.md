@@ -10,9 +10,9 @@ Replace the thin-site factory with a platform factory: fewer canonical propertie
 
 | Platform | Canonical source | Vercel role | Target surface |
 |---|---|---|---|
-| MindReply | `Mind-Reply/mind-reply-core` | `mindreply` | Business automation, agents, communication, tools, resources, proof |
-| ResellerPro | `angellllkr-eng/resellerpro-platform` | `resellerpro-platform` | Reselling/sourcing workflow, tools, guides, pricing, dashboard |
-| A11-K | `angellllkr-eng/mind-reply-core` + A11-K apps | `a11k-live-foundation` / `a11k-surface` | Platform, chat, tools, developer, docs, research, security |
+| MindReply | `Mind-Reply/mindreply-app` | `mindreply` | Business automation, agents, communication, tools, resources, proof |
+| ResellerPro | `Mind-Reply/resellerpro` | `resellerpro-platform` | Reselling/sourcing workflow, tools, guides, pricing, dashboard |
+| A11-K | `Mind-Reply/mindreply-app` + A11-K apps | `a11k-live-foundation` / `a11k-surface` | Platform, chat, tools, developer, docs, research, security |
 | PatchTalk | `angellllkr-eng/patchtalk` | `patchtalk` | Voice/chat/WhatsApp/business/developer/security/docs |
 | Aurel | `angellllkr-eng/agent-control-plane` | `agent-control-plane-vezr` | Product, proof, experience, documentation |
 

@@ -2,7 +2,7 @@
 
 ## Canonical implementation
 
-- Repository: `angellllkr-eng/mind-reply-core`
+- Repository: `Mind-Reply/mindreply-app`
 - Branch: `main`
 - Role: active implementation source for the MindReply production platform
 
@@ -13,7 +13,7 @@
 
 ## Vercel requirement
 
-The production Vercel project serving `mind-reply.com` is currently associated with an archived `Mind-Reply/mind-reply-core` repository. That association must be changed to a validated active production source before the new microservices can be claimed as live on the custom domain.
+The production Vercel project serving `mind-reply.com` is currently associated with an archived `Mind-Reply/mindreply-app` repository. That association must be changed to a validated active production source before the new microservices can be claimed as live on the custom domain.
 
 ## Release rule
 

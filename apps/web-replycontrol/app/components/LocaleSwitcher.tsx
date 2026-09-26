@@ -15,8 +15,8 @@ export function LocaleSwitcher({ locale }: { locale: SupportedLocale }) {
   }, [locale]);
 
   function choose(next: SupportedLocale) {
-    const cleanPath = pathname.replace(/^\/(en|bg|de|fr|es)(?=\/|$)/, "") || "/";
-    router.push(next === "en" ? cleanPath : `/${next}${cleanPath === "/" ? "" : cleanPath}`);
+    const cleanPath = pathname.replace(/^\/(en|uk|bg|de|es|pt-br|tr)(?=\/|$)/, "") || "/";
+    router.push(`/${next}${cleanPath === "/" ? "/" : cleanPath}`);
   }
 
   return <div className="localeSwitcher" aria-label="Country and language">

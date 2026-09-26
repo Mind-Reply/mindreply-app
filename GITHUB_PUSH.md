@@ -14,10 +14,10 @@
 cd Users/ANGEL
 
 # If you have SSH keys set up (recommended):
-git remote add origin git@github.com:mind-reply/mind-reply-core.git
+git remote add origin git@github.com:Mind-Reply/mindreply-app.git
 
 # If using HTTPS with token:
-git remote add origin https://github.com/mind-reply/mind-reply-core.git
+git remote add origin https://github.com/Mind-Reply/mindreply-app.git
 ```
 
 ### 2. Push to GitHub
@@ -61,7 +61,7 @@ git push -u origin main
 
 ## Repository Details
 
-**GitHub URL:** https://github.com/mind-reply/mind-reply-core
+**GitHub URL:** https://github.com/Mind-Reply/mindreply-app
 **Default Branch:** main
 **Description:** MindReply - Polite & Persuasive Operating Layer
 

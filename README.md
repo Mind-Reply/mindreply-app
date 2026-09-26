@@ -15,7 +15,7 @@ MindReply Proofline is the canonical product repository for building reliable op
 | **Patternwright** | Visual-system and component experimentation | `apps/experimental/brushworks/` |
 | **Venture Foundry** | Concept-to-deployment workflow experiments | `apps/experimental/forge/` |
 
-The private operational control root is `angellllkr-eng/agent-control-plane`. This product repository must not become a second owner-control plane.
+The owner-control implementation boundary is `Mind-Reply/control-plane`. This product repository is the canonical MindReply product root and must not become a second owner-control plane.
 
 ## Operating docs
 

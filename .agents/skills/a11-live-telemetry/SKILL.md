@@ -19,7 +19,7 @@ Monitor analytics over visual presence on the web. Surface activity, results, en
 1. Web presence & traffic — Vercel Web Analytics on a11k-live-foundation, a11-k-core, public-site, brand surfaces.
 2. Income & revenue — Stripe gross volume, charges, refunds, disputes, net cash. X Ads spend and engagement.
 3. Engagement & proof — Gamma, X Ads, public proof assets, attribution to PINS/Notion.
-4. Live telemetry dashboard — single Notion surface updated every cycle.
+4. Live telemetry dashboard — single Notion surface updated when an owner-invoked check runs.
 
 ## Wiring
 Fifth core skill in a11-ceo-skill-mesh. human-gate-closer is the execution spine. a11-ios-zero-interruption is a hard constraint.

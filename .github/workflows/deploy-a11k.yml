@@ -1,44 +1,22 @@
-name: Deploy A11-K to Vercel (a11-k.space)
+# RETIRED / PROTECTED
+# A11-K no longer deploys from this canonical MindReply repo.
+# The former Vercel production workflow is intentionally disabled.
+# Canonical deployment must be established in the A11-K repository using the approved Cloudflare/ResellerPro path.
+
+name: Retired A11-K Deployment Guard
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "apps/a11k/**"
-      - "packages/shared-*/**"
-      - ".github/workflows/deploy-a11k.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  deploy:
+  guard:
     runs-on: ubuntu-latest
-    environment:
-      name: production-a11k
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Install Vercel CLI
-        run: npm i -g vercel
-
-      - name: Pull Vercel environment information
-        run: vercel pull --yes --environment=production
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_A11K_PROJECT_ID }}
-
-      - name: Build and deploy to Vercel
-        run: vercel deploy --prod
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_A11K_PROJECT_ID }}
-
-      - name: Health check
+      - name: Explain deployment boundary
         run: |
-          sleep 15
-          curl -f https://a11-k.space/health || exit 1
+          echo "A11-K deployment is intentionally disabled in Mind-Reply/mindreply-app."
+          echo "Use the canonical A11-K repository and the verified Cloudflare/ResellerPro release path."
+          exit 1

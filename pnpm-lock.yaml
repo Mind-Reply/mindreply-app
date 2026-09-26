@@ -110,7 +110,7 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1
       next:
-        specifier: 16.2.11
+        specifier: 16.3.5
         version: 16.2.11(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       next-auth:
         specifier: 5.0.0-beta.32
@@ -155,13 +155,13 @@ importers:
         specifier: ^1.6.1
         version: 1.6.7(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react:
-        specifier: 19.2.7
+        specifier: 19.3.0
         version: 19.2.7
       react-data-grid:
         specifier: 7.0.0-beta.61
         version: 7.0.0-beta.61(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react-dom:
-        specifier: 19.2.7
+        specifier: 19.3.0
         version: 19.2.7(react@19.2.7)
       redis:
         specifier: ^6.1.0

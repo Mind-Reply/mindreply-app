@@ -120,8 +120,11 @@ export const copy: Record<SupportedLocale, Copy> = {
 };
 
 export function normalizeLocale(value?: string | null): SupportedLocale {
-  const candidate = value?.toLowerCase() || "";\n  if (candidate === "pt-br" || candidate.startsWith("pt-br-")) return "pt-br";\n  if (candidate === "en-gb" || candidate === "en-ie") return "uk";\n  const base = candidate.split("-")[0];
-  return supportedLocales.includes(candidate as SupportedLocale)
+  const candidate = value?.toLowerCase() || "";
+  if (candidate === "pt-br" || candidate.startsWith("pt-br-")) return "pt-br";
+  if (candidate === "en-gb" || candidate === "en-ie") return "uk";
+  const base = candidate.split("-")[0];
+  return supportedLocales.includes(base as SupportedLocale)
     ? (candidate as SupportedLocale)
     : "en";
 }

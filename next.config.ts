@@ -147,7 +147,7 @@ const config: NextConfig = {
     root: __dirname,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
 
   // Environment variables

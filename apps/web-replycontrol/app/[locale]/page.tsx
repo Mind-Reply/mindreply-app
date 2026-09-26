@@ -12,7 +12,7 @@ const hreflang = Object.fromEntries([
 
 export const dynamicParams = false;
 export function generateStaticParams() {
-  return supportedLocales.filter((locale) => locale !== "en").map((locale) => ({ locale }));
+  return supportedLocales.map((locale) => ({ locale }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {

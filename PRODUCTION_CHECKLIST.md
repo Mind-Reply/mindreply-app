@@ -1,6 +1,6 @@
 # PRODUCTION CHECKLIST FOR MindReply
 
-**Status:** NOT PRODUCTION READY (see blockers below)  
+**Status:** CODE REMEDIATION IN PROGRESS — EXTERNAL DEPLOYMENT/SECRET VERIFICATION STILL REQUIRED  
 **Last Verified:** 2026-09-16  
 **Owner:** Angel Krastev  
 
@@ -12,18 +12,14 @@
 
 Before any production deployment, all previously exposed credentials must be rotated at their providers:
 
-### Required Rotations
+### Required Rotations — external provider action required
 
 - [ ] **Stripe API keys** — Revoke old, generate new test + live keys
   - Affects: Webhook secret, API key, restricted key
   - Location: Stripe Dashboard → Developers → API Keys
-  - Action: Rotate + update in Vercel Environment Variables
+  - Action: Rotate + update in the selected production provider's secret store
   - Evidence: Screenshot of new keys dated {date}
 
-- [ ] **Vercel tokens** — Revoke old deploy tokens
-  - Location: Vercel Dashboard → Settings → Tokens
-  - Action: Revoke all old tokens, generate new scoped tokens
-  - Evidence: New token hash dated {date}
 
 - [ ] **Supabase credentials** — Rotate service-role key + database password
   - Location: Supabase Project → Settings → API
@@ -252,7 +248,7 @@ Owner must approve before production deployment:
 
 ---
 
-## DEPLOYMENT STEPS
+## DEPLOYMENT STEPS — CURRENT PATH
 
 Once all sign-offs are complete:
 
@@ -268,14 +264,13 @@ Once all sign-offs are complete:
    ```
 
 3. **Trigger deployment**
-   - Via GitHub Actions: Merge PR to main
-   - Via Vercel: Deploy from dashboard
-   - Via manual: `git push origin release/production-v1`
+   - Use the approved ResellerPro / Cloudflare production delivery path.
+   - GitHub merge alone is not deployment evidence.
 
 4. **Verify deployment**
    ```bash
-   curl https://mind-reply.com/health
-   # Expected: { "status": "ok" }
+   curl https://mind-reply.com/api/health
+   # Expected: HTTP 200 with `ok: true`
    ```
 
 5. **Monitor first 24 hours**
@@ -296,7 +291,7 @@ If production fails:
    - Check deployment status
 
 2. **Rollback** (choose one)
-   - **Vercel:** Click "Rollback" in dashboard to previous deployment
+   - **ResellerPro / Cloudflare:** roll back the provider's immutable deployment to the previously verified release.
    - **Docker:** `docker-compose -f docker-compose.prod.yml down && docker pull {previous_image} && docker-compose up -d`
    - **GitHub:** Revert commit + push
 

@@ -25,14 +25,14 @@ alter table public.veridex_envelopes enable row level security;
 -- No public insert/update/delete via anon key
 -- Service role bypasses RLS for append from gate API
 
--- Optional: allow authenticated owners to read their own request trails
--- Adjust claim key to match your auth model
+-- Fail-closed until an owner claim mapping is verified in production.
+-- Service-role/server-side readers bypass RLS; do not expose this ledger to authenticated users by default.
 drop policy if exists veridex_select_authenticated on public.veridex_envelopes;
 create policy veridex_select_authenticated
   on public.veridex_envelopes
   for select
   to authenticated
-  using (true);
+  using (false);
 
 comment on table public.veridex_envelopes is
   'Append-only Veridex cryptographic envelopes (.epack). Do not update or delete rows.';

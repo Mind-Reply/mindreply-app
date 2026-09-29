@@ -23,6 +23,7 @@ export const regions = [
   { slug: "global", name: "Global", mode: "Cross-border delivery" },
   { slug: "europe", name: "Europe", mode: "Digital transformation and resilience" },
   { slug: "bulgaria", name: "Bulgaria", mode: "SME digitalisation and capability uplift" },
+  { slug: "uk-global", name: "UK / Global", mode: "Enterprise modernisation and managed operations" },
 ];
 
 export function getService(slug: string) { return services.find((service) => service.slug === slug); }

@@ -1,0 +1,12 @@
+name: compliance
+on:
+  pull_request:
+  push:
+    branches: ["main", "master", "trunk"]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    uses: Mind-Reply/.github/.github/workflows/compliance.yml@main
+    permissions:
+      contents: read

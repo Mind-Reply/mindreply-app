@@ -1,0 +1,15 @@
+version: 1
+status: UNVERIFIED
+required:
+  - repository_identity
+  - default_branch
+  - current_commit
+  - ci_status
+  - deployment_configuration
+  - deployment_evidence
+  - runtime_verification
+  - security_policy
+  - secret_configuration
+  - rollback_path
+  - last_verified_at
+rule: "UNVERIFIED until each applicable evidence item is proven; material changes require re-verification."

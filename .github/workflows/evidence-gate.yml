@@ -1,0 +1,32 @@
+name: Evidence Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: evidence-gate-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - name: Validate evidence manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f .github/evidence-gate.yml
+          grep -q '^version: ' .github/evidence-gate.yml
+          grep -q '^status: ' .github/evidence-gate.yml
+          grep -q '^required:' .github/evidence-gate.yml
+          grep -q '^rule:' .github/evidence-gate.yml
+          echo "Evidence gate manifest present."
+          echo "Declared status: $(sed -n 's/^status: //p' .github/evidence-gate.yml | head -n1)"

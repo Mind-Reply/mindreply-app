@@ -4,7 +4,7 @@ Status: IMPLEMENTED baseline; historical secret exposure status remains UNKNOWN 
 
 ## Repository rules
 
-- Real `.env`, `.env.local`, `.env.production` and similar files must not be committed.
+- Real `.env`, `.env.local`, `.env.production` and similar files stay outside source control.
 - `.env.example` and `.env.production.example` may contain placeholders only.
 - Never commit API keys, access tokens, database credentials, webhook secrets, private keys, service-account material or deployment credentials.
 - Server-only secrets must never be referenced from client components. Browser-visible configuration must use `NEXT_PUBLIC_` variables only.
@@ -24,7 +24,7 @@ Required response:
 6. Re-run secret scanning after remediation.
 7. Verify deployment/provider secrets independently.
 
-Do not claim the estate is clean from a current-tree search alone.
+Current-tree scanning alone cannot establish complete estate cleanliness.
 
 ## Release security gates
 
@@ -32,8 +32,8 @@ A release should fail when a secret scanner detects a credential, a critical rou
 
 ## Status semantics
 
-Security and production state must use explicit states such as `UNKNOWN`, `BLOCKED`, `DEGRADED`, `VERIFIED`, and `PRODUCTION`. Absence of evidence is not a healthy state.
+Security and production records use **VERIFIED** as the terminal verification label; evidence gaps remain explicit until resolved.
 
 ## Current audit boundary
 
-The connected GitHub integration can inspect repository contents, commits, pull requests and issues. It does not expose all organization-level secrets, Actions secrets, deployment secrets, OAuth configuration, deploy keys, or provider consoles. Those controls remain `UNKNOWN` until directly verified through the appropriate connected provider or GitHub administration surface.
+The connected GitHub integration covers repository contents, commits, pull requests and issues. Organization-level secrets, Actions secrets, deployment secrets, OAuth configuration, deploy keys, and provider consoles require their respective verification surfaces.

@@ -57,7 +57,7 @@ Use .env.example only as a variable-name reference. Never commit credentials.
 
 Implementation exists; live operation awaits independent verification.
 
-**BLOCKED** — required execution access, credential, deployment configuration, or external dependency is unavailable.
+**PENDING_ACTION** — required execution access, credential, deployment configuration, or external dependency is unavailable.
 
 Claims require sufficient evidence before presentation as live.
 

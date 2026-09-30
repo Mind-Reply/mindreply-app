@@ -1,0 +1,76 @@
+name: Creator, Recruitment, PR & Events Intake
+description: Stage a creator, hiring, PR, media or event-management opportunity for qualification.
+title: "[OPS] "
+labels:
+  - operations
+body:
+  - type: dropdown
+    id: department
+    attributes:
+      label: Department
+      options:
+        - Content Creator
+        - Recruitment
+        - PR Management
+        - Events & Partnerships
+    validations:
+      required: true
+  - type: input
+    id: brand
+    attributes:
+      label: Brand or product
+      description: Which owned brand/product does this support?
+    validations:
+      required: true
+  - type: input
+    id: counterpart
+    attributes:
+      label: Counterpart
+      description: Creator, candidate, publication, venue, supplier, partner or organisation.
+    validations:
+      required: true
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What outcome is being pursued?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: URLs, source documents, portfolio, event page, role brief or other evidence. Discovery links are not proof of commitment.
+    validations:
+      required: true
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Stage
+      options:
+        - INTAKE
+        - RESEARCH
+        - QUALIFIED
+        - PROPOSAL
+        - AWAITING_APPROVAL
+        - COMMITTED
+        - IN_EXECUTION
+        - DELIVERED
+        - EVIDENCE_REVIEW
+        - CLOSED
+        - DECLINED
+        - BLOCKED
+    validations:
+      required: true
+  - type: textarea
+    id: next_action
+    attributes:
+      label: Next action
+    validations:
+      required: true
+  - type: checkboxes
+    id: approval
+    attributes:
+      label: Approval gate
+      options:
+        - label: No contract, spend, sponsorship, external commitment or privileged access is being represented as approved unless owner approval is recorded.

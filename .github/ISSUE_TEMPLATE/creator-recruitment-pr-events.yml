@@ -22,6 +22,22 @@ body:
       description: Which owned brand/product does this support?
     validations:
       required: true
+  - type: dropdown
+    id: partnership_lane
+    attributes:
+      label: Partnership lane
+      options:
+        - Creator / Talent
+        - Media / Press
+        - Agency / Production
+        - Event / Venue
+        - Sponsor / Commercial Partner
+        - Technology / Platform
+        - Community / Institutional
+        - Supplier / Contractor
+        - Internal Recruitment
+    validations:
+      required: true
   - type: input
     id: counterpart
     attributes:
@@ -68,6 +84,21 @@ body:
       label: Next action
     validations:
       required: true
+  - type: input
+    id: due_date
+    attributes:
+      label: Due date
+      description: Use YYYY-MM-DD when a date is known.
+  - type: input
+    id: budget
+    attributes:
+      label: Budget
+      description: Amount and currency, if applicable. Do not treat this as approved spend.
+  - type: textarea
+    id: rights_permissions
+    attributes:
+      label: Rights / permissions
+      description: Content usage, image/video rights, whitelisting, exclusivity or other permissions relevant to the opportunity.
   - type: checkboxes
     id: approval
     attributes:

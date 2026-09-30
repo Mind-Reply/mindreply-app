@@ -6,10 +6,18 @@ This is the canonical MindReply product repository. The public commercial surfac
 
 ## Canonical boundaries
 
-- Product root: `Mind-Reply/mindreply-app`
-- Private owner-control root: `Mind-Reply/control-plane`
-- A11 execution service: `a11-live-cloud-execution`
+- Product root: Mind-Reply/mindreply-app
+- Private owner-control root: Mind-Reply/control-plane
+- A11 execution service: a11-live-cloud-execution
 - Historical/personal copies are migration sources, not parallel production roots.
+
+## Department operations
+
+Creator, Recruitment, PR & Events operations are defined in:
+- docs/CREATOR_RECRUITMENT_PR_EVENTS_OPERATIONS.md
+- docs/CREATOR_PR_EVENTS_DEPARTMENT_CHARTER.md
+
+The department may research, qualify, draft and stage work. External commitments, contracts, spend, sponsorships, bookings, privileged access and legally binding communications require the applicable owner approval and evidence.
 
 ## Current commercial surface
 
@@ -37,13 +45,11 @@ The intended production infrastructure is Cloudflare / ResellerPro. Vercel is no
 
 ## Development
 
-```bash
 pnpm install
 pnpm --filter web-replycontrol typecheck
 pnpm --filter web-replycontrol build
-```
 
-Use `.env.example` only as a variable-name reference. Never commit credentials.
+Use .env.example only as a variable-name reference. Never commit credentials.
 
 ## Evidence rule
 

@@ -53,7 +53,7 @@ Use `.env.example` only as a variable-name reference. Never commit credentials.
 
 **BLOCKED** — required execution access, credential, deployment configuration, or external dependency is unavailable.
 
-**UNVERIFIED** — a claim exists without sufficient evidence and must not be presented as live.
+**pending_evidence** — a claim exists without sufficient evidence and must not be presented as live.
 
 ## Commercial discipline
 

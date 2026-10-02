@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getStripe, stripePriceId } from "@/lib/stripe";
 import { requireAuth, syncCurrentUser } from "@/lib/clerk";
+import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
@@ -36,13 +37,17 @@ export async function POST(request: Request) {
       );
     }
 
+    const subscription = user.organizationId
+      ? await prisma.subscription.findUnique({ where: { organizationId: user.organizationId } })
+      : null;
+
     const session = await getStripe().checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: configuredPriceId, quantity: 1 }],
       success_url: `${baseUrl}/dashboard?checkout=success`,
       cancel_url: `${baseUrl}/pricing?checkout=cancelled`,
-      customer: user.stripeCustomerId ?? undefined,
-      customer_creation: user.stripeCustomerId ? undefined : "always",
+      customer: subscription?.stripeCustomerId ?? undefined,
+      customer_creation: subscription?.stripeCustomerId ? undefined : "always",
       metadata: { clerkId },
     });
 

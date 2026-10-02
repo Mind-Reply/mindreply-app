@@ -1,1 +1,62 @@
-import { NextResponse } from "next/server";\nimport { getStripe, stripePriceId } from "@/lib/stripe";\nimport { requireAuth, syncCurrentUser } from "@/lib/clerk";\nimport { prisma } from "@/lib/prisma";\n\nexport const runtime = "nodejs";\n\nexport async function POST(request: Request) {\n  try {\n    const clerkId = await requireAuth();\n    const body = (await request.json().catch(() => ({}))) as {\n      priceId?: unknown;\n    };\n    const configuredPriceId = stripePriceId();\n    const requestedPriceId =\n      typeof body.priceId === "string" && body.priceId.trim()\n        ? body.priceId.trim()\n        : configuredPriceId;\n\n    if (configuredPriceId === "price_REPLACE_ME") {\n      return NextResponse.json(\n        { error: "Stripe price is not configured." },\n        { status: 503 },\n      );\n    }\n\n    if (requestedPriceId !== configuredPriceId) {\n      return NextResponse.json(\n        { error: "Requested Stripe price is not allowlisted." },\n        { status: 400 },\n      );\n    }\n\n    const user = await syncCurrentUser();\n    const baseUrl = process.env.NEXT_PUBLIC_APP_URL;\n    if (!baseUrl) {\n      return NextResponse.json(\n        { error: "NEXT_PUBLIC_APP_URL is not configured." },\n        { status: 503 },\n      );\n    }\n\n    const session = await getStripe().checkout.sessions.create({\n      payment_method_types: ["card"],\n      line_items: [{ price: configuredPriceId, quantity: 1 }],\n      mode: "payment",\n      success_url: baseUrl + "/workspace?success=true&session_id={CHECKOUT_SESSION_ID}",\n      cancel_url: baseUrl + "/workspace?canceled=true",\n      customer_email: user.email ?? undefined,\n      client_reference_id: "MINDREPLY-WORKSPACE-EUR",\n      metadata: {\n        clerkId,\n        organizationId: user.organizationId ?? "",\n      },\n    });\n\n    return NextResponse.json({ url: session.url });\n  } catch (error) {\n    if (error instanceof Error && error.message === "UNAUTHORIZED") {\n      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });\n    }\n\n    console.error("Stripe checkout error", error);\n    return NextResponse.json(\n      { error: "Unable to create Stripe Checkout session." },\n      { status: 500 },\n    );\n  }\n}\n
+import { NextResponse } from "next/server";
+import { getStripe } from "@/lib/stripe";
+import { requireAuth, syncCurrentUser } from "@/lib/clerk";
+
+export const runtime = "nodejs";
+
+export async function POST() {
+  try {
+    const clerkId = await requireAuth();
+    const user = await syncCurrentUser();
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+
+    if (!baseUrl) {
+      return NextResponse.json(
+        { error: "NEXT_PUBLIC_APP_URL is not configured." },
+        { status: 503 },
+      );
+    }
+
+    const session = await getStripe().checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "eur",
+            unit_amount: 99700,
+            product_data: {
+              name: "MindReply Workspace Access",
+              description: "Commercial workspace license and execution runtime",
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url:
+        baseUrl + "/workspace?success=true&session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: baseUrl + "/workspace?canceled=true",
+      customer_email: user.email ?? undefined,
+      client_reference_id: "MINDREPLY-WORKSPACE-EUR",
+      metadata: {
+        clerkId,
+        organizationId: user.organizationId ?? "",
+      },
+    });
+
+    return NextResponse.json({
+      sessionId: session.id,
+      url: session.url,
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message === "UNAUTHORIZED") {
+      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+    }
+
+    console.error("Stripe checkout error", error);
+    return NextResponse.json(
+      { error: "Unable to create Stripe Checkout session." },
+      { status: 500 },
+    );
+  }
+}

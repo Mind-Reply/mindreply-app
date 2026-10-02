@@ -67,3 +67,19 @@ All other repos across all three namespaces are satellites/experiments/historica
 - All operational notifications route exclusively to mind.repl@gmail.com.
 
 This declaration supersedes any conflicting or outdated ownership claim found elsewhere in the estate, and must not be treated as evidence of deployment, security, or revenue status — per the rule stated at the top of this file.
+
+## Cloudflare Agent Setup (2026-10-02)
+
+When interacting with Cloudflare, use the `cf` CLI unless this project has a Wrangler configuration file. Use Wrangler for Workers-specific local development, deployment, migrations and commands tied to an existing `wrangler.jsonc`/Wrangler project.
+
+Cloudflare agent guidance:
+- Prefer current Cloudflare documentation and official MCP/Skills rather than memory.
+- Never hard-code secrets or API tokens.
+- Use the Cloudflare docs MCP server at https://docs.mcp.cloudflare.com/mcp for current product documentation.
+- Use the Cloudflare API MCP server at https://mcp.cloudflare.com/mcp for account-level Cloudflare operations when authenticated.
+- Treat production readiness as evidence-gated: verify build, deployment, DNS, runtime health and relevant bindings before claiming LIVE/READY.
+- For Cloudflare projects using `wrangler.jsonc`, do not run `cf dev`, `cf build`, or `cf deploy` until the project has been migrated to the supported `cloudflare.config.ts` flow; otherwise use Wrangler.
+- Prefer TypeScript, ES modules, minimal dependencies, explicit error handling and secure secret bindings.
+- Cloudflare setup requiring browser OAuth must be completed by the owner when the CLI/MCP requests it.
+
+Reference: https://developers.cloudflare.com/agent-setup/

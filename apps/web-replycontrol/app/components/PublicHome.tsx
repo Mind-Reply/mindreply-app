@@ -1,8 +1,6 @@
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { copy, type SupportedLocale } from "../lib/locales";
 
-const AUDIT_CHECKOUT = "https://book.stripe.com/8x2aER4owd8c1TG4Ku63K00";
-
 const modules = [
   ["01", "Operations", "Run governed workflows, monitor execution, and keep consequential actions visible.", "/operations"],
   ["02", "Agents", "Coordinate task-specific workers with explicit boundaries, handoffs, and approval points.", "/agents"],
@@ -24,20 +22,20 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
       <div className="mc-nav-center">
         <a href="/platform">Platform</a><a href="/operations">Operations</a><a href="/agents">Agents</a><a href="/knowledge">Knowledge</a><a href="/evidence">Evidence</a>
       </div>
-      <div className="mc-nav-right"><span className="mc-state"><i className="mc-dot"/>RELEASE STATUS</span><LocaleSwitcher locale={locale} /></div>
+      <div className="mc-nav-right"><span className="mc-state"><i className="mc-dot"/>OWNER CONTROL</span><LocaleSwitcher locale={locale} /></div>
     </nav>
 
     <section className="mc-hero" id="top" aria-labelledby="hero-title">
       <div>
         <p className="mc-kicker"><i/>OWNER-GOVERNED OPERATIONS</p>
-        <h1 id="hero-title">Turn complex work into <em>controlled execution.</em></h1>
+        <h1 id="hero-title">{t.title}</h1>
         <p className="lead">{t.lead}</p>
-        <div className="mc-actions"><a className="mc-primary" href="/platform">Explore the platform <span aria-hidden="true">↗</span></a><a className="mc-secondary" href={AUDIT_CHECKOUT} target="_blank" rel="noreferrer">Start a review</a></div>
+        <div className="mc-actions"><a className="mc-primary" href="/platform">{t.primaryAction} <span aria-hidden="true">↗</span></a><a className="mc-secondary" href="/contact">{t.secondaryAction}</a></div>
       </div>
       <aside className="mc-console" aria-label="MindReply release evidence">
-        <div className="mc-console-top"><span>PROOFLINE / RELEASE STATE</span><b>EVIDENCE BOUNDARY</b></div>
-        <div className="mc-console-main"><span className="mc-console-label">Decision posture</span><div className="mc-verdict"><strong>Human authority retained.</strong><span>READY</span></div><div className="mc-lanes">
-          {[["Intent","EXPLICIT"],["Evidence","TRACEABLE"],["Release","GATED"],["Rollback","PLANNED"]].map(([label,state]) => <div className="mc-lane" key={label}><span>{label}</span><div className="mc-lane-bar"><i style={{width: "100%"}}/></div><b>{state}</b></div>)}
+        <div className="mc-console-top"><span>PROOFLINE / OPERATING POSTURE</span><b>EVIDENCE BOUNDARY</b></div>
+        <div className="mc-console-main"><span className="mc-console-label">{t.signal.title}</span><div className="mc-verdict"><strong>{t.signal.rule}</strong><span>OWNER-LED</span></div><div className="mc-lanes">
+          {[["Proof",t.signal.proof],["Authority",t.signal.authority],["Release",t.signal.release]].map(([label,state]) => <div className="mc-lane" key={label}><span>{label}</span><div className="mc-lane-bar"><i style={{width: "100%"}}/></div><b>{state}</b></div>)}
         </div></div>
       </aside>
     </section>

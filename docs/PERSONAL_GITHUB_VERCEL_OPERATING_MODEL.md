@@ -53,20 +53,22 @@ Each canonical platform should contain roughly 10–30 substantive pages only wh
 
 No doorway pages, keyword-only variants, empty templates or duplicate city/topic pages.
 
-## Required production gates
+## Retirement verification
 
-Before retiring or merging a Vercel project:
-1. inventory custom domains;
-2. inventory environment variables/secrets without exposing values;
-3. identify current production deployment;
-4. verify GitHub repository and branch;
-5. verify DNS/canonical URLs;
-6. verify redirects;
-7. verify forms/auth/payments/integrations;
-8. preserve rollback deployment;
-9. deploy canonical replacement;
-10. smoke test;
-11. only then archive the legacy project.
+Before retiring or merging a Vercel project, record:
+1. custom domains;
+2. environment variables/secrets without exposing values;
+3. current production deployment;
+4. GitHub repository and branch;
+5. DNS/canonical URLs;
+6. redirects;
+7. forms/auth/payments/integrations;
+8. rollback deployment;
+9. canonical replacement deployment;
+10. smoke-test result;
+11. resulting legacy-project state.
+
+This is a continuity and evidence checklist, not a production promotion gate. Keep security, credential, billing and destructive-action authorization controls intact.
 
 ## Build standard
 
@@ -102,7 +104,7 @@ Repair builds, lockfiles, migrations, environment validation, CI and deployment 
 Move/redirect domains only after production replacement is verified.
 
 ### Phase 6 — Retirement
-Archive duplicate/empty Vercel projects and repositories only after all safety gates pass.
+Archive duplicate/empty Vercel projects after continuity evidence is recorded and required owner authorization exists.
 
 ## Success criteria
 

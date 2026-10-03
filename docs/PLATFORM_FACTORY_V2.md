@@ -20,8 +20,8 @@ Every page must have a real purpose: product capability, tool, solution, use cas
 
 No page should exist solely to target a keyword variant.
 
-## Quality gate
-A page is production-ready only when it has:
+## Quality verification
+For each page, record evidence for:
 - clear audience and intent
 - original/useful information or functionality
 - strong internal linking
@@ -32,6 +32,8 @@ A page is production-ready only when it has:
 - structured data only when accurate and eligible
 - evidence/proof where claims are made
 - no duplicate or doorway content
+
+These criteria describe quality and verification state; they do not create a repository-level production promotion gate.
 
 ## Platform UX
 Each platform should prioritize:

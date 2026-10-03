@@ -40,7 +40,7 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
         <div className="mc-actions"><a className="mc-primary" href="/services">Explore services <span aria-hidden="true">↗</span></a><a className="mc-secondary" href="/audit">Request an assessment</a></div>
       </div>
       <aside className="mc-console" aria-label="MindReply delivery evidence">
-        <div className="mc-console-top"><span>DELIVERY MODEL / OPERATING POSTURE</span><b>EVIDENCE BOUNDARY</b></div>
+        <div className="mc-console-top"><span>DELIVERY MODEL / OPERATING POSTURE</span><b>CONTINUOUS VERIFICATION</b></div>
         <div className="mc-console-main"><span className="mc-console-label">{t.signal.title}</span><div className="mc-verdict"><strong>{t.signal.rule}</strong><span>OWNER-LED</span></div><div className="mc-lanes">
           {[["Proof",t.signal.proof],["Authority",t.signal.authority],["Release",t.signal.release]].map(([label,state]) => <div className="mc-lane" key={label}><span>{label}</span><div className="mc-lane-bar"><i style={{width: "100%"}}/></div><b>{state}</b></div>)}
         </div></div>
@@ -96,7 +96,7 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
       </div></div>
     </section>
 
-    <section className="mc-closing"><p className="mc-kicker"><i/>NEXT STEP</p><h2>Start with the highest-value gap. Build only what can be verified.</h2><p>Choose a capability, request an assessment, and move into implementation with a bounded delivery path and reviewable evidence.</p><a className="mc-primary" href="/audit">Start with an assessment ↗</a></section>
+    <section className="mc-closing"><p className="mc-kicker"><i/>NEXT STEP</p><h2>Start with the highest-value gap. Build only what can be verified.</h2><p>Choose a capability, request an assessment, and move into implementation with a clear delivery path and reviewable evidence.</p><a className="mc-primary" href="/audit">Start with an assessment ↗</a></section>
     <footer className="mc-footer"><span>MindReply</span><span>INTELLIGENCE · TECHNOLOGY · OPERATIONS</span><div className="mc-footer-links"><a href="/status">System status ↗</a><a href="/contact">Contact ↗</a></div></footer>
   </main>;
 }

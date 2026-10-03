@@ -71,6 +71,25 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
       <div className="mc-link-grid">{secondary.map(([title, href]) => <a className="mc-link-card" href={href} key={href}><span>{title}</span><b>↗</b></a>)}</div>
     </section>
 
+    <section className="mc-section" aria-labelledby="delivery-stack-title">
+      <div className="mc-section-head"><span>FUNCTIONAL DELIVERY INFRASTRUCTURE</span><h2 id="delivery-stack-title">Each capability connects to a concrete operating path.</h2></div>
+      <div className="mc-link-grid">
+        <a className="mc-link-card" href="/audit"><span>01 · DISCOVER</span><b>Assess the estate, signals and constraints ↗</b></a>
+        <a className="mc-link-card" href="/platform"><span>02 · ARCHITECT</span><b>Define the target architecture and delivery boundary ↗</b></a>
+        <a className="mc-link-card" href="/operations"><span>03 · EXECUTE</span><b>Build, integrate, monitor and maintain ↗</b></a>
+        <a className="mc-link-card" href="/evidence"><span>04 · VERIFY</span><b>Record deployment, runtime and outcome evidence ↗</b></a>
+      </div>
+    </section>
+
+    <section className="mc-section" aria-labelledby="regional-title">
+      <div className="mc-section-head"><span>REGIONAL + GLOBAL DELIVERY</span><h2 id="regional-title">One core platform. Regional commercial and delivery layers.</h2></div>
+      <div className="mc-rail">
+        <a className="mc-module" href="/regions"><span className="num">01</span><h3>Europe</h3><p>Cross-border delivery with regional operating requirements, resilience and data considerations.</p><span className="mc-module-link">View region model ↗</span></a>
+        <a className="mc-module" href="/regions"><span className="num">02</span><h3>Bulgaria</h3><p>Local delivery for digitalisation, modernisation and capability uplift, connected to the same core.</p><span className="mc-module-link">View region model ↗</span></a>
+        <a className="mc-module" href="/regions"><span className="num">03</span><h3>UK / Global</h3><p>Enterprise modernisation and managed operations delivered from the same controlled service catalogue.</p><span className="mc-module-link">View region model ↗</span></a>
+      </div>
+    </section>
+
     <section className="mc-section" id="principles" aria-labelledby="principles-title">
       <div className="mc-principles"><div className="mc-section-head"><span>OPERATING PRINCIPLES</span><h2 id="principles-title">Automation should make responsibility clearer, not disappear.</h2></div><div className="mc-principle-list">
         {["Intent is explicit before execution starts.","The right capability is selected for the job.","Consequential actions remain reviewable.","Evidence follows the work.","Release paths stay reversible."].map((title,index)=><article className="mc-principle" key={title}><span>{String(index+1).padStart(2,"0")}</span><div><h3>{title}</h3><p>MindReply treats this as a product behavior, not a marketing statement.</p></div></article>)}

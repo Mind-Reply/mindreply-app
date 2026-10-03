@@ -83,9 +83,9 @@ Do not ship:
 - Keep optimistic UI reversible.
 - Never treat client-side state as proof of a server-side action.
 
-## Release gate
+## Feature verification
 
-Before a feature is considered ready:
+Before and after implementation, record:
 
 - [ ] phone-first interaction tested;
 - [ ] keyboard and focus behavior checked;
@@ -97,3 +97,5 @@ Before a feature is considered ready:
 - [ ] evidence/proof state exists;
 - [ ] logs do not expose secrets or private payloads;
 - [ ] copy passes the uncommon-dictionary filter.
+
+These are product-quality verification criteria. Authorization controls for consequential actions remain separate.

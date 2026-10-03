@@ -75,7 +75,7 @@ This avoids the common failure mode of exposing internal architecture as the pub
 
 ## UX acceptance criteria
 
-A redesign is acceptable only when:
+A redesign should be evaluated against:
 
 1. A new visitor can identify the primary value proposition immediately.
 2. A returning user can reach a frequent task in two or fewer navigation decisions.
@@ -94,8 +94,8 @@ A redesign is acceptable only when:
 4. Implement workspace shell and progressive status/evidence panels.
 5. Migrate one representative platform end-to-end.
 6. Run visual/accessibility QA.
-7. Expand only after the representative implementation passes.
+7. Expand after the representative implementation has recorded its verification evidence.
 
-## Safety / release gate
+## Safety / deployment verification
 
-This document changes no production routing or domains. Production migration requires separate verification of source preservation, environment inventory, successful deployment, route smoke tests, redirects/canonicals, rollback and webhook dependencies.
+This document changes no production routing or domains. Deployment work records source preservation, environment inventory, successful deployment, route smoke tests, redirects/canonicals, rollback and webhook dependencies. These are verification records rather than a separate production promotion gate.

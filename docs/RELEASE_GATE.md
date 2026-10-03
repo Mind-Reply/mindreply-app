@@ -1,33 +1,31 @@
-# MindReply Release Gate
+# MindReply Release Verification
 
-Before a branch can be promoted to a public deployment, verify:
+Before and after deployment, record:
 
-- [ ] `pnpm install` succeeds with the lockfile.
-- [ ] typecheck passes.
-- [ ] lint passes.
-- [ ] unit tests pass.
-- [ ] production build passes.
-- [ ] all declared routes return expected status codes.
-- [ ] no public route is an accidental 404.
-- [ ] forms have validation and visible failure states.
-- [ ] authentication and authorization are tested.
-- [ ] secrets are absent from source and client bundles.
-- [ ] external integrations report their actual connection state.
-- [ ] Stripe/webhook flows are tested in test mode before any production promotion.
-- [ ] accessibility smoke checks cover keyboard navigation, labels, focus and reduced motion.
-- [ ] public copy contains no unverified capability claims.
-- [ ] rollback or disable path is documented.
+- `pnpm install` and lockfile result.
+- typecheck result.
+- lint result.
+- unit-test result.
+- production-build result.
+- route/status checks.
+- authentication and authorization checks.
+- secret-scan result.
+- integration connection state.
+- Stripe/webhook test evidence where applicable.
+- accessibility smoke checks.
+- public-copy verification.
+- rollback/disable path.
 
 ## Status vocabulary
 
-`DRAFT` means not releaseable.
+`DRAFT` means implementation is incomplete.
 
-`READY_FOR_CHECK` means implementation exists but has not passed the gate.
+`READY_FOR_CHECK` means implementation exists and verification is pending.
 
-`VERIFIED` means the gate passed against a named commit/deployment.
+`VERIFIED` means the named checks were observed against a named commit/deployment.
 
-`LIVE` may only be used when a deployment is reachable and the critical path has been checked after deployment.
+`LIVE` means the deployment is reachable and the critical path has been checked after deployment.
 
-`UNCONNECTED` means a declared integration exists in configuration but cannot currently be verified.
+`UNCONNECTED` means a declared integration cannot currently be verified.
 
-Never substitute `LIVE` for `READY_FOR_CHECK` or `UNCONNECTED`.
+These states are evidence states, not production approval gates. A failed or missing check is recorded and routed for follow-up rather than creating a separate promotion hold.

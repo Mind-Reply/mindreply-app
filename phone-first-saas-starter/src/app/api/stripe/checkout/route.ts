@@ -31,7 +31,9 @@ export async function POST(request: Request) {
     const session = await getStripe().checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: configuredPriceId, quantity }],
+      payment_method_collection: "always",
       subscription_data: { trial_period_days: stripeTrialDays(), metadata: { clerkId } },
+      integration_identifier: "MindReplyCheckoutXkqTzAbC",
       success_url: baseUrl + "/dashboard?checkout=success",
       cancel_url: baseUrl + "/pricing?checkout=cancelled",
       customer: subscription?.stripeCustomerId ?? undefined,

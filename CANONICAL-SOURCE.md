@@ -9,21 +9,23 @@
 ## Organizational repository
 
 - `Mind-Reply/mindreply-app` is the organizational application repository.
-- It remains non-canonical for production until it contains the validated application and passes the migration gate.
+- It is the canonical implementation source; live status is established by deployment and runtime evidence, not by a separate migration gate.
 
 ## Vercel requirement
 
-The production Vercel project serving `mind-reply.com` is currently associated with an archived `Mind-Reply/mindreply-app` repository. That association must be changed to a validated active production source before the new microservices can be claimed as live on the custom domain.
+The production Vercel project serving `mind-reply.com` is currently associated with an archived `Mind-Reply/mindreply-app` repository. That association must be changed to the validated active production source before the new microservices can be claimed as live on the custom domain.
 
-## Release rule
+## Continuous release verification
 
-A release is considered complete only after:
+For each release, record:
 
-- GitHub source is verified.
-- Build succeeds.
-- Runtime checks succeed.
-- Required environment configuration is present.
-- Production deployment succeeds.
-- `mind-reply.com` resolves to that deployment.
-- `/api/health`, `/api/ready`, `/api/version`, `/api/services`, `/api/dependencies`, `/api/metrics`, and `/status` are verified.
-- Rollback remains available.
+- GitHub source and commit.
+- Build result.
+- Runtime checks.
+- Required environment configuration state.
+- Deployment result.
+- `mind-reply.com` resolution.
+- `/api/health`, `/api/ready`, `/api/version`, `/api/services`, `/api/dependencies`, `/api/metrics`, and `/status` observations.
+- Rollback availability.
+
+These are evidence records for the actual deployment state. Missing or failed evidence is a remediation item rather than a repository-level production promotion lock.

@@ -2,101 +2,56 @@
 
 ## Source of truth
 
-GitHub `angellllkr-eng/mind-reply-core` is the canonical source for the MindReply/A11-K monorepo. Vercel is the deployment layer. Production projects must remain Git-connected and deploy from `main`.
+GitHub `Mind-Reply/mindreply-app` is the canonical MindReply application source. Vercel is the deployment layer. The canonical website must deploy from this repository's `main` branch.
 
-Vercel supports multiple projects from one monorepo; each project should represent a deliberate deployable application with an explicit Root Directory and selective builds where appropriate.
+Vercel projects should represent deliberate deployable applications with an explicit Root Directory and deployment configuration.
 
-## Canonical projects
+## Canonical MindReply website
 
-| Product | Canonical Vercel project | GitHub source | Status | Rule |
-|---|---|---|---|---|
-| MindReply | `mindreply` | `angellllkr-eng/mind-reply-core` | READY | Preserve production domains |
-| A11-K Foundation | `a11k-live-foundation` | `angellllkr-eng/mind-reply-core` | Repair/redeploy | Canonical A11-K deployment target |
-| PatchTalk | `patchtalk` | `angellllkr-eng/patchtalk` | READY | Preserve as independent product |
-| Private Opportunity Core | `private-opportunity-core` | Git-connected | Repair | Internal/private only |
-| ResellerPro | `resellerpro-platform` | Canonical ResellerPro repository | Consolidate | All duplicate projects are migration candidates |
+| Product | Vercel project | GitHub source | Current evidence |
+|---|---|---|---|
+| MindReply main site | `mindreply` | `Mind-Reply/mindreply-app` | Project/domain association requires live verification |
+| A11-K Foundation | `a11k-live-foundation` | verify current canonical source before claiming live | Deployment requires current verification |
+| PatchTalk | `patchtalk` | `angellllkr-eng/patchtalk` | Independent product; verify current deployment |
+| ResellerPro | `resellerpro-platform` | canonical ResellerPro repository | Separate product surface |
 
-## Monorepo applications
+## Main-site verification contract
 
-The repository currently contains deployable application areas including:
+A source change is **changed** when committed to `Mind-Reply/mindreply-app/main`.
 
-- `apps/a11k`
-- `apps/a11k-chat`
-- `apps/a11k-forge`
-- `apps/a11k-nexus`
-- `apps/a11k-sites`
-- `apps/a11k-studio`
-- `apps/experimental`
-- `apps/mindreply-ios`
-- `apps/own-registrar`
-- `apps/web-replycontrol`
+A site is **live** only when the production domain serves that source and runtime verification confirms the expected surface. A stale domain, failed deployment, or mismatched Git source is evidence for remediation; it is not a repository-level production promotion gate.
 
-These are not automatically separate production products. A Vercel project is created only when an application needs an independent deployment, domain, environment, or release lifecycle.
+For MindReply, verify at minimum:
 
-## Consolidation policy
+- GitHub source: `Mind-Reply/mindreply-app`
+- branch: `main`
+- Vercel project: `mindreply`
+- production domain: `mind-reply.com`
+- expected public routes: `/`, `/services`, `/regions`
+- runtime/content verification against the current Git commit
 
-### Keep
+## Monorepo/application note
 
-- `mindreply`
-- `patchtalk`
-- `a11k-live-foundation`
-- `resellerpro-platform`
-- validated revenue products with a real production domain or explicit launch plan
+Other applications in the repository are not automatically separate production products. Create or retain a separate Vercel project only when an application needs an independent deployment, domain, environment, or lifecycle.
 
-### Repair
+## Safety and continuity controls
 
-- `a11k-live-foundation`
-- `private-opportunity-core`
-- any canonical project whose latest Git deployment fails
+These are operational safety controls, not generic release-promotion gates:
 
-### Archive candidates
-
-- duplicate `resellerpro-platform-*` projects
-- duplicate `mindreply-org-site*` projects
-- duplicate `public-site*` projects
-- temporary validation/surface projects after domain and environment verification
-
-## Safety gates
-
-1. Never delete a Vercel project while it owns a production custom domain.
-2. Never move a domain until the replacement deployment is READY.
+1. Do not delete a Vercel project while it owns a production custom domain.
+2. Do not move a production domain until a replacement deployment is verified.
 3. Never copy production secrets into GitHub.
 4. Never force-push `main` during consolidation.
-5. Preserve rollback-capable READY deployments until the replacement is verified.
-6. Keep Vercel project settings as deployment configuration; keep application architecture in GitHub.
-7. For monorepo projects, use Root Directory and selective/filtered builds rather than duplicating repositories.
+5. Preserve a rollback-capable deployment until replacement runtime verification succeeds.
+6. Keep Vercel deployment configuration separate from application architecture in GitHub.
+7. Use Root Directory and selective/filtered builds for monorepo projects rather than duplicating repositories.
 
-## Target architecture
+## Current evidence state
 
-```text
-GitHub
-└── mind-reply-core
-    ├── apps/
-    │   ├── a11k
-    │   ├── a11k-chat
-    │   ├── a11k-forge
-    │   ├── a11k-nexus
-    │   ├── a11k-sites
-    │   ├── a11k-studio
-    │   ├── web-replycontrol
-    │   └── own-registrar
-    └── packages/
+The GitHub source has been updated. The public domain is reachable, but the current conversation does not contain evidence that `mind-reply.com` is serving the newest `Mind-Reply/mindreply-app/main` commit. Do not describe the main site as updated/live until that runtime check succeeds.
 
-                 ↓ Git-connected deployments
+The Vercel account currently requires re-authentication for the `mind-reply-s-projects` scope, so project/deployment inspection cannot be treated as verified through the connected Vercel account until access is restored.
 
-Vercel
-├── mindreply
-├── a11k-live-foundation
-├── resellerpro-platform
-└── internal/validated product projects
-```
+## Next
 
-## Current verified production anchors
-
-- `mindreply`: latest production deployment READY; domains include `mind-reply.com`.
-- `patchtalk`: latest production deployment READY.
-- `a11k-live-foundation`: latest deployment currently failing after Git-connected configuration commits; earlier READY deployments remain rollback candidates.
-
-## Next operational step
-
-Repair canonical builds first, then verify domains and environment bindings, then archive duplicate Vercel projects through the Vercel dashboard/API where project-management permissions are available.
+Re-authenticate the Vercel `mind-reply-s-projects` scope, then inspect `mindreply`, its latest production deployment, domain association, and Git source. Deploy the current `main` when the project is correctly connected, then verify `https://mind-reply.com` and the public routes before marking the site live.

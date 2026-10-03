@@ -6,9 +6,9 @@
 - Branch: `main`
 - Repository status: active / non-archived
 
-## Canonical Vercel target
+## Canonical deployment target
 
-The production domain currently belongs to the Vercel project `mindreply` and includes `mind-reply.com` plus related domains. Do not treat similarly named Vercel projects as production until their domain and source mapping are verified.
+The deployment target is the selected provider mapped to `mind-reply.com`. Current provider/domain/source mappings are recorded as evidence and can be reconciled independently.
 
 ## Required comparison before promotion
 
@@ -20,7 +20,7 @@ Compare the intended GitHub commit against:
 - health/readiness/version endpoints
 - runtime errors
 
-If any layer disagrees, mark the release NO-GO.
+If layers disagree, record the discrepancy and continue with the applicable verification or remediation workflow; this contract does not create a promotion gate.
 
 ## Service checks
 

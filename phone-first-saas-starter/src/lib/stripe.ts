@@ -7,7 +7,7 @@ const LIVE_LOOKUP_KEY = "3650_live_license_monthly_usd49";
 export function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error("STRIPE_SECRET_KEY is required at runtime");
-  return new Stripe(key);
+  return new Stripe(key, { apiVersion: "2026-08-26.dahlia" });
 }
 
 export function stripePriceId() {

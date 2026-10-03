@@ -14,6 +14,12 @@ const secondary = [
   ["Platform", "/platform"], ["Integrations", "/integrations"], ["Pricing", "/pricing"], ["Resources", "/resources"], ["Contact", "/contact"],
 ];
 
+const proofline = [
+  ["01", "OWNER CONTROL", "Human authority stays explicit."],
+  ["02", "EVIDENCE", "Important work leaves a reviewable trail."],
+  ["03", "REVERSIBLE", "Release paths stay bounded and recoverable."],
+];
+
 export function PublicHome({ locale }: { locale: SupportedLocale }) {
   const t = copy[locale];
   return <main className="mc-page">
@@ -27,7 +33,7 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
 
     <section className="mc-hero" id="top" aria-labelledby="hero-title">
       <div>
-        <p className="mc-kicker"><i/>OWNER-GOVERNED OPERATIONS</p>
+        <p className="mc-kicker"><i/>ANSWERABLE SYSTEMS · OWNER-LED</p>
         <h1 id="hero-title">{t.title}</h1>
         <p className="lead">{t.lead}</p>
         <div className="mc-actions"><a className="mc-primary" href="/platform">{t.primaryAction} <span aria-hidden="true">↗</span></a><a className="mc-secondary" href="/contact">{t.secondaryAction}</a></div>
@@ -38,6 +44,10 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
           {[["Proof",t.signal.proof],["Authority",t.signal.authority],["Release",t.signal.release]].map(([label,state]) => <div className="mc-lane" key={label}><span>{label}</span><div className="mc-lane-bar"><i style={{width: "100%"}}/></div><b>{state}</b></div>)}
         </div></div>
       </aside>
+    </section>
+
+    <section className="mc-proofline" aria-label="MindReply operating proofline">
+      {proofline.map(([code, title, body]) => <article key={code}><span>{code}</span><div><b>{title}</b><p>{body}</p></div></article>)}
     </section>
 
     <section className="mc-section" id="platform" aria-labelledby="platform-title">

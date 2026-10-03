@@ -2,7 +2,7 @@
 
 Status: ACTIVE
 Owner: A.K.
-Source of truth: `angellllkr-eng/mind-reply-core`
+Source of truth: `Mind-Reply/mindreply-app`
 
 ## Objective
 
@@ -83,23 +83,15 @@ Existing A11-K application surfaces are retained as capabilities and consolidate
 - Superseded site experiments
 - Duplicate deployment shells
 
-## Migration gate
+## Continuous verification
 
-A legacy project can be retired only after all are true:
+When consolidating a legacy project, record the canonical source, domain/DNS mapping, environment inventory, deployment identifier, critical-route smoke results, recovery path, active automation dependencies, and migration record.
 
-1. GitHub source or useful code is preserved in the canonical destination.
-2. Production domain ownership and DNS are mapped.
-3. Production environment variables are inventoried.
-4. Latest successful deployment is verified.
-5. Critical routes and forms are smoke-tested.
-6. Redirect/canonical strategy is deployed where required.
-7. Rollback deployment exists.
-8. No active automation/webhook still depends on the legacy project.
-9. A migration record is committed to GitHub.
+These are evidence fields, not a production promotion gate. Missing evidence is recorded as `UNVERIFIED` or `REMEDIATION_REQUIRED`.
 
-## Build and release gates
+## Build and release verification
 
-Before production promotion:
+During and after deployment, record:
 - install is deterministic with the repository lockfile;
 - typecheck/lint/build pass;
 - database migrations are not an accidental side effect of the application build;

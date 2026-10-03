@@ -12,7 +12,7 @@
 | Cost per iteration | Tokens / seats | **Zero** for shell + narrative |
 | Lock-in | Vendor session | **None** — download HTML |
 | Offline | No | **Yes** after first load |
-| Authority | Easy over-claim | **Hard boundary** + owner gate |
+| Authority | Easy over-claim | **Hard boundary** + owner approval |
 | Estate fit | Generic | Pre-filled **€3k Profit Audit** template + Stripe CTA |
 
 ## Ready-to-use actions
@@ -43,8 +43,8 @@ Suggested domain: `studio.a11-k.space` (already referenced in estate nav).
 
 1. Add optional BYOK model endpoint for richer section copy (still export-owned).
 2. Persist approved shells under `evidence/studio/` via control-plane.
-3. Crownline approval gate before any production publish.
+3. Record owner approval before any consequential production publish.
 
 ## Boundary (unchanged)
 
-Does not deploy, does not store secrets, does not replace Angel approval, does not require Vercel v0 or Manus.
+Does not deploy, does not store secrets, does not replace owner approval, does not require Vercel v0 or Manus.

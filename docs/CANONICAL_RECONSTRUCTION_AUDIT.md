@@ -35,7 +35,7 @@ PR #110 removed the stale `functions` block. The current `vercel.json` contains 
 
 A fresh production deployment was created from `b598d592...`, followed by another from the current reconstruction commit `e421d994...`. Both are presently queued rather than showing the former unmatched-function build error. The latest deployment has no error/stderr events at inspection time.
 
-The GitHub `Production Deploy — Mind-Reply Core` run for `e421d994...` initially failed in `build-and-test`; its failed jobs were safely re-run. The rerun is currently queued. Deployment/health promotion remains **NO-GO until that run and the fresh Vercel deployment complete successfully**.
+The GitHub `Production Deploy — Mind-Reply Core` run for `e421d994...` initially failed in `build-and-test`; its failed jobs were safely re-run. The rerun is currently queued. Deployment and health state remain subject to direct verification of the relevant runtime.
 
 ### Vercel estate duplication
 
@@ -64,7 +64,7 @@ Figma could not yet be reconciled to code because an authorized editable file ke
 
 Do not create new thin properties when a route, page, feature or module can live inside a canonical platform. Do not retire duplicate deployments until custom domains, environment bindings, data dependencies, analytics, webhooks and rollback paths are checked.
 
-## Remaining blockers / exact next actions
+## Remaining verification / exact next actions
 
 1. **CI:** wait for the re-run of `Production Deploy — Mind-Reply Core` for `e421d994...`; inspect the first failed step if it fails again.
 2. **Vercel:** verify `dpl_snxCrF1TwFVHWoEz6HsnDuCpKACb` reaches READY and then perform production health/smoke verification.
@@ -78,8 +78,8 @@ Do not create new thin properties when a route, page, feature or module can live
 
 Configuration references server-only values such as database, Redis, payment and authentication secrets. Repository documentation requires secrets to remain in provider secret stores. Placeholder environment files were observed; no real credential value was exposed in this audit. Historical exposure is **unverified** and must not be asserted without evidence.
 
-## Current GO/NO-GO
+## Current verification state
 
-**Production consolidation: NO-GO until CI + fresh Vercel deployment + health/smoke evidence passes.**  
+**Production consolidation: verify CI, deployment, health and smoke evidence as part of continuous delivery.**  
 **Verified Vercel code repair: GO; stale unmatched-function configuration has been removed.**  
-**Destructive consolidation: NO-GO pending domain/environment/data/rollback verification and explicit owner approval.**
+**Destructive consolidation: requires domain/environment/data/rollback verification and explicit owner approval.**

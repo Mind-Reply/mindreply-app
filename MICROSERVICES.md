@@ -46,7 +46,7 @@ Keep tightly coupled Next.js UI/API services in the same Vercel project when sam
 
 ## Comparison contract
 
-Before promotion, compare:
+During and after deployment, compare:
 
 1. GitHub canonical source and commit.
 2. Vercel project and Git integration.
@@ -54,14 +54,14 @@ Before promotion, compare:
 4. Known-good deployment/rollback candidate.
 5. Runtime telemetry.
 
-Production is GREEN only when these agree.
+Record whether these agree. A discrepancy is a verification/remediation item, not a repository-level production promotion lock.
 
-## Production gate
+## Continuous service verification
 
-A service is not production-ready merely because its code exists. Verify:
+A service is verified from:
 
 `source -> build -> deployment -> endpoint -> domain -> runtime -> monitoring`
 
-before marking it GREEN.
+Record the observed state and evidence for each stage. Missing or failed evidence is routed to remediation without creating a separate production gate.
 
 Secrets must never be returned by health/readiness endpoints or committed to the repository.

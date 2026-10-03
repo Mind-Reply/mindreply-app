@@ -1,8 +1,10 @@
 # Protected Release Runbook
 
-## Current decision
+## Current model
 
-Production must have one exclusive promotion path. Pull requests validate; they do not deploy. Production promotion is manual, environment-gated, and uses an immutable commit-tagged image.
+Production delivery uses one explicit deployment path. Validation and runtime checks provide evidence; they do not create a repository-level production promotion lock.
+
+Deployment state is recorded continuously as `DRAFT`, `VERIFIED`, `LIVE`, `UNCONNECTED`, or `REMEDIATION_REQUIRED`. Failed or unavailable checks are recorded with evidence and routed to remediation.
 
 ## Why the workflow files are staged under `ops/`
 
@@ -25,17 +27,11 @@ git push -u origin HEAD
 
 Open a pull request and verify that `Validate Pull Request / web-replycontrol` passes before merge.
 
-## GitHub settings required
+## GitHub settings
 
-1. Create a `main` ruleset requiring pull requests and the `web-replycontrol` status check.
-2. Block force pushes and branch deletion.
-3. Apply rules to administrators where practical.
-4. Create environment `production-mindreply`.
-5. Add the owner as required reviewer and disallow bypass.
-6. Restrict deployment branches to `main`.
-7. Store production deployment credentials only in that environment.
+Repository integrity, branch protection and credential controls may remain enabled. They protect source and authorization boundaries; they are not production promotion gates.
 
-## Promotion
+## Continuous verification
 
 1. Select **Promote MindReply Production** in Actions.
 2. Run it from the reviewed commit on `main`.

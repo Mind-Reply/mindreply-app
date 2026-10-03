@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The canonical frontend lives in `mind-reply-core`. Frontend changes must be validated with a real browser smoke gate before merge or production release.
+The canonical frontend lives in `Mind-Reply/mindreply-app`. Frontend changes should be validated with a real browser smoke check before and after deployment.
 
 ## Baseline
 
@@ -18,9 +18,9 @@ The canonical frontend lives in `mind-reply-core`. Frontend changes must be vali
 
 Keep the existing shadcn/ui New York component source as the production baseline. Do not replace the primitive layer as part of routine dependency upgrades. A future Base UI migration must be isolated, visually tested, and reviewed as a separate change.
 
-## Required E2E gate
+## E2E verification
 
-Every frontend-changing PR should:
+For every frontend-changing PR:
 
 1. Install dependencies with the repository's package-manager contract.
 2. Install Chromium for Playwright.
@@ -28,9 +28,9 @@ Every frontend-changing PR should:
 4. Run the smoke suite.
 5. Upload Playwright reports when failures occur.
 
-## Production safety
+## Production verification
 
-E2E success is necessary but not sufficient for production deployment. Production deployment must additionally pass build, security, environment, database, and deployment-health checks.
+E2E results are one evidence input alongside build, security, environment, database, and deployment-health checks. Failed or missing checks are recorded for remediation rather than creating a separate production promotion gate.
 
 ## Known repository hygiene rule
 

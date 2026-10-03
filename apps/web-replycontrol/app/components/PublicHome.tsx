@@ -1,5 +1,6 @@
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { copy, type SupportedLocale } from "../lib/locales";
+import { services } from "../services/catalog";
 
 const modules = [
   ["01", "Operations", "Run governed workflows, monitor execution, and keep consequential actions visible.", "/operations"],
@@ -11,7 +12,7 @@ const modules = [
 ];
 
 const secondary = [
-  ["Platform", "/platform"], ["Integrations", "/integrations"], ["Pricing", "/pricing"], ["Resources", "/resources"], ["Contact", "/contact"],
+  ["Platform", "/platform"], ["Services", "/services"], ["Regions", "/regions"], ["Pricing", "/pricing"], ["Resources", "/resources"], ["Contact", "/contact"],
 ];
 
 const proofline = [
@@ -26,20 +27,20 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
     <nav className="mc-nav" aria-label="Primary navigation">
       <a className="mc-brand" href="/">MindReply<small>OPERATING SYSTEM</small></a>
       <div className="mc-nav-center">
-        <a href="/platform">Platform</a><a href="/operations">Operations</a><a href="/agents">Agents</a><a href="/knowledge">Knowledge</a><a href="/evidence">Evidence</a>
+        <a href="/platform">Platform</a><a href="/services">Services</a><a href="/regions">Regions</a><a href="/operations">Operations</a><a href="/evidence">Evidence</a>
       </div>
       <div className="mc-nav-right"><span className="mc-state"><i className="mc-dot"/>OWNER CONTROL</span><LocaleSwitcher locale={locale} /></div>
     </nav>
 
     <section className="mc-hero" id="top" aria-labelledby="hero-title">
       <div>
-        <p className="mc-kicker"><i/>ANSWERABLE SYSTEMS · OWNER-LED</p>
+        <p className="mc-kicker"><i/>INTELLIGENCE · TECHNOLOGY · OPERATIONS</p>
         <h1 id="hero-title">{t.title}</h1>
         <p className="lead">{t.lead}</p>
-        <div className="mc-actions"><a className="mc-primary" href="/platform">{t.primaryAction} <span aria-hidden="true">↗</span></a><a className="mc-secondary" href="/contact">{t.secondaryAction}</a></div>
+        <div className="mc-actions"><a className="mc-primary" href="/services">Explore services <span aria-hidden="true">↗</span></a><a className="mc-secondary" href="/audit">Request an assessment</a></div>
       </div>
-      <aside className="mc-console" aria-label="MindReply release evidence">
-        <div className="mc-console-top"><span>PROOFLINE / OPERATING POSTURE</span><b>EVIDENCE BOUNDARY</b></div>
+      <aside className="mc-console" aria-label="MindReply delivery evidence">
+        <div className="mc-console-top"><span>DELIVERY MODEL / OPERATING POSTURE</span><b>EVIDENCE BOUNDARY</b></div>
         <div className="mc-console-main"><span className="mc-console-label">{t.signal.title}</span><div className="mc-verdict"><strong>{t.signal.rule}</strong><span>OWNER-LED</span></div><div className="mc-lanes">
           {[["Proof",t.signal.proof],["Authority",t.signal.authority],["Release",t.signal.release]].map(([label,state]) => <div className="mc-lane" key={label}><span>{label}</span><div className="mc-lane-bar"><i style={{width: "100%"}}/></div><b>{state}</b></div>)}
         </div></div>
@@ -50,13 +51,23 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
       {proofline.map(([code, title, body]) => <article key={code}><span>{code}</span><div><b>{title}</b><p>{body}</p></div></article>)}
     </section>
 
-    <section className="mc-section" id="platform" aria-labelledby="platform-title">
-      <div className="mc-section-head"><span>THE MINDREPLY PLATFORM</span><h2 id="platform-title">One operating layer for the work between intent and outcome.</h2></div>
-      <div className="mc-rail">{modules.map(([code, title, body, href]) => <article className="mc-module" key={code}><span className="num">{code}</span><h3>{title}</h3><p>{body}</p><a href={href}>{title} ↗</a></article>)}</div>
+    <section className="mc-section" id="services" aria-labelledby="services-title">
+      <div className="mc-section-head"><span>INNOVATION & INTELLIGENCE · CORE TECHNOLOGY · OPERATIONS</span><h2 id="services-title">Eight capabilities connected to one accountable delivery path.</h2></div>
+      <div className="mc-rail">{services.map((service) => <a className="mc-module" key={service.slug} href={`/services/${service.slug}`}><span className="num">{service.number}</span><h3>{service.title}</h3><p>{service.promise}</p><ul>{service.outcomes.map((outcome) => <li key={outcome}>{outcome}</li>)}</ul><span className="mc-module-link">Explore capability ↗</span></a>)}</div>
+    </section>
+
+    <section className="mc-section" aria-labelledby="delivery-title">
+      <div className="mc-section-head"><span>DELIVERY MODEL</span><h2 id="delivery-title">Assess → Build → Operate → Expand.</h2></div>
+      <div className="mc-link-grid"><a className="mc-link-card" href="/audit"><span>01 · ASSESS</span><b>Find the highest-value gaps ↗</b></a><a className="mc-link-card" href="/platform"><span>02 · BUILD</span><b>Implement the required capability ↗</b></a><a className="mc-link-card" href="/operations"><span>03 · OPERATE</span><b>Monitor, improve and assure ↗</b></a><a className="mc-link-card" href="/regions"><span>04 · EXPAND</span><b>Deploy regionally from one core ↗</b></a></div>
     </section>
 
     <section className="mc-section" aria-labelledby="capabilities-title">
-      <div className="mc-section-head"><span>EXPLORE THE SYSTEM</span><h2 id="capabilities-title">A product surface built to explain itself.</h2></div>
+      <div className="mc-section-head"><span>THE MINDREPLY PLATFORM</span><h2 id="capabilities-title">One operating layer for the work between intent and outcome.</h2></div>
+      <div className="mc-rail">{modules.map(([code, title, body, href]) => <article className="mc-module" key={code}><span className="num">{code}</span><h3>{title}</h3><p>{body}</p><a href={href}>{title} ↗</a></article>)}</div>
+    </section>
+
+    <section className="mc-section" aria-labelledby="explore-title">
+      <div className="mc-section-head"><span>EXPLORE THE SYSTEM</span><h2 id="explore-title">A connected public surface with a private operating core.</h2></div>
       <div className="mc-link-grid">{secondary.map(([title, href]) => <a className="mc-link-card" href={href} key={href}><span>{title}</span><b>↗</b></a>)}</div>
     </section>
 
@@ -66,7 +77,7 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
       </div></div>
     </section>
 
-    <section className="mc-closing"><p className="mc-kicker"><i/>REALITY DELTA</p><h2>{t.closing.title}</h2><p>{t.closing.body}</p><a className="mc-primary" href="/platform">Enter MindReply ↗</a></section>
-    <footer className="mc-footer"><span>MindReply</span><span>OPERATE · EVIDENCE · RELEASE</span><div className="mc-footer-links"><a href="/status">System status ↗</a><a href="/contact">Contact ↗</a></div></footer>
+    <section className="mc-closing"><p className="mc-kicker"><i/>NEXT STEP</p><h2>Start with the highest-value gap. Build only what can be verified.</h2><p>Choose a capability, request an assessment, and move into implementation with a bounded delivery path and reviewable evidence.</p><a className="mc-primary" href="/audit">Start with an assessment ↗</a></section>
+    <footer className="mc-footer"><span>MindReply</span><span>INTELLIGENCE · TECHNOLOGY · OPERATIONS</span><div className="mc-footer-links"><a href="/status">System status ↗</a><a href="/contact">Contact ↗</a></div></footer>
   </main>;
 }

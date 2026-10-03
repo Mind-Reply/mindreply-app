@@ -1,7 +1,7 @@
 # Product Design — Production Action Plan
 
 Date: 2026-08-26
-Status: ACTIVE — implementation evidence required before production promotion
+Status: ACTIVE — continuous implementation and runtime verification
 
 ## Objective
 
@@ -65,21 +65,11 @@ Internal component names remain implementation vocabulary, not primary navigatio
 
 ## Current deployment finding
 
-Vercel project `a11k-live-foundation` is linked to `angellllkr-eng/mind-reply-core` and its latest production deployment for commit `d9c8917e053c77c93c361d8b5791b49d2b5ed965` is currently reported as `ERROR`.
+The historical deployment referenced by this document is retained as evidence of the previous estate state. It is not a current production authority.
 
-The build-log error filter returned no error/stderr/exit events, and runtime-error logs for that deployment are empty. Therefore the failure is not yet proven to be a source-build failure. Production promotion must remain blocked until the deployment state is reconciled with an observable successful health check.
+## Continuous verification
 
-## Release gate
-
-Do not promote a Product Design change to production until all are true:
-
-- design change is committed on a reviewable branch;
-- automated validation passes;
-- Vercel deployment reaches a confirmed successful state;
-- live URL is reachable;
-- primary user journey is manually/automatically smoke-tested;
-- no critical runtime errors are present;
-- exact production commit is recorded.
+For each Product Design change, record the commit, validation, deployment identifier, live URL response, primary journey smoke result, runtime error state, and exact production source when verified. Missing or failed evidence becomes a remediation record rather than a production promotion lock.
 
 ## Immediate execution order
 

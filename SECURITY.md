@@ -26,9 +26,16 @@ Required response:
 
 Current-tree scanning alone cannot establish complete estate cleanliness.
 
-## Release security gates
+## Security verification
 
-A release should fail when a secret scanner detects a credential, a critical route is broken, an authentication boundary is bypassed, or a production webhook cannot be verified.
+Record security evidence for:
+- secret scanning;
+- critical-route integrity;
+- authentication/authorization boundaries;
+- production webhook configuration;
+- provider-side credential state.
+
+A critical security finding remains a security/remediation issue and may require owner authorization or an immediate safety response. It is not represented as a generic repository-level production promotion gate.
 
 ## Status semantics
 

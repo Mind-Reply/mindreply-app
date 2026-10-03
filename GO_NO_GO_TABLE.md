@@ -1,6 +1,6 @@
-# Production Decision Table
+# Production Verification Table
 
-| Asset | Current state | Evidence | Next gate |
+| Asset | Current state | Evidence | Next verification |
 |---|---|---|---|
 | MindReply public site | Public surface reachable | https://www.mind-reply.com plus homepage/contact/privacy evidence | Match exact deployment and security/payment evidence |
 | MindReply cleanup | ACTION REQUIRED | canonical main identified; stale cleanup branch identified | Execute clean branch and validate |
@@ -11,4 +11,4 @@
 | Connector estate | REVIEW | requested a11global repositories identified | Per-repo API/security/test/release inspection |
 | Owner control plane | ACTION REQUIRED | control-plane source exists but repository is public | Establish private repository/security boundary and authenticated deployment |
 
-Source code alone is never treated as proof of live operation, revenue, payment settlement or external connectivity.
+Source code alone is never treated as proof of live operation, revenue, payment settlement or external connectivity. This table records evidence and next actions; it does not create a GO/NO-GO promotion mechanism.

@@ -30,8 +30,19 @@ n8n, Zapier, webhooks, queues, vector retrieval and model providers are adapters
 6. human approval requirement;
 7. health signal.
 
-## Release gate
-A release is not "live" until build, smoke, route, dependency, secret, accessibility and external-integration checks pass. Unknown status is reported as **unverified**, never as ready.
+## Continuous verification
+
+A deployment has an observable state based on current build, smoke, route, dependency, secret, accessibility and external-integration evidence.
+
+Use these states:
+
+- `UNVERIFIED` — evidence is missing or stale.
+- `VERIFIED` — named checks were observed.
+- `LIVE` — deployment is reachable and the critical path has been checked.
+- `DEGRADED` — reachable with a known failing capability.
+- `REMEDIATION_REQUIRED` — a discrepancy has been recorded for follow-up.
+
+A failed or missing check is recorded and routed to remediation. It does not create a repository-level production promotion lock.
 
 ## Owner boundary
 Private, personal and self-development data stays separated from public product data. No agent may merge, deploy, spend money, contact a third party, alter billing, or expose private data without the configured owner gate.

@@ -6,6 +6,8 @@ export type Service = {
   outcomes: string[];
   delivery: string[];
   evidence: string[];
+  systems: string[];
+  regional: string[];
 };
 
 export const services: Service[] = [

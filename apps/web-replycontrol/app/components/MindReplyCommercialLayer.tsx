@@ -17,13 +17,13 @@ const copy: Record<SupportedLocale, {
     eyebrow: "MINDREPLY · LAST-MILE RESCUE",
     title: "Turn pressure, website friction and follow-up gaps into one clear move.",
     intro: "The current MindReply experience starts with the fastest useful output: an action queue or send-ready response. From there, the same controlled path can move into assessment, delivery and evidence.",
-    packageTitle: "Website Completion Package",
-    packagePrice: "GBP 600",
-    packageBody: "A fixed-scope rescue for overloaded website messaging, commercial priorities and send-ready communication.",
+    packageTitle: "Operator setup + Website Leak Audit",
+    packagePrice: "Start with the audit",
+    packageBody: "The current public MindReply path: identify the highest-value leak, match the right operator, then move through a focused setup sprint.",
     rows: [
-      ["01", "Website messaging", "Tighten the homepage, offer and contact story into buyer-ready language."],
-      ["02", "Ranked action queue", "Prioritize the changes that remove confusion, build trust and move the visitor."],
-      ["03", "Send-ready delivery", "Provide usable copy, a next-step structure, consent wording and a privacy-safe receipt."],
+      ["01", "Leak Audit", "Find unanswered questions, slow response, weak qualification and broken handoffs."],
+      ["02", "Operator Match", "Choose QuoteCapture, Patient Intake or Proposal Rescue for the highest-value gap."],
+      ["03", "Setup Sprint", "Move through Audit → Map → Build → Launch → Improve with a clear handoff."],
     ],
     agent: "Try MRagent",
     audit: "Request an assessment",
@@ -34,13 +34,13 @@ const copy: Record<SupportedLocale, {
     eyebrow: "MINDREPLY · ПОСЛЕДНА МИЛЯ",
     title: "Превърнете натиска, неяснотата по сайта и пропуснатите follow-up-и в една ясна следваща стъпка.",
     intro: "MindReply започва с най-бързия полезен резултат: action queue или готов отговор. След това същият контролиран път преминава към оценка, изпълнение и доказателства.",
-    packageTitle: "Website Completion Package",
-    packagePrice: "GBP 600",
-    packageBody: "Фиксиран обхват за изчистване на посланията, търговските приоритети и готовата за изпращане комуникация.",
+    packageTitle: "Одит + настройка на оператор",
+    packagePrice: "Започнете с одита",
+    packageBody: "Текущият публичен път на MindReply: открийте най-ценния пропуск, изберете оператор и преминете към фокусиран setup sprint.",
     rows: [
-      ["01", "Website messaging", "Изчистване на началната страница, офертата и контактната история."],
-      ["02", "Ranked action queue", "Подреждане на промените по търговска стойност и яснота."],
-      ["03", "Send-ready delivery", "Готов текст, следваща стъпка, consent wording и безопасен receipt."],
+      ["01", "Leak Audit", "Открийте липсващи отговори, бавна реакция, слаба квалификация и счупено предаване."],
+      ["02", "Operator Match", "Изберете QuoteCapture, Patient Intake или Proposal Rescue."],
+      ["03", "Setup Sprint", "Audit → Map → Build → Launch → Improve с ясен handoff."],
     ],
     agent: "Опитайте MRagent",
     audit: "Заявете оценка",
@@ -82,7 +82,7 @@ export function MindReplyCommercialLayer({ locale }: { locale: SupportedLocale }
             <a className="mc-primary" href="/audit">{t.audit} ↗</a>
             <a className="mc-secondary" href="/contact">Request invoice</a>
           </div>
-          <small>No payment link is required to begin. Scope and billing details are confirmed before the invoice route.</small>
+          <small>Public-site alignment only: commercial and deployment claims remain subject to independent evidence.</small>
         </article>
 
         <div className="grid gap-4">

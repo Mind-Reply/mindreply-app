@@ -86,7 +86,7 @@ export function MindReplyCommercialLayer({ locale }: { locale: SupportedLocale }
         </article>
 
         <div className="grid gap-4">
-          <a className="mc-link-card" href="/mrag​ent">
+          <a className="mc-link-card" href="/operations">
             <span>01 · ENTRY</span>
             <b>{t.agent} ↗</b>
             <p>Start with the pressure, identify the next move, then hand off into the appropriate delivery path.</p>

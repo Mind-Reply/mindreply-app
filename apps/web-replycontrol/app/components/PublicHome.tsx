@@ -1,6 +1,7 @@
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { copy, type SupportedLocale } from "../lib/locales";
 import { services } from "../services/catalog";
+import { MindReplyCommercialLayer } from "./MindReplyCommercialLayer";
 
 const modules = [
   ["01", "Operations", "Run governed workflows, monitor execution, and keep consequential actions visible.", "/operations"],
@@ -50,6 +51,8 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
     <section className="mc-proofline" aria-label="MindReply operating proofline">
       {proofline.map(([code, title, body]) => <article key={code}><span>{code}</span><div><b>{title}</b><p>{body}</p></div></article>)}
     </section>
+
+    <MindReplyCommercialLayer locale={locale} />
 
     <section className="mc-section" id="services" aria-labelledby="services-title">
       <div className="mc-section-head"><span>INNOVATION & INTELLIGENCE · CORE TECHNOLOGY · OPERATIONS</span><h2 id="services-title">Eight capabilities connected to one accountable delivery path.</h2></div>

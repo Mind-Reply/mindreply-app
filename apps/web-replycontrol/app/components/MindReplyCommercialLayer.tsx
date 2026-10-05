@@ -57,19 +57,19 @@ export function MindReplyCommercialLayer({ locale }: { locale: SupportedLocale }
       <div className="mc-section-head">
         <span>{t.eyebrow}</span>
         <h2 id="commercial-layer-title">{t.title}</h2>
-        <p className="mc-section-copy">{t.intro}</p>
+        <p className="lead">{t.intro}</p>
       </div>
 
-      <div className="mc-commercial-grid">
-        <article className="mc-commercial-primary">
-          <div className="mc-commercial-top">
+      <div className="grid gap-6 lg:grid-cols-[1.4fr_.8fr]">
+        <article className="mc-module">
+          <div className="flex flex-wrap items-baseline justify-between gap-4">
             <span>{t.packageTitle}</span>
             <strong>{t.packagePrice}</strong>
           </div>
           <p>{t.packageBody}</p>
-          <div className="mc-commercial-rows">
+          <div className="mt-8 space-y-4">
             {t.rows.map(([number, title, body]) => (
-              <div key={number} className="mc-commercial-row">
+              <div key={number} className="grid grid-cols-[2rem_1fr] gap-4 border-t border-white/10 pt-4">
                 <span>{number}</span>
                 <div>
                   <b>{title}</b>
@@ -78,25 +78,25 @@ export function MindReplyCommercialLayer({ locale }: { locale: SupportedLocale }
               </div>
             ))}
           </div>
-          <div className="mc-commercial-actions">
+          <div className="mt-8 flex flex-wrap gap-3">
             <a className="mc-primary" href="/audit">{t.audit} ↗</a>
             <a className="mc-secondary" href="/contact">Request invoice</a>
           </div>
           <small>No payment link is required to begin. Scope and billing details are confirmed before the invoice route.</small>
         </article>
 
-        <div className="mc-commercial-stack">
-          <a className="mc-commercial-card" href="/mrag​ent">
+        <div className="grid gap-4">
+          <a className="mc-link-card" href="/mrag​ent">
             <span>01 · ENTRY</span>
             <b>{t.agent} ↗</b>
             <p>Start with the pressure, identify the next move, then hand off into the appropriate delivery path.</p>
           </a>
-          <a className="mc-commercial-card" href="/operations">
+          <a className="mc-link-card" href="/operations">
             <span>02 · CONTROL</span>
             <b>{t.owner} ↗</b>
             <p>Keep consequential work reviewable with explicit ownership, bounded actions and clear handoffs.</p>
           </a>
-          <a className="mc-commercial-card" href="/evidence">
+          <a className="mc-link-card" href="/evidence">
             <span>03 · PROOF</span>
             <b>{t.proof} ↗</b>
             <p>Keep delivery, deployment and outcome claims tied to evidence rather than optimistic wording.</p>

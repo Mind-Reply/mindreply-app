@@ -7,7 +7,8 @@ This is the canonical MindReply product repository. The public commercial surfac
 ## Canonical boundaries
 
 - Product root: Mind-Reply/mindreply-app
-- Private owner-control root: Mind-Reply/control-plane
++ Private owner-control root: `angellllkr-eng/agent-control-plane` (private personal owner-control source)
+- Organization control-plane repository: `Mind-Reply/control-plane` is legacy/source-freeze and must not be treated as a second production root.
 - A11 execution service: a11-live-cloud-execution
 - Historical/personal copies are migration sources; one canonical production root is maintained.
 

@@ -1,0 +1,183 @@
+name: Deploy 3650-Live Worker & Verify
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "3650-live-worker/**"
+      - ".github/workflows/deploy-3650-live.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || !startsWith(github.event.head_commit.message, 'chore(3650): persist PROOF_VAULT binding')
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3650-live-worker
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      PROOF_WRITE_TOKEN: ${{ secrets.PROOF_WRITE_TOKEN }}
+      METRICS_SECRET: ${{ secrets.METRICS_SECRET }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate Cloudflare secrets
+        run: |
+          set -euo pipefail
+          test -n "$CLOUDFLARE_API_TOKEN" || { echo "::error::Missing CLOUDFLARE_API_TOKEN"; exit 1; }
+          test -n "$CLOUDFLARE_ACCOUNT_ID" || { echo "::error::Missing CLOUDFLARE_ACCOUNT_ID"; exit 1; }
+          test -n "$PROOF_WRITE_TOKEN" || { echo "::error::Missing PROOF_WRITE_TOKEN"; exit 1; }
+          test -n "$METRICS_SECRET" || { echo "::error::Missing METRICS_SECRET"; exit 1; }
+
+      - name: Validate Cloudflare authentication
+        run: npx --yes wrangler@latest whoami
+
+      - name: Resolve existing PROOF_VAULT or create exactly one
+        shell: bash
+        run: |
+          set -euo pipefail
+          KV_JSON="$(npx --yes wrangler@latest kv namespace list)"
+          KV_ID="$(printf '%s' "$KV_JSON" | node -e '
+            let s="";
+            process.stdin.on("data",d=>s+=d);
+            process.stdin.on("end",()=>{
+              const rows=JSON.parse(s);
+              const hit=rows.find(x=>x.title==="PROOF_VAULT");
+              process.stdout.write(hit?.id||"");
+            });
+          ')"
+
+          if [ -z "$KV_ID" ]; then
+            echo "PROOF_VAULT not found; creating it once."
+            npx --yes wrangler@latest kv namespace create PROOF_VAULT --binding PROOF_VAULT --update-config
+          fi
+
+          if ! grep -q '"binding"[[:space:]]*:[[:space:]]*"PROOF_VAULT"' wrangler.jsonc; then
+            echo "::error::PROOF_VAULT binding missing from wrangler.jsonc after resolution."
+            exit 1
+          fi
+
+          echo "Resolved PROOF_VAULT configuration:"
+          grep -A2 -B1 '"binding"[[:space:]]*:[[:space:]]*"PROOF_VAULT"' wrangler.jsonc
+
+      - name: Validate Worker source and configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f wrangler.jsonc
+          test -f src/index.ts
+          test -d public
+          test -f ../AGENTS.md
+          test -f ../.mcp.json
+          if grep -RInE --exclude-dir=.git --exclude='*.map' '(CLOUDFLARE_(API|MCP)_TOKEN|PROOF_WRITE_TOKEN|BEGIN (RSA|OPENSSH|EC|PRIVATE) KEY|sk-[A-Za-z0-9_-]{20,})' .; then
+            echo "::error::Potential secret material found in Worker source."
+            exit 1
+          fi
+          npx --yes wrangler@latest deploy --dry-run
+
+      - name: Configure proof write secret
+        run: printf '%s' "$PROOF_WRITE_TOKEN" | npx --yes wrangler@latest secret put PROOF_WRITE_TOKEN
+
+      - name: Configure metrics push secret
+        run: printf '%s' "$METRICS_SECRET" | npx --yes wrangler@latest secret put METRICS_SECRET
+
+      - name: Deploy 3650 LIVE once
+        id: deploy
+        run: |
+          set -euo pipefail
+          npx --yes wrangler@latest deploy | tee /tmp/deploy.txt
+          VERSION_ID="$(npx --yes wrangler@latest versions list --name 3650-live --json | node -e '
+            let s="";
+            process.stdin.on("data",d=>s+=d);
+            process.stdin.on("end",()=>{
+              const j=JSON.parse(s);
+              const rows=Array.isArray(j)?j:(j.versions||[]);
+              const v=rows[0];
+              if(!v) process.exit(2);
+              process.stdout.write(v.id||v.versionId||"");
+            });
+          ')"
+          test -n "$VERSION_ID"
+          echo "version_id=$VERSION_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Persist real PROOF_VAULT binding without a second deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- wrangler.jsonc; then
+            echo "No wrangler.jsonc change."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add wrangler.jsonc
+          git commit -m "chore(3650): persist PROOF_VAULT binding"
+          git push origin HEAD:main
+
+      - name: Verify six public monitor endpoints and audits
+        shell: bash
+        run: |
+          set -euo pipefail
+          hosts=(
+            dubai.mind-reply.com
+            nyc.mind-reply.com
+            london.mind-reply.com
+            sofia.mind-reply.com
+            tokyo.mind-reply.com
+            live.shipbythurs.day
+          )
+
+          for host in "${hosts[@]}"; do
+            echo "=== $host /monitor/public ==="
+            BODY="$(curl -fsS --retry 5 --retry-all-errors --retry-delay 3 "https://$host/monitor/public")"
+            echo "$BODY"
+            BODY="$BODY" node -e '
+              const j=JSON.parse(process.env.BODY);
+              if (j.status !== "PROVEN") {
+                console.error("Expected PROVEN, received:", j.status);
+                process.exit(2);
+              }
+            '
+
+            echo "=== $host /monitor/audit ==="
+            AUDIT="$(curl -fsS --retry 5 --retry-all-errors --retry-delay 3 "https://$host/monitor/audit")"
+            echo "$AUDIT"
+            AUDIT="$AUDIT" node -e '
+              const j=JSON.parse(process.env.AUDIT);
+              if (j.policies?.A !== "PASS" || j.policies?.C !== "PASS" || j.policies?.E !== "PASS") process.exit(2);
+              if (j.zero_ai_exposure !== true || j.secrets_isolation !== "PASS") process.exit(3);
+            '
+          done
+
+          echo "=== metrics contract ==="
+          METRICS="$(curl -fsS --retry 5 --retry-all-errors --retry-delay 3 "https://sofia.mind-reply.com/metrics")"
+          echo "$METRICS"
+          METRICS="$METRICS" node -e '
+            const j=JSON.parse(process.env.METRICS);
+            for (const key of ["total_replies_ever","billable_events_ever","real_profit_ever","daily","corrected_math"]) {
+              if (!(key in j)) process.exit(4);
+            }
+            if (j.price_per_billable !== 0.01) process.exit(5);
+          '
+
+      - name: Inspect deployed version and observability
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx --yes wrangler@latest deployments status --name 3650-live --json
+          npx --yes wrangler@latest versions list --name 3650-live --json

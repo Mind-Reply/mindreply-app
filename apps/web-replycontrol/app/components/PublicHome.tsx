@@ -38,7 +38,7 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
         <p className="mc-kicker"><i/>INTELLIGENCE · TECHNOLOGY · OPERATIONS</p>
         <h1 id="hero-title">{t.title}</h1>
         <p className="lead">{t.lead}</p>
-        <div className="mc-actions"><a className="mc-primary" href="/audit">{t.primaryAction} <span aria-hidden="true">↗</span></a><a className="mc-secondary" href="/services">{t.secondaryAction}</a></div>
+        <div className="mc-actions"><a className="mc-primary" href="/platform">{t.primaryAction} <span aria-hidden="true">↗</span></a><a className="mc-secondary" href="/services">{t.secondaryAction}</a></div>
       </div>
       <aside className="mc-console" aria-label="MindReply delivery evidence">
         <div className="mc-console-top"><span>DELIVERY MODEL / OPERATING POSTURE</span><b>CONTINUOUS VERIFICATION</b></div>

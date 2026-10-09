@@ -38,7 +38,7 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
         <p className="mc-kicker"><i/>INTELLIGENCE · TECHNOLOGY · OPERATIONS</p>
         <h1 id="hero-title">{t.title}</h1>
         <p className="lead">{t.lead}</p>
-        <div className="mc-actions"><a className="mc-primary" href="/services">Explore services <span aria-hidden="true">↗</span></a><a className="mc-secondary" href="/audit">Request an assessment</a></div>
+        <div className="mc-actions"><a className="mc-primary" href="/platform">{t.primaryAction} <span aria-hidden="true">↗</span></a><a className="mc-secondary" href="/services">{t.secondaryAction}</a></div>
       </div>
       <aside className="mc-console" aria-label="MindReply delivery evidence">
         <div className="mc-console-top"><span>DELIVERY MODEL / OPERATING POSTURE</span><b>CONTINUOUS VERIFICATION</b></div>
@@ -72,16 +72,6 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
     <section className="mc-section" aria-labelledby="explore-title">
       <div className="mc-section-head"><span>EXPLORE THE SYSTEM</span><h2 id="explore-title">A connected public surface with a private operating core.</h2></div>
       <div className="mc-link-grid">{secondary.map(([title, href]) => <a className="mc-link-card" href={href} key={href}><span>{title}</span><b>↗</b></a>)}</div>
-    </section>
-
-    <section className="mc-section" aria-labelledby="delivery-stack-title">
-      <div className="mc-section-head"><span>FUNCTIONAL DELIVERY INFRASTRUCTURE</span><h2 id="delivery-stack-title">Each capability connects to a concrete operating path.</h2></div>
-      <div className="mc-link-grid">
-        <a className="mc-link-card" href="/audit"><span>01 · DISCOVER</span><b>Assess the estate, signals and constraints ↗</b></a>
-        <a className="mc-link-card" href="/platform"><span>02 · ARCHITECT</span><b>Define the target architecture and delivery boundary ↗</b></a>
-        <a className="mc-link-card" href="/operations"><span>03 · EXECUTE</span><b>Build, integrate, monitor and maintain ↗</b></a>
-        <a className="mc-link-card" href="/evidence"><span>04 · VERIFY</span><b>Record deployment, runtime and outcome evidence ↗</b></a>
-      </div>
     </section>
 
     <section className="mc-section" aria-labelledby="regional-title">

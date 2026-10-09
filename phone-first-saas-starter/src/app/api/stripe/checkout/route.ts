@@ -12,35 +12,23 @@ export async function POST(request: Request) {
     const configuredPriceId = stripePriceId();
     const requestedPriceId = typeof body.priceId === "string" && body.priceId.trim() ? body.priceId.trim() : configuredPriceId;
     const quantity = typeof body.quantity === "number" && Number.isInteger(body.quantity) ? body.quantity : 1;
-
-    if (!Number.isInteger(quantity) || quantity < 1 || quantity > 1000) {
-      return NextResponse.json({ error: "Invalid seat quantity." }, { status: 400 });
-    }
-    if (requestedPriceId !== configuredPriceId) {
-      return NextResponse.json({ error: "Requested Stripe price is not allowlisted." }, { status: 400 });
-    }
-
+    if (quantity < 1 || quantity > 1000) return NextResponse.json({ error: "Invalid seat quantity." }, { status: 400 });
+    if (requestedPriceId !== configuredPriceId) return NextResponse.json({ error: "Requested Stripe price is not allowlisted." }, { status: 400 });
     const user = await syncCurrentUser();
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
     if (!baseUrl) return NextResponse.json({ error: "NEXT_PUBLIC_APP_URL is not configured." }, { status: 503 });
-
-    const subscription = user.organizationId
-      ? await prisma.subscription.findUnique({ where: { organizationId: user.organizationId } })
-      : null;
-
+    const subscription = user.organizationId ? await prisma.subscription.findUnique({ where: { organizationId: user.organizationId } }) : null;
     const session = await getStripe().checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: configuredPriceId, quantity }],
       payment_method_collection: "always",
       subscription_data: { trial_period_days: stripeTrialDays(), metadata: { clerkId } },
-      integration_identifier: "MindReplyCheckoutXkqTzAbC",
-      success_url: baseUrl + "/dashboard?checkout=success",
-      cancel_url: baseUrl + "/pricing?checkout=cancelled",
+      success_url: `${baseUrl}/dashboard?checkout=success`,
+      cancel_url: `${baseUrl}/pricing?checkout=cancelled`,
       customer: subscription?.stripeCustomerId ?? undefined,
       customer_creation: subscription?.stripeCustomerId ? undefined : "always",
       metadata: { clerkId },
     });
-
     return NextResponse.json({ url: session.url });
   } catch (error) {
     if (error instanceof Error && error.message === "UNAUTHORIZED") return NextResponse.json({ error: "Unauthorized." }, { status: 401 });

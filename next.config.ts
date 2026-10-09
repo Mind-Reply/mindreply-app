@@ -10,18 +10,15 @@ const config: NextConfig = {
   // Build output
   output: 'standalone',
 
+  // Next.js 16: PPR is enabled through cacheComponents.
+  cacheComponents: true,
+
   // Images optimization
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-      },
-      {
-        protocol: 'https',
         hostname: '*.mind-reply.com',
-      },
-      {
-        protocol: 'https',
       },
     ],
     formats: ['image/avif', 'image/webp'],
@@ -150,7 +147,6 @@ const config: NextConfig = {
     parallelServerCompiles: true,
     parallelServerBuildTraces: true,
     isrMemoryCacheSize: 52 * 1024 * 1024, // 52MB
-    ppr: true,
   },
 
   // Environment variables

@@ -1,12 +1,12 @@
 import "server-only";
 import Stripe from "stripe";
 
-export type MindReplyPlan = "personal" | "business" | "creator";
+export type MindReplyPlan = "operator" | "sovereign" | "enterprise";
 
 const SANDBOX_PRICE_IDS: Record<MindReplyPlan, string> = {
-  personal: "price_1TbgZcLTiMfuPTv6NKx8VffL",
-  business: "price_1TbgaDLTiMfuPTv61nX8nCXl",
-  creator: "price_1TbgayLTiMfuPTv64DqfFqKs",
+  operator: "price_1TbgZcLTiMfuPTv6NKx8VffL",
+  sovereign: "price_1TbgaDLTiMfuPTv61nX8nCXl",
+  enterprise: "price_1TbgayLTiMfuPTv64DqfFqKs",
 };
 
 export function getStripe() {
@@ -19,12 +19,12 @@ export function getStripe() {
  * Resolve only known MindReply plans. Sandbox IDs are the safe defaults for
  * test keys; live mode must supply explicit live price IDs per plan.
  */
-export function stripePriceId(plan: MindReplyPlan = "personal") {
+export function stripePriceId(plan: MindReplyPlan = "operator") {
   const key = process.env.STRIPE_SECRET_KEY;
   const envName = {
-    personal: "STRIPE_PRICE_ID_PERSONAL",
-    business: "STRIPE_PRICE_ID_BUSINESS",
-    creator: "STRIPE_PRICE_ID_CREATOR",
+    operator: "STRIPE_PRICE_ID_OPERATOR",
+    sovereign: "STRIPE_PRICE_ID_SOVEREIGN",
+    enterprise: "STRIPE_PRICE_ID_ENTERPRISE",
   }[plan];
   const configured = process.env[envName];
 
@@ -38,3 +38,4 @@ export function stripeTrialDays() {
   const value = Number(process.env.STRIPE_TRIAL_DAYS ?? "14");
   return Number.isInteger(value) && value > 0 && value <= 90 ? value : 14;
 }
+

@@ -6,7 +6,7 @@ export const projectSchema = z.object({
 });
 
 export const checkoutSchema = z.object({
-  plan: z.enum(["personal", "business", "creator"]).default("personal"),
+  plan: z.enum(["operator", "sovereign", "enterprise"]).default("operator"),
 });
 
 export function parse<T>(schema: z.ZodSchema<T>, input: unknown) {

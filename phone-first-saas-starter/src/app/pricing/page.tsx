@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/Button";
 import { useState } from "react";
 
 const plans = [
-  { id: "personal", name: "Personal", price: "€29", description: "For individual use." },
-  { id: "business", name: "Business", price: "€99", description: "For teams and growing workspaces." },
-  { id: "creator", name: "Creator", price: "€149", description: "For high-volume professional workflows." },
+  { id: "operator", name: "Operator", price: "€29", description: "For focused teams building repeatable revenue." },
+  { id: "sovereign", name: "Sovereign", price: "€99", description: "For organizations that need control and scale." },
+  { id: "enterprise", name: "Enterprise", price: "Custom", description: "For complex operations and dedicated service." },
 ] as const;
 
 export default function Pricing() {
@@ -35,8 +35,8 @@ export default function Pricing() {
     <section className="mx-auto max-w-5xl space-y-6 px-4 py-10">
       <header className="space-y-2">
         <p className="text-sm text-slate-500">MindReply subscriptions · sandbox</p>
-        <h1 className="text-3xl font-bold">Choose your plan</h1>
-        <p className="text-slate-600">Prices are shown in EUR. Checkout uses Stripe test mode until live billing is separately configured and reviewed.</p>
+        <h1 className="text-3xl font-bold">Choose your revenue operating layer</h1>
+        <p className="text-slate-600">Checkout uses Stripe test mode until live billing is separately configured and reviewed.</p>
       </header>
       <div className="grid gap-4 md:grid-cols-3">
         {plans.map((plan) => (
@@ -58,3 +58,4 @@ export default function Pricing() {
     </section>
   );
 }
+

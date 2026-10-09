@@ -6,6 +6,7 @@ import "./globals.css";
 import "./mission-control.css";
 import "./frontend-polish.css";
 import "./flow-premium.css";
+import "./quiet-intelligence.css";
 
 const site = "https://mind-reply.com";
 const alternates = {
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const locale = (await headers()).get("x-mindreply-locale") || "en";
   const lang = locale === "uk" ? "en-GB" : locale;
-  return <html lang={lang}><head><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" /><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" /></head><body>{children}<Script async src="https://www.googletagmanager.com/gtag/js?id=G-MDMV5H2SFK" strategy="afterInteractive" /><Script id="google-analytics" strategy="afterInteractive">{`window.dataLayer = window.dataLayer || [];
+  return <html lang={lang}><head><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" /><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet" /></head><body>{children}<Script async src="https://www.googletagmanager.com/gtag/js?id=G-MDMV5H2SFK" strategy="afterInteractive" /><Script id="google-analytics" strategy="afterInteractive">{`window.dataLayer = window.dataLayer || [];
 function gtag(){window.dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-MDMV5H2SFK');`}</Script></body></html>;

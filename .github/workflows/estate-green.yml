@@ -17,7 +17,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if find . -maxdepth 3 -type f \( -name '.env' -o -name '.env.*' \) ! -name '.env.example' | grep -q .; then
+          if find . -maxdepth 3 -type f \( -name '.env' -o -name '.env.*' \) ! -name '*.example' | grep -q .; then
             echo "Environment file detected; review before release."
             exit 1
           fi

@@ -15,13 +15,7 @@ const config: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-      },
-      {
-        protocol: 'https',
         hostname: '*.mind-reply.com',
-      },
-      {
-        protocol: 'https',
       },
     ],
     formats: ['image/avif', 'image/webp'],

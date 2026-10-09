@@ -8746,7 +8746,6 @@ snapshots:
       resolve.exports: 2.0.3
       semver: 7.8.5
       string-width: 8.2.2
-      yaml: 2.9.0
       zod: 4.6.5
       yaml: 2.9.1
     optionalDependencies:

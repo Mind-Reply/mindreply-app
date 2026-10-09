@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 const config: NextConfig = {
   // Optimization
+  swcMinify: true,
   reactStrictMode: true,
   compress: true,
   poweredByHeader: false,
@@ -9,7 +10,7 @@ const config: NextConfig = {
   // Build output
   output: 'standalone',
 
-  // Preserve Partial Prerendering behavior on Next.js 16.
+  // Next.js 16: PPR is enabled through cacheComponents.
   cacheComponents: true,
 
   // Images optimization
@@ -38,18 +39,39 @@ const config: NextConfig = {
       {
         source: '/:path*',
         headers: [
-          { key: 'X-DNS-Prefetch-Control', value: 'on' },
-          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-XSS-Protection', value: '1; mode=block' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
+          },
         ],
       },
       {
         source: '/api/(.*)',
         headers: [
-          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
         ],
       },
     ];
@@ -70,8 +92,14 @@ const config: NextConfig = {
   async rewrites() {
     return {
       beforeFiles: [
-        { source: '/sitemap.xml', destination: '/api/sitemap' },
-        { source: '/robots.txt', destination: '/api/robots' },
+        {
+          source: '/sitemap.xml',
+          destination: '/api/sitemap',
+        },
+        {
+          source: '/robots.txt',
+          destination: '/api/robots',
+        },
       ],
       afterFiles: [
         {
@@ -127,9 +155,19 @@ const config: NextConfig = {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
   },
 
-  // Legacy serverRuntimeConfig/publicRuntimeConfig are intentionally omitted:
-  // Next.js 16 flags them as unsupported. Server secrets must be read from process.env
-  // on the server and public values from NEXT_PUBLIC_* variables.
+  // Custom server config
+  serverRuntimeConfig: {
+    DATABASE_URL: process.env.DATABASE_URL,
+    REDIS_URL: process.env.REDIS_URL,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+  },
+
+  publicRuntimeConfig: {
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  },
 };
 
 export default config;

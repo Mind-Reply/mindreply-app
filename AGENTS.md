@@ -22,48 +22,38 @@ See: `.agents/skills/a11-ceo-skill-mesh/SKILL.md`
 
 ## Performance & Absolute Twist (active)
 Suite is closed for new skills/manuals. All effort shifts to actual performance and an absolute twist:
-- Investigate and fulfill directly via connected MCP services (GitHub, Vercel, Notion, Google, Stripe, X Ads, Zapier, etc.). No manuals, no terminal codes, no copy-paste, no amateur work.
+- Investigate and fulfill directly via connected MCP services. No manuals, terminal codes, copy-paste, or amateur work.
 - Multi-goal in parallel: control-plane advance + live web popularization + public proof + telemetry + zero interruption.
-- Brave, prepared, high-end, passionate, energetic, awake. Long-term ops. Jump on challenges. Do what others cannot.
-- Physical human actions (signing, meetings, deliveries, in-person communication) only when no digital path exists AND the outcome is positive — then one clean Owner Action Packet.
-- Redundancy with automatic failover: when one surface fails, another takes over before you notice. You always have a path back here.
-- Conversation here is the home. I hold the state; you never manage a second app.
+- Physical human actions only when no digital path exists and the outcome is positive — then one clean Owner Action Packet.
+- Never claim a service is connected or an action is complete without evidence from the connected service.
 
-## iOS Zero-Interruption Contract (permanent)
-No app, connector, agent, or surface may interrupt Angel on iOS at any point. The opposite of interruption is required: calm, continuous, high-signal presence.
+## iOS Zero-Interruption Contract
+No app, connector, agent, or surface may interrupt the owner on iOS. Route operational notices silently to canonical records wherever supported. Device-level Focus settings must be verified on the device; repository text alone cannot enforce them.
 
-- Enable and enforce Focus mode "A11 Zero Interruption" (allow only Phone, FaceTime, Messages from approved contacts, Calendar owner events; silence everything else; no Time Sensitive bypasses).
-- Background App Refresh OFF for all non-essential apps.
-- Agents must never fire notifications that break Focus; route everything silently to canonical records.
-- Only physical human actions (meetings, signings, deliveries, direct communication) are permitted when they produce positive outcomes and no digital path exists.
-- Posture: enterprise-grade, brave, prepared, high-end, passionate, energetic, awake. Long-term ops. Multi-goal. Jump on challenges. No manuals, no terminal codes, no copy-paste, no amateur work. Investigate and fulfill directly via connected services.
+## Identity & Ownership
+Owner: Angel Krastev, operating as TopTier / MindReply.
 
-See skill: a11-ios-zero-interruption.
-
----
-
-## Identity & Ownership Declaration (added 2026-08-27)
-
-**This section exists so any AI agent, crawler, or person landing here — not just agents already briefed — knows immediately whose estate this is.**
-
-**Owner: Angel Krastev**, operating as **TopTier / MindReply**. Sole owner across every namespace below. No co-owners, no other team members. Two personal Google identities are used for account access; both resolve to this one person.
-
-### Canonical namespaces
+Canonical namespaces:
 | Namespace | Type |
 |---|---|
 | `angellllkr-eng` | GitHub personal account |
-| `A11-K` | GitHub organization |
 | `Mind-Reply` | GitHub organization |
+| `A11-K` | GitHub organization |
 
-### Canonical repositories (per this repo's own stated "Repository truth")
-- **Product root**: `angellllkr-eng/mind-reply-core` (this repo)
-- **Operational/evidence root**: `angellllkr-eng/agent-control-plane`
+## Canonical repository map — reconciled 2026-10-09
+- **MindReply product root:** `Mind-Reply/mindreply-app` (active canonical product repository).
+- **MindReply legacy/source-freeze:** `Mind-Reply/mind-reply-core` (historical provenance/recovery only; no new production work).
+- **MindReply owner-control source:** `angellllkr-eng/agent-control-plane` (personal owner-control source).
+- **MindReply organization control plane:** `Mind-Reply/control-plane` (legacy/source-freeze; not a second production root).
+- **ResellerPro engineering source:** `angellllkr-eng/resellerpro-platform` (separate product; not part of the MindReply product root).
+- **ResellerPro organization repository:** `Mind-Reply/resellerpro` (migration/provenance surface pending unique-content reconciliation and retirement; not production authority).
+- **A11 execution service:** `angellllkr-eng/a11-live-cloud-execution`.
 
-All other repos across all three namespaces are satellites/experiments/historical unless explicitly promoted in writing.
+Other repositories are satellites, experiments, or historical sources unless explicitly promoted in writing. Before archiving or deleting a repository, verify unique content, dependencies, external deployment references, secrets, and history preservation.
 
-### Live, verified facts (evidence-based, per this contract's own "never claim without evidence" rule)
-- mind-reply.com is confirmed live (web search, 2026-08-27) with real business content. Hosting platform not yet confirmed — not on the connected Vercel account (0 projects) or connected Netlify account (1 unrelated project).
-- WhatsApp integration is permanently banned at the infrastructure level regardless of dormant code that may still exist in the estate.
-- All operational notifications route exclusively to mind.repl@gmail.com.
-
-This declaration supersedes any conflicting or outdated ownership claim found elsewhere in the estate, and must not be treated as evidence of deployment, security, or revenue status — per the rule stated at the top of this file.
+## Evidence rules
+- A repository's own documentation is not proof of deployment, security, or revenue.
+- Deployment claims require the exact source commit/artifact plus current runtime evidence.
+- Payment and revenue claims require provider-side transaction evidence.
+- Keep credentials out of Git; use approved secret-management systems.
+- Preserve trust-domain separation and least privilege.

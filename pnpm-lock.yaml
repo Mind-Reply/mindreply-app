@@ -109,8 +109,6 @@ importers:
       framer-motion:
         specifier: ^13.4.2
         version: 13.4.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-        specifier: ^13.4.1
-        version: 13.4.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       katex:
         specifier: ^0.18.7
         version: 0.18.7
@@ -120,8 +118,6 @@ importers:
       motion:
         specifier: ^13.4.2
         version: 13.4.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-        specifier: ^13.4.1
-        version: 13.4.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       nanoid:
         specifier: ^6.0.1
         version: 6.0.1

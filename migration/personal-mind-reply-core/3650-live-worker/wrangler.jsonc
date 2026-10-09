@@ -1,0 +1,23 @@
+{
+  "name": "3650-live",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-30",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+  "observability": { "enabled": true },
+  "routes": [
+    { "pattern": "dubai.mind-reply.com/*", "zone_name": "mind-reply.com" },
+    { "pattern": "nyc.mind-reply.com/*", "zone_name": "mind-reply.com" },
+    { "pattern": "london.mind-reply.com/*", "zone_name": "mind-reply.com" },
+    { "pattern": "sofia.mind-reply.com/*", "zone_name": "mind-reply.com" },
+    { "pattern": "tokyo.mind-reply.com/*", "zone_name": "mind-reply.com" },
+    { "pattern": "live.shipbythurs.day/*", "zone_name": "shipbythurs.day" }
+  ],
+  "kv_namespaces": [
+    { "binding": "PROOF_VAULT", "id": "REPLACE_WITH_REAL_KV_ID" }
+  ]
+}

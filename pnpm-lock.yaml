@@ -127,7 +127,6 @@ importers:
       next-auth:
         specifier: 5.0.0-beta.32
         version: 5.0.0-beta.32(next@16.2.11(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
-        version: 5.0.0-beta.32(next@16.2.11(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -378,11 +377,6 @@ packages:
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/mcp@2.0.56':
-    resolution: {integrity: sha512-iOBhc5H/AS2BsR/yLXEPK5fA1Dn0uV27wCRE8NJGLniROBk/G9JV6ErYqdmHXhSM2XFRk7dvERD0HhNI06HT1Q==}
-    engines: {node: '>=22'}
-    peerDependencies:
-      zod: ^3.25.76 || ^4.1.8
 
   '@ai-sdk/otel@1.0.112':
     resolution: {integrity: sha512-Ke+ZvGV7qFmdotKgwV262bed8Pm5MOQZgLWxX924Ea8yuJFgh5TjHYmF07CIgPW0eYJGgNvFovGHguAtvsPvdw==}
@@ -4335,8 +4329,6 @@ packages:
   style-mod@4.1.4:
     resolution: {integrity: sha512-XXWIQt633/EpAFx8aZDOTjBzrCaGmhvEQlQo6MVPfa2OzO2cWo+4hV9h+6UkHYlXGfy+ODXKUdP7Pthmcu5ATw==}
 
-  style-mod@4.1.4:
-    resolution: {integrity: sha512-XXWIQt633/EpAFx8aZDOTjBzrCaGmhvEQlQo6MVPfa2OzO2cWo+4hV9h+6UkHYlXGfy+ODXKUdP7Pthmcu5ATw==}
 
   style-to-js@1.1.21:
     resolution: {integrity: sha512-RjQetxJrrUJLQPHbLku6U/ocGtzyjbJMP9lCNK7Ag0CNh690nSH8woqWH9u16nMjYBAok+i7JO1NP2pOy8IsPQ==}
@@ -4579,8 +4571,6 @@ packages:
   zod@4.6.5:
     resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==}
 
-  zod@4.6.5:
-    resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -7990,7 +7980,6 @@ snapshots:
 
   nanoid@3.3.19: {}
 
-  nanoid@3.3.19: {}
 
   nanoid@6.0.1: {}
 
@@ -8659,7 +8648,6 @@ snapshots:
 
   style-mod@4.1.4: {}
 
-  style-mod@4.1.4: {}
 
   style-to-js@1.1.21:
     dependencies:
@@ -8761,7 +8749,6 @@ snapshots:
       yaml: 2.9.0
       zod: 4.6.5
       yaml: 2.9.1
-      zod: 4.6.5
     optionalDependencies:
       '@biomejs/biome': 2.5.14
 
@@ -8895,6 +8882,5 @@ snapshots:
 
   zod@4.6.5: {}
 
-  zod@4.6.5: {}
 
   zwitch@2.0.4: {}

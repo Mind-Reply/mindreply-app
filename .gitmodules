@@ -1,0 +1,3 @@
+[submodule "apps/experimental/brushworks"]
+	path = apps/experimental/brushworks
+	url = https://github.com/angellllkr-eng/brushworks.git

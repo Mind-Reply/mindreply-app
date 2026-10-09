@@ -33,8 +33,8 @@ export const copy: Record<SupportedLocale, Copy> = {
     eyebrow: "Answerable systems · owner-led",
     title: "Turn more website visits into clear next steps.",
     lead: "Find where interested visitors drop off, match the right chat operator, and give your team a clearer route from first question to qualified enquiry. Start with an assessment; implementation scope is agreed before work begins.",
-    primaryAction: "Find your highest-value leak",
-    secondaryAction: "Explore operator packages",
+    primaryAction: "Explore the platform",
+    secondaryAction: "Browse service capabilities",
     signal: { title: "Signal window", rule: "Responsibility follows evidence.", proof: "Visible", authority: "Named", release: "Reversible" },
     estate: { eyebrow: "The estate", title: "Different rooms. One discipline.", cards: [
       { title: "Crownwork", body: "Operating circuits for teams who need measurable value without handing over the last word.", action: "Map the first knot" },
@@ -54,8 +54,8 @@ export const copy: Record<SupportedLocale, Copy> = {
     eyebrow: "Проверими системи · водени от собственика",
     title: "Превърнете повече посещения на сайта в ясни следващи стъпки.",
     lead: "Открийте къде заинтересованите посетители се отказват, изберете подходящ чат оператор и дайте на екипа си по-ясен път от първия въпрос до квалифицираното запитване. Започнете с оценка; обхватът на внедряването се уточнява предварително.",
-    primaryAction: "Открийте най-ценния пропуск",
-    secondaryAction: "Разгледайте пакетите оператори",
+    primaryAction: "Разгледайте платформата",
+    secondaryAction: "Разгледайте услугите",
     signal: { title: "Оперативен сигнал", rule: "Отговорността следва доказателствата.", proof: "Видимо", authority: "Посочено", release: "Обратимо" },
     estate: { eyebrow: "Екосистемата", title: "Различни пространства. Една дисциплина.", cards: [
       { title: "Crownwork", body: "Оперативни процеси за екипи, които търсят измерима стойност без да предават последната дума.", action: "Картографирайте първата пречка" },

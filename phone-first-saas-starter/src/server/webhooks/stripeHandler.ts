@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { SubscriptionStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { claimIdempotency, saveIdempotencyResult } from "@/db/idempotency";
 
@@ -40,7 +41,7 @@ export async function handleStripeEvent(event: Stripe.Event) {
             where: { id: existing.id },
             data: {
               stripeSubscriptionId: sub.id,
-              status: sub.status.toUpperCase() as any,
+              status: sub.status.toUpperCase() as SubscriptionStatus,
               priceId: item?.price.id,
               currentPeriodEnd: item?.current_period_end ? new Date(item.current_period_end * 1000) : null,
             },
@@ -85,3 +86,6 @@ export async function handleStripeEvent(event: Stripe.Event) {
     throw error;
   }
 }
+
+
+

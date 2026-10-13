@@ -2,9 +2,10 @@
 
 ## Canonical source
 
-- GitHub: `angellllkr-eng/mind-reply-core`
+- GitHub: `Mind-Reply/mindreply-app`
 - Branch: `main`
-- Repository status: active / non-archived
+- Repository status: active / non-archived (verified from GitHub metadata)
+- Production deployment binding: UNVERIFIED in this documentation change; confirm the provider's linked repository and deployed commit before release.
 
 ## Canonical deployment target
 

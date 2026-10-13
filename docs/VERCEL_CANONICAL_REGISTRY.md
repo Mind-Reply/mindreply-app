@@ -1,7 +1,7 @@
 # Vercel Canonical Project Registry
 
 **Status:** active control document  
-**Repository source of truth:** `angellllkr-eng/mind-reply-core`  
+**Repository source of truth:** `Mind-Reply/mindreply-app` (repository identity verified; live provider binding still requires a current check)  
 **Production branch:** `main`
 
 ## Architecture rule
@@ -14,8 +14,8 @@ Do **not** collapse distinct applications into one Vercel Project merely to redu
 
 | Product | Canonical GitHub source | Canonical Vercel project | Root / role | State |
 |---|---|---|---|---|
-| MindReply | `angellllkr-eng/mind-reply-core` | `mindreply` | repository root / primary web surface | VERIFIED READY |
-| A11-K | `angellllkr-eng/mind-reply-core` | `a11k-live-foundation` | A11-K production surface; migrate to explicit monorepo root when project settings permit | NEEDS CONFIG/BUILD FIX |
+| MindReply | `Mind-Reply/mindreply-app` | `mindreply` (intended; verify current provider binding) | repository root / primary web surface | UNVERIFIED — check linked repo, deployed commit, domain and health |
+| A11-K | `Mind-Reply/mindreply-app` (intended shared source; verify root mapping) | `a11k-live-foundation` | A11-K production surface; migrate to explicit monorepo root when project settings permit | NEEDS CONFIG/BUILD FIX |
 | PatchTalk | `angellllkr-eng/patchtalk` | `patchtalk` | PatchTalk application | VERIFIED READY |
 | ResellerPro | canonical ResellerPro repository | `resellerpro-platform` | canonical ResellerPro application | KEEP; duplicates are migration candidates |
 | Private Opportunity Core | matching GitHub repository | `private-opportunity-core` | private/internal application | BUILD ERROR; repair before production |

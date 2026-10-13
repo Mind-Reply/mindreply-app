@@ -1,5 +1,7 @@
-export async function register() {
+import { registerOTel } from '@vercel/otel';
+
+export function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    await import('./instrumentation-client');
+    registerOTel('a11k-surface');
   }
 }

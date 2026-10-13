@@ -6069,7 +6069,7 @@ snapshots:
     dependencies:
       std-env: 4.3.0
     optionalDependencies:
-      typescript: 7.0.2
+      typescript: 5.9.3
 
   '@supabase/phoenix@0.4.5': {}
 

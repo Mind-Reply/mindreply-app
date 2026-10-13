@@ -1,7 +1,7 @@
 # MindReply Operating Model
 
 **Status:** proposed; human review required  
-**Product root:** `angellllkr-eng/mind-reply-core`  
+**Product root:** `Mind-Reply/mindreply-app` (repository identity verified; live deployment binding is a separate check)  
 **Operations root:** `angellllkr-eng/agent-control-plane`
 
 ## Why this document exists

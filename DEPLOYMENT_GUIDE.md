@@ -1,5 +1,7 @@
 # MindReply Build & Deployment Guide
 
+> **Current-path note:** The canonical repository is `Mind-Reply/mindreply-app`. This file contains legacy self-hosted/Docker instructions below; do not run those legacy production commands without first validating the target environment. See `docs/DEPLOYMENT.md` for the current delivery contract.
+
 ## Canonical production path — 2026-09-29
 
 The canonical MindReply source is `Mind-Reply/mindreply-app`.

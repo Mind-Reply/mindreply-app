@@ -11,7 +11,7 @@ Status: canonical consolidation plan — 2026-08-26
 | Product | Canonical GitHub source | Canonical Vercel project | Rule |
 |---|---|---|---|
 | MindReply | `Mind-Reply/mindreply-app` | `mindreply` (intended; verify live binding) | UNVERIFIED — confirm linked repo, deployed commit, domain and runtime health |
-| A11-K core/surfaces | `angellllkr-eng/mind-reply-core` | `a11k-live-foundation` / approved A11-K surfaces | Shared monorepo; no duplicate foundations |
+| A11-K core/surfaces | `Mind-Reply/mindreply-app` | `a11k-live-foundation` / approved A11-K surfaces | Shared monorepo; no duplicate foundations |
 | Private opportunity core | `angellllkr-eng/private-opportunity-core` | `private-opportunity-core` | Separate security boundary |
 | PatchTalk | `angellllkr-eng/patchtalk` | `patchtalk` | Canonical product repo/project |
 | ResellerPro | canonical ResellerPro repository | `resellerpro-platform` | One canonical Vercel project; legacy duplicates are non-canonical |

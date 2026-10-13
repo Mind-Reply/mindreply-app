@@ -2,7 +2,7 @@
 
 ## Canonical application source
 
-- GitHub: `angellllkr-eng/mind-reply-core`
+- GitHub: `Mind-Reply/mindreply-app`
 - Branch: `main`
 - Product: MindReply
 - Primary production domain: `mind-reply.com`
@@ -17,7 +17,7 @@
 
 ## Deployment rule
 
-The production Vercel project serving `mind-reply.com` must ultimately point to this repository and `main`.
+The production Vercel project serving `mind-reply.com` must ultimately point to `Mind-Reply/mindreply-app` and `main`. This is the intended source mapping, not proof of the current live binding.
 
 Until that Git source mapping is verified, the domain is not considered aligned with the canonical source.
 

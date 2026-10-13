@@ -4,13 +4,13 @@ Status: canonical consolidation plan — 2026-08-26
 
 ## Canonical source of truth
 
-`angellllkr-eng/mind-reply-core` is the canonical GitHub control repository for the MindReply platform and shared A11-K application surfaces.
+`Mind-Reply/mindreply-app` is the active canonical product repository according to its README and AGENTS.md. The production provider's live repository/commit binding must be verified separately.
 
 ## Production domains / Vercel projects
 
 | Product | Canonical GitHub source | Canonical Vercel project | Rule |
 |---|---|---|---|
-| MindReply | `angellllkr-eng/mind-reply-core` | `mindreply` | Primary production platform |
+| MindReply | `Mind-Reply/mindreply-app` | `mindreply` (intended; verify live binding) | UNVERIFIED — confirm linked repo, deployed commit, domain and runtime health |
 | A11-K core/surfaces | `angellllkr-eng/mind-reply-core` | `a11k-live-foundation` / approved A11-K surfaces | Shared monorepo; no duplicate foundations |
 | Private opportunity core | `angellllkr-eng/private-opportunity-core` | `private-opportunity-core` | Separate security boundary |
 | PatchTalk | `angellllkr-eng/patchtalk` | `patchtalk` | Canonical product repo/project |

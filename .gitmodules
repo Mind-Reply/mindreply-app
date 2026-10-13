@@ -5,3 +5,7 @@
 [submodule "apps/experimental/forge"]
 	path = apps/experimental/forge
 	url = https://github.com/angellllkr-eng/forge.git
+
+[submodule "infrastructure/nexus"]
+	path = infrastructure/nexus
+	url = https://github.com/angellllkr-eng/nexus-core.git

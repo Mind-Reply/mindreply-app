@@ -4,7 +4,7 @@ Names are intentionally not reused across every repository. Each surface gets a 
 
 | Repository | Surface name | Core job | Preferred verbs |
 |---|---|---|---|
-| mind-reply-core | **Proofline** | canonical product/runtime | verify, reconcile, deliver |
+| Mind-Reply/mindreply-app | **Proofline** | canonical product/runtime | verify, reconcile, deliver |
 | agent-control-plane | **Crownline** | owner operations | observe, approve, release |
 | a11k-surface | **Dialogue Atlas** | owner conversation | ask, retrieve, decide |
 | saas-starter | **Human Moment** | reusable product starter | start, carry, recover |

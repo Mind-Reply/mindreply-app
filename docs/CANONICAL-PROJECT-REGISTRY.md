@@ -7,6 +7,8 @@
 
 ## Agent hard rules (non-negotiable)
 
+Repository identity has been reconciled to `Mind-Reply/mindreply-app` using the active README/AGENTS map and archived-source READMEs. Vercel project names and IDs below are registry records, not proof of the current live Git binding; verify provider settings and deployed commit before release.
+
 1. **Never pick a repo by similar name.** `mindreply`, `mind-reply`, `mind-reply-core`, `mindreply-org-site`, `MindReply` are **different**.
 2. **Canonical = one GH repo + one primary Vercel project.** Everything else is ALIAS, ARCHIVE, or NOISE.
 3. **If the task name is ambiguous, stop and use this registry.** Do not "guess the most recent."
@@ -19,7 +21,7 @@
 
 | Intent | Canonical GitHub | Primary Vercel project | Domain / notes |
 |--------|------------------|------------------------|----------------|
-| Unified platform monorepo | `angellllkr-eng/mind-reply-core` | `a11-k-core` (`prj_tF8MATzE2bOP0hPfiKZcuGX992dh`) | mindreply.com + a11-k.space |
+| Unified platform monorepo | `Mind-Reply/mindreply-app` | `a11-k-core` (`prj_tF8MATzE2bOP0hPfiKZcuGX992dh`) | mindreply.com + a11-k.space |
 | Public org / marketing site | `angellllkr-eng/mindreply-org-site` | `mindreply-org-site` (`prj_U0IAVGgzJKZhEl1FLts2vJft23Ym`) | Standalone public site |
 | Agent mesh / control plane | `angellllkr-eng/agent-control-plane` | **`agent-control-plane-vezr` (PRODUCTION FROZEN)** — `optimus-the-ai-platform-to-bu` = ARCHIVE | See COMPETITIVE-CONTROL-PLANE-2026.md |
 | Live cloud execution | `angellllkr-eng/a11-live-cloud-execution` | `a11-live-cloud-execution` | Revenue-first routes |

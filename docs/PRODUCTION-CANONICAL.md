@@ -2,15 +2,16 @@
 
 ## Canonical source
 
-- GitHub: `angellllkr-eng/mind-reply-core`
+- GitHub: `Mind-Reply/mindreply-app`
 - Branch: `main`
-- Status: active, public, writable
+- Status: active, public, writable (verified from GitHub metadata)
+- Live deployment source mapping: UNVERIFIED; check provider project settings and deployed commit before promoting.
 
 ## Canonical Vercel target
 
 - Intended project: `mindreply`
 - Intended production domain: `mind-reply.com`
-- Required source: `angellllkr-eng/mind-reply-core`
+- Required source: `Mind-Reply/mindreply-app`
 - Framework: Next.js
 - Node: 24.x
 
@@ -37,7 +38,7 @@
 
 ## Cutover rule
 
-The Vercel project serving `mind-reply.com` must be connected to the canonical GitHub repository above. Until that is verified, a deployment from another repository is not considered the canonical production release.
+The Vercel project serving `mind-reply.com` is intended to be connected to the canonical GitHub repository above. The current live binding has not been verified by this documentation change; do not infer deployment status from this contract.
 
 ## Verification
 

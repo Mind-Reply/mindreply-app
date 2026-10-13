@@ -2,7 +2,7 @@
 
 ## Canonical source
 
-`angellllkr-eng/mind-reply-core` is the active implementation source for this service layer.
+`Mind-Reply/mindreply-app` is the active canonical product repository. Route presence in source does not establish a live deployment.
 
 ## Public operational routes
 
@@ -29,9 +29,7 @@ A service is not marked operational merely because its source route exists. It m
 
 ## Vercel source-alignment finding
 
-The Vercel project currently named `mindreply` has `mind-reply.com` attached, but its Git integration currently points to the archived `Mind-Reply/mind-reply-core` repository. The active GitHub source is `angellllkr-eng/mind-reply-core`.
-
-This is a release-blocking source-of-truth mismatch for promoting these new services to `mind-reply.com`.
+Historical note: an earlier repository record reported that the Vercel project named `mindreply` was linked to archived `Mind-Reply/mind-reply-core`. That live binding was not rechecked in this documentation pass. Verify the current provider Git link, deployed commit, domain and health endpoints before deciding whether a source mismatch remains. The intended canonical GitHub source is `Mind-Reply/mindreply-app`.
 
 ## Safe migration sequence
 

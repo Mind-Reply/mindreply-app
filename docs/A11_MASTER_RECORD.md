@@ -100,7 +100,7 @@ Never “stand by.”
 
 GitHub is the active work queue. Existing issues consumed; workstreams executed; stuck agents swapped; real commits; real PRs; evidence; continuous progress.
 
-Canonical monorepo: `angellllkr-eng/mind-reply-core`
+Canonical product repository: `Mind-Reply/mindreply-app` (live deployment binding must be independently verified)
 A11-K branded surface: `apps/a11k/`
 
 ## 11. Automation

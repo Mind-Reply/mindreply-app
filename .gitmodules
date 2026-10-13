@@ -1,3 +1,11 @@
 [submodule "apps/experimental/brushworks"]
 	path = apps/experimental/brushworks
 	url = https://github.com/angellllkr-eng/brushworks.git
+
+[submodule "apps/experimental/forge"]
+	path = apps/experimental/forge
+	url = https://github.com/angellllkr-eng/forge.git
+
+[submodule "infrastructure/nexus"]
+	path = infrastructure/nexus
+	url = https://github.com/angellllkr-eng/nexus-core.git

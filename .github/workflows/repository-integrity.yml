@@ -16,7 +16,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          forbidden="$(git ls-files | grep -E '(^|/)(\.env|\.env\..*|.*\.pem|.*\.key|credentials\.json)$' || true)"
+          forbidden="$(git ls-files | grep -E '(^|/)(\.env(\..*)?|.*\.(pem|key)|credentials\.json)
+          if [ -n "$forbidden" ]; then
+            echo "::error::Potential secret-bearing files are tracked:"
+            printf '%s\n' "$forbidden"
+            exit 1
+          fi
+      - name: Repository gate result
+        run: echo "PASS — repository integrity checks completed."
+ | grep -Ev '(^|/)\.env(\.[^/]+)*\.example
+          if [ -n "$forbidden" ]; then
+            echo "::error::Potential secret-bearing files are tracked:"
+            printf '%s\n' "$forbidden"
+            exit 1
+          fi
+      - name: Repository gate result
+        run: echo "PASS — repository integrity checks completed."
+ || true)"
           if [ -n "$forbidden" ]; then
             echo "::error::Potential secret-bearing files are tracked:"
             printf '%s\n' "$forbidden"

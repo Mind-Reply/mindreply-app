@@ -14,7 +14,7 @@ EXPECTED_RELEASE_SHA="${EXPECTED_RELEASE_SHA:-}"
 RELEASE_SHA_URL="${RELEASE_SHA_URL:-/api/release}"
 
 if [[ -z "$BASE_URL" ]]; then
-  printf '{"checked_at":"%s","source":"reality-probe","state":"UNCONNECTED","reason":"BASE_URL not configured"}\\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  printf '{"checked_at":"%s","source":"reality-probe","state":"UNCONNECTED","reason":"BASE_URL not configured"}\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   exit 0
 fi
 

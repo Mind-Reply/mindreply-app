@@ -63,7 +63,7 @@ export default function CommandGatePage() {
     <main className={styles.shell}>
       <header className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>A11 INTERFACE / PRODUCTION GATE</p>
+          <p className={styles.eyebrow}>A11 INTERFACE / OWNER COMMAND LAYER</p>
           <h1>Your command layer.<br />Clear approvals. Controlled execution.</h1>
           <p className={styles.intro}>A PC-first owner console designed for desktop and iOS PWA. Sensitive actions stay gated; this route currently uses local demo records only.</p>
         </div>
@@ -80,7 +80,7 @@ export default function CommandGatePage() {
         <section className={styles.primary}>
           <article className={styles.panel}>
             <div className={styles.panelHead}>
-              <div><p className={styles.eyebrow}>OWNER DECISION POINT</p><h2>Approval Gate</h2><p>Review the request, its risk signals and the recorded decision.</p></div>
+              <div><p className={styles.eyebrow}>OWNER DECISION POINT</p><h2>Owner Decision Queue</h2><p>Review the request, its risk signals and the recorded decision.</p></div>
               <label className={styles.filterLabel}>Filter
                 <select value={filter} onChange={(e) => setFilter(e.target.value)}>
                   {["All", "Needs your approval", "Auto-approved", "Hard stop", "Deferred", "Blocked"].map((v) => <option key={v}>{v}</option>)}

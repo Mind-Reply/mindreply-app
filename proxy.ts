@@ -11,7 +11,7 @@ export const config = {
   matcher: ['/api/chat', '/api/messages'],
 };
 
-export async function middleware(request: Request) {
+export async function proxy(request: Request) {
   if (process.env.NODE_ENV !== 'production' || !process.env.BOTID_SECRET) {
     return;
   }

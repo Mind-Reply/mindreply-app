@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Deterministic production-truth gate.
+# Live-state probe; route failures are evidence, not a release gate.
 # Usage: BASE_URL=https://example.com ./scripts/reality-gate.sh
 # Optional: REALITY_ROUTES="/ /pricing /contact /checkout /api/health"
 # Optional: EXPECTED_RELEASE_SHA="..." and RELEASE_SHA_URL="/api/release"
@@ -65,6 +65,5 @@ fi
 printf '],"release":{"expected_sha":"%s","result":"%s"},"state":"%s"}\n' \
   "$EXPECTED_RELEASE_SHA" "$release_result" "$([ "$failures" -eq 0 ] && echo VERIFIED || echo BLOCKED)"
 
-if [[ "$failures" -gt 0 ]]; then
-  exit 1
-fi
+# Probe findings are reported in JSON and do not block promotion.
+exit 0

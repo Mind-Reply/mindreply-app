@@ -41,6 +41,8 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - name: Run tests
         run: pnpm test
+        env:
+          PLAYWRIGHT_WEB_SERVER_COMMAND: pnpm --filter web-replycontrol dev
       - name: Build application
         run: pnpm build
 # estate-green trigger revision: 2026-10-09

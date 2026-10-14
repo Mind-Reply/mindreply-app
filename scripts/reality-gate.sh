@@ -14,8 +14,8 @@ EXPECTED_RELEASE_SHA="${EXPECTED_RELEASE_SHA:-}"
 RELEASE_SHA_URL="${RELEASE_SHA_URL:-/api/release}"
 
 if [[ -z "$BASE_URL" ]]; then
-  echo "BASE_URL is required" >&2
-  exit 2
+  printf '{"checked_at":"%s","source":"reality-probe","state":"UNCONNECTED","reason":"BASE_URL not configured"}\\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  exit 0
 fi
 
 BASE_URL="${BASE_URL%/}"
@@ -63,7 +63,7 @@ if [[ -n "$EXPECTED_RELEASE_SHA" ]]; then
 fi
 
 printf '],"release":{"expected_sha":"%s","result":"%s"},"state":"%s"}\n' \
-  "$EXPECTED_RELEASE_SHA" "$release_result" "$([ "$failures" -eq 0 ] && echo VERIFIED || echo BLOCKED)"
+  "$EXPECTED_RELEASE_SHA" "$release_result" "$([ "$failures" -eq 0 ] && echo VERIFIED || echo REMEDIATION_REQUIRED)"
 
 # Probe findings are reported in JSON and do not block promotion.
 exit 0

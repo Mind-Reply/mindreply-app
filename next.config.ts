@@ -143,8 +143,6 @@ const config: NextConfig = {
   // Experimental features
   experimental: {
     optimizePackageImports: ['@radix-ui/*', 'lucide-react'],
-    parallelServerCompiles: true,
-    parallelServerBuildTraces: true,
     isrMemoryCacheSize: 52 * 1024 * 1024, // 52MB
   },
 

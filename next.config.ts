@@ -10,8 +10,9 @@ const config: NextConfig = {
   // Build output
   output: 'standalone',
 
-  // Next.js 16: PPR is enabled through cacheComponents.
-  cacheComponents: true,
+  // Keep legacy route segment `runtime` and `dynamic` settings compatible.
+  // Enable cacheComponents only after those route configs are migrated.
+  cacheComponents: false,
 
   // Images optimization
   images: {

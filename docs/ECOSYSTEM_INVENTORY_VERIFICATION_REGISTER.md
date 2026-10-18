@@ -26,8 +26,8 @@
 - VERIFIED: Supabase management API reports project MindR in eu-west-1, status ACTIVE_HEALTHY, PostgreSQL 17.6.
 - VERIFIED: Migration history exists through 20261018102858_harden_ledger_mutation_function_search_path_and_execute_grants at review time.
 - VERIFIED: The management API lists active Edge Functions including stripe-webhook, sovereign-sweep-worker, treasury-hmac-verify, and sovereign-treasury-summary. This proves management-plane status, not successful end-to-end operation.
-- NOT VERIFIED: The named treasury_ledger and distressed_pipeline schemas. Inspect actual schema/table inventory.
-- NOT VERIFIED: pg_net sweep triggers or scheduled jobs. Check extensions, cron/job records, trigger definitions, and recent execution logs.
+- VERIFIED: A read-only PostgreSQL catalog query returned no objects in schemas named treasury_ledger or distressed_pipeline. The supplied schema names do not currently match the inspected database catalog.
+- VERIFIED: pg_net 0.20.3 and pg_cron 1.6.4 are installed. NOT VERIFIED: the claimed sweep triggers/jobs; inspect cron/job records, trigger definitions, and recent execution logs before asserting they run.
 - Supplied database host: db.aziwdgndohdgnwztpwdi.supabase.co:5432. Never commit connection strings containing credentials.
 - Auth JWKS path supplied: /auth/v1/.well-known/jwks.json. Verify the project API URL and endpoint response; endpoint existence alone does not prove correct authorization.
 

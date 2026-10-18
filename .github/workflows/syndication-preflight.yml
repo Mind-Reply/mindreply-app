@@ -1,0 +1,29 @@
+name: Syndication Preflight
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 6 * * 1-5"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: syndication-preflight
+  cancel-in-progress: true
+
+jobs:
+  validate-manifests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes jq
+
+      - name: Validate manifests without publishing
+        run: bash scripts/syndication-preflight.sh

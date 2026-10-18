@@ -10,3 +10,6 @@ export const MAX_CHAT_MESSAGES = 100;
 
 export const ARTIFACT_KINDS = ['text', 'code', 'image', 'sheet'] as const;
 export type ArtifactKind = (typeof ARTIFACT_KINDS)[number];
+
+// Database visibility is a domain type; it must not depend on a removed UI component.
+export type VisibilityType = 'public' | 'private';

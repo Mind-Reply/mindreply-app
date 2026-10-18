@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 const regions = [
-  { code: "UK", label: "United Kingdom", href: "/uk", detail: "UK language and delivery context" },
-  { code: "DE", label: "Deutschland", href: "/de", detail: "German-language entry point" },
-  { code: "BG", label: "България", href: "/bg", detail: "Bulgarian-language entry point" },
+  { code: "UK", label: "United Kingdom", href: "/regions/uk-global", detail: "UK language and delivery context" },
+  { code: "DE", label: "Deutschland", href: "/regions/europe", detail: "European delivery context; German-language copy requires review" },
+  { code: "BG", label: "България", href: "/regions/bulgaria", detail: "Bulgarian and Balkans delivery context" },
 ];
 
 const auditAreas = [

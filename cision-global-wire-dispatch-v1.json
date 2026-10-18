@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "service": "cision-global-wire",
+  "status": "draft",
+  "dispatch_enabled": false,
+  "endpoint_status": "unverified",
+  "endpoint": "https://api.cision.com/v1/releases/dispatch",
+  "auth_method_status": "unverified",
+  "payload_status": "not-provided",
+  "notes": "Do not enable outbound wire dispatch until Cision confirms the account-specific endpoint, request schema, authentication method, publication fees, and test/sandbox procedure. This file is a preflight placeholder, not a dispatch payload."
+}

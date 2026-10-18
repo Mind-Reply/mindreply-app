@@ -7,8 +7,8 @@
   },
   "scripts": {
     "dev": "next dev --turbo",
-    "build": "next build",
-    "build:with-migrations": "tsx lib/db/migrate && next build",
+    "build": "next build --webpack",
+    "build:with-migrations": "tsx lib/db/migrate && next build --webpack",
     "start": "next start",
     "check": "ultracite check",
     "fix": "ultracite fix",

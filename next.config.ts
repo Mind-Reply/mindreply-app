@@ -28,12 +28,6 @@ const config: NextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
   },
 
-  // Internationalization (if needed)
-  i18n: {
-    locales: ['en', 'de', 'fr'],
-    defaultLocale: 'en',
-  },
-
   // Headers
   async headers() {
     return [

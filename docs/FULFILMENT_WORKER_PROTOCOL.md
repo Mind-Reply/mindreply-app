@@ -1,6 +1,6 @@
 # Fulfilment Worker Protocol
 
-**Status:** READY FOR REVIEW — proposed on branch `ops/fulfilment-worker-gates`  
+**Status:** MERGED to `main` via PR #88 — evidence schema and validation gate are in the repository. Runtime seller-monitoring workers are not yet activated.  
 **Scope:** Evidence collection and validation for fulfilment workflows. This protocol does not place orders or grant private-account access.
 
 ## Operating model

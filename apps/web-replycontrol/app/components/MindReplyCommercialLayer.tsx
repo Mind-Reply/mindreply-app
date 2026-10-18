@@ -1,6 +1,6 @@
 import type { SupportedLocale } from "../lib/locales";
 
-const copy: Record<SupportedLocale, {
+const copy: Partial<Record<SupportedLocale, {
   eyebrow: string;
   title: string;
   intro: string;
@@ -12,7 +12,7 @@ const copy: Record<SupportedLocale, {
   audit: string;
   owner: string;
   proof: string;
-}> = {
+}>> = {
   en: {
     eyebrow: "MINDREPLY · LAST-MILE RESCUE",
     title: "Turn pressure, website friction and follow-up gaps into one clear move.",

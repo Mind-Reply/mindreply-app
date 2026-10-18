@@ -16,6 +16,7 @@ This workstream is intentionally separate from the paused chat implementation. I
 * Advertising copy and creative territories
 * SEO structure and content planning
 * Launch operations, measurement, and approval gates
+* Evidence-led lead diagnostics, regional funnels, events and RSVP operations, verified billing handoff, and operational failure controls
 
 ## Working assumptions
 
@@ -23,9 +24,12 @@ This workstream is intentionally separate from the paused chat implementation. I
 * Copy must describe the intended experience without promising unverified performance, availability, privacy, security, or outcomes.
 * No advertising spend, public signup, tracking, or production claim should be activated until the corresponding destination and owner-controlled configuration are verified.
 * The public brand should not expose private owner details or internal infrastructure.
+* Competitor claims must be sourced and dated; estimates and hypotheses must be labelled. No synthetic testimonials, customer counts, revenue, conversion, or performance evidence.
+* Outbound messaging, event invitations, analytics, and retargeting must respect consent, regional law, opt-outs, suppression lists, and approved budgets.
 
 ## Documents
 
+* [HighStrike Campaign Orchestrator](docs/HIGHSTRIKE_CAMPAIGN_ORCHESTRATOR.md) — operational pipeline, regional funnels, diagnostic outreach, event/RSVP controls, Stripe handoff, webhook security, durable audit requirements, escalation, stop conditions, and release gates.
 * [Brand platform](marketing/brand/brand-platform.md)
 * [Messaging system](marketing/brand/messaging.md)
 * [Visual system](marketing/brand/visual-system.md)
@@ -50,6 +54,10 @@ This workstream is intentionally separate from the paused chat implementation. I
 9. Activate campaigns with controlled budgets and UTMs.
 10. Review results before expanding distribution.
 
+## Activation gates
+
+Before a HighStrike campaign can be activated, the team must verify the live regional URL, a working server-side intake, consent/opt-out enforcement, evidence and claim review, approved offer and budget, end-to-end attribution, payment/webhook reconciliation where applicable, a tested pause/escalation route, and a named owner. Drafts, repository files, previews, and successful builds do not prove live operation.
+
 ## Current release state
 
-The repository now contains the initial marketing system and a static preview concept. This is not a statement that the production site, campaigns, signup flow, or SEO indexing are live.
+The repository contains the initial marketing system and a static preview concept. The HighStrike specification documents the target operating model and the existing gaps; it does not claim that production campaigns, signup capture, event operations, immutable storage, analytics, or escalation are live.

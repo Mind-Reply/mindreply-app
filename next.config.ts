@@ -11,7 +11,7 @@ const config: NextConfig = {
   output: 'standalone',
 
   // Next.js 16: PPR is enabled through cacheComponents.
-  cacheComponents: true,
+  cacheComponents: false,
 
   // Images optimization
   images: {
@@ -122,7 +122,7 @@ const config: NextConfig = {
             default: false,
             vendors: false,
             vendor: {
-              filename: 'chunks/vendor.js',
+              filename: 'chunks/vendor.[id].[contenthash].js',
               test: /node_modules/,
               priority: 10,
               reuseExistingChunk: true,

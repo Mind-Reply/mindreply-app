@@ -11,7 +11,8 @@ export async function handleStripeEvent(event: Stripe.Event) {
 
   try {
     switch (event.type) {
-      case "checkout.session.completed": {
+      case "checkout.session.completed":
+      case "checkout.session.async_payment_succeeded": {
         const s = event.data.object as Stripe.Checkout.Session;
         if (s.metadata?.package_key === WEBSITE_COMPLETION_PACKAGE) {
           // A completed redirect is not sufficient: only persist paid orders.

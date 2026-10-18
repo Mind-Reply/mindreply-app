@@ -6,7 +6,7 @@ import {
   documentHandlersByArtifactKind,
 } from "@/lib/artifacts/server";
 import type { ChatMessage } from "../../types";
-import { generateUUID } from "@/lib/utils";
+import { generateId } from "@/lib/utils";
 
 type CreateDocumentProps = {
   session: Session;
@@ -23,7 +23,7 @@ export const createDocument = ({
     description:
       "Create an artifact. You MUST specify kind: use 'code' for any programming/algorithm request (creates a script), 'text' for essays/writing (creates a document), 'sheet' for spreadsheets/data.",
     execute: async ({ title, kind }) => {
-      const id = generateUUID();
+      const id = generateId();
 
       dataStream.write({
         data: kind,

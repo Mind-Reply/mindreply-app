@@ -123,7 +123,8 @@ const config: NextConfig = {
             default: false,
             vendors: false,
             vendor: {
-              filename: 'chunks/vendor.js',
+              // Unique names prevent separate chunks from colliding on one static asset path.
+              filename: 'chunks/vendor.[id].[contenthash].js',
               test: /node_modules/,
               priority: 10,
               reuseExistingChunk: true,

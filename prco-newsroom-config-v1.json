@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "service": "pr.co-newsroom",
+  "status": "draft",
+  "publish_enabled": false,
+  "endpoint_status": "unverified",
+  "endpoint": "https://api.pr.co/v1/newsroom/publish",
+  "auth_method_status": "unverified",
+  "payload_status": "not-provided",
+  "notes": "Do not enable publishing until PR.co confirms a supported write API for this account. Public API documentation describes read-only newsroom retrieval; publishing may require the PR.co console or a supported integration. This file is a preflight placeholder, not a publish payload."
+}

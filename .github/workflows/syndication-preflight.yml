@@ -1,0 +1,33 @@
+name: Syndication Preflight
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/syndication-preflight.yml"
+      - "scripts/syndication-preflight.sh"
+      - "cision-global-wire-dispatch-v1.json"
+      - "prco-newsroom-config-v1.json"
+  workflow_dispatch:
+  schedule:
+    - cron: "23 6 * * 1-5"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: syndication-preflight
+  cancel-in-progress: true
+
+jobs:
+  validate-manifests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate manifests without publishing
+        run: |
+          set -euo pipefail
+          command -v jq >/dev/null || { echo "jq is required"; exit 1; }
+          bash scripts/syndication-preflight.sh

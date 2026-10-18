@@ -3,6 +3,8 @@ import { SubscriptionStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { claimIdempotency, saveIdempotencyResult } from "@/db/idempotency";
 
+const WEBSITE_COMPLETION_PACKAGE = "website_completion_gbp_600";
+
 export async function handleStripeEvent(event: Stripe.Event) {
   const claim = await claimIdempotency(event.id);
   if (!claim.claimed) return { duplicate: true };
@@ -11,6 +13,37 @@ export async function handleStripeEvent(event: Stripe.Event) {
     switch (event.type) {
       case "checkout.session.completed": {
         const s = event.data.object as Stripe.Checkout.Session;
+        if (s.metadata?.package_key === WEBSITE_COMPLETION_PACKAGE) {
+          // A completed redirect is not sufficient: only persist paid orders.
+          if (s.payment_status === "paid" && s.mode === "payment" && s.currency === "gbp" && s.amount_total === 60_000) {
+            await prisma.oneTimeOrder.upsert({
+              where: { stripeCheckoutSessionId: s.id },
+              update: {
+                stripePaymentIntentId: typeof s.payment_intent === "string" ? s.payment_intent : null,
+                customerEmail: s.customer_details?.email ?? s.customer_email ?? null,
+                amountTotal: s.amount_total,
+                currency: s.currency,
+                paymentStatus: "paid",
+                livemode: event.livemode,
+                paidAt: new Date(event.created * 1000),
+              },
+              create: {
+                packageKey: WEBSITE_COMPLETION_PACKAGE,
+                offerVersion: s.metadata.offer_version ?? "1",
+                stripeCheckoutSessionId: s.id,
+                stripePaymentIntentId: typeof s.payment_intent === "string" ? s.payment_intent : null,
+                customerEmail: s.customer_details?.email ?? s.customer_email ?? null,
+                amountTotal: s.amount_total,
+                currency: s.currency,
+                paymentStatus: "paid",
+                livemode: event.livemode,
+                paidAt: new Date(event.created * 1000),
+              },
+            });
+          }
+          break;
+        }
+
         const clerkId = s.metadata?.clerkId;
         if (clerkId && s.customer) {
           const user = await prisma.user.findUnique({ where: { clerkId } });
@@ -86,6 +119,3 @@ export async function handleStripeEvent(event: Stripe.Event) {
     throw error;
   }
 }
-
-
-

@@ -1,7 +1,6 @@
 import type { NextConfig } from 'next';
 const config: NextConfig = {
   // Optimization
-  swcMinify: true,
   reactStrictMode: true,
   compress: true,
   poweredByHeader: false,
@@ -146,7 +145,6 @@ const config: NextConfig = {
   // Experimental features
   experimental: {
     optimizePackageImports: ['@radix-ui/*', 'lucide-react'],
-    isrMemoryCacheSize: 52 * 1024 * 1024, // 52MB
   },
 
   // Environment variables

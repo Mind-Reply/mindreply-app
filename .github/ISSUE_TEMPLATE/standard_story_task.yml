@@ -1,0 +1,70 @@
+---
+name: Standard story / task
+about: Create a well-specified, testable engineering issue
+title: ""
+labels: []
+assignees: []
+---
+
+## Objective
+
+Describe the outcome this work should achieve.
+
+## User Story
+
+As a [user/persona], I want [capability], so that [benefit].
+
+## Business Value
+
+Explain the user, operational, commercial, or risk-reduction value.
+
+## Acceptance Criteria
+
+### Scenario: Happy path
+
+- **Given** ...
+- **When** ...
+- **Then** ...
+
+## Validators
+
+List validation rules and how they will be checked.
+
+## Business Rules
+
+Document domain rules, constraints, and expected behavior.
+
+## Edge Cases
+
+Describe boundary conditions, empty inputs, duplicate requests, retries, and other exceptional cases.
+
+## Security and Privacy
+
+Describe authorization, data minimization, retention, auditability, and sensitive-data handling.
+
+## Subtasks
+
+- [ ] Data model
+- [ ] API
+- [ ] Validation
+- [ ] Interface
+- [ ] Tests
+- [ ] Security review
+
+## QA Checklist
+
+- [ ] Happy path
+- [ ] Required-field validation
+- [ ] Boundary values
+- [ ] Permission failure
+- [ ] Empty state
+- [ ] Loading state
+- [ ] Error state
+
+## Definition of Done
+
+- [ ] Acceptance criteria passed
+- [ ] Automated tests passed
+- [ ] No credentials or personal data exposed
+- [ ] Review completed
+- [ ] Documentation updated

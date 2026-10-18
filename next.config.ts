@@ -10,6 +10,7 @@ const config: NextConfig = {
   // Build output
   output: 'standalone',
 
+  // Next.js 16: PPR is enabled through cacheComponents.
   // Keep legacy route segment `runtime` and `dynamic` settings compatible.
   // Enable cacheComponents only after those route configs are migrated.
   cacheComponents: false,
@@ -54,7 +55,7 @@ const config: NextConfig = {
           },
           {
             key: 'X-XSS-Protection',
-            value: '1; mode=block',
+            value: '1; mode=ok',
           },
           {
             key: 'Referrer-Policy',

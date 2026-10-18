@@ -89,6 +89,23 @@ model Payment {
   @@index([organizationId])
 }
 
+model OneTimeOrder {
+  id                      String   @id @default(cuid())
+  packageKey              String
+  offerVersion            String
+  stripeCheckoutSessionId String   @unique
+  stripePaymentIntentId   String?  @unique
+  customerEmail           String?
+  amountTotal             Int
+  currency                String
+  paymentStatus           String
+  livemode                Boolean
+  paidAt                  DateTime?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  @@index([packageKey, paymentStatus])
+}
+
 model AuditLog {
   id        String   @id @default(cuid())
   userId    String?

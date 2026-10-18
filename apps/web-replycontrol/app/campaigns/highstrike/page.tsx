@@ -50,7 +50,7 @@ export default function HighStrikeCampaignPage() {
 
       <section className="mc-hero">
         <div>
-          <p className="mc-kicker"><i />HIGHTSTRIKE · OPERATIONAL DIAGNOSTICS</p>
+          <p className="mc-kicker"><i />HIGHSTRIKE · OPERATIONAL DIAGNOSTICS</p>
           <h1>Find where work<br /><em>loses momentum.</em></h1>
           <p className="lead">
             Identify missed enquiries, fragile handoffs, repeated manual work, and gaps between

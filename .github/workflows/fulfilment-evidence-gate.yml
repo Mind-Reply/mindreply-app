@@ -1,0 +1,29 @@
+name: Fulfilment Evidence Gate
+
+on:
+  pull_request:
+    paths:
+      - "docs/FULFILMENT_WORKER_PROTOCOL.md"
+      - "scripts/validate_fulfilment_evidence.py"
+      - "tests/test_validate_fulfilment_evidence.py"
+      - "evidence/fulfilment/**"
+      - ".github/workflows/fulfilment-evidence-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fulfilment-evidence-gate-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - name: Run validator unit tests
+        run: python -m unittest discover -s tests -p 'test_validate_fulfilment_evidence.py' -v
+      - name: Validate evidence records
+        run: python scripts/validate_fulfilment_evidence.py

@@ -1,4 +1,8 @@
-import type { Message } from '@ai-sdk/ui-utils';
+import type { UIMessage } from 'ai';
+
+// The chat UI streams typed custom data parts (artifact deltas, suggestions, and status events).
+// Keep this transport type aligned with the AI SDK writer while the data-part map is centralized.
+export type ChatMessage = UIMessage<any, any, any>;
 
 export type Phase = 'waiting' | 'still-waiting' | 'health' | 'thinking' | 'error';
 
@@ -19,7 +23,7 @@ export interface DBMessage {
   id: string;
   chatId: string;
   role: string;
-  content: string | Message['parts'];
+  content: string | ChatMessage['parts'];
   createdAt: Date;
 }
 

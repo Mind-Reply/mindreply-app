@@ -28,6 +28,9 @@ export function generateId(): string {
   return crypto.randomUUID();
 }
 
+// Backward-compatible name used by existing server utilities.
+export const generateUUID = generateId;
+
 export async function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

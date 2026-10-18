@@ -30,7 +30,7 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
       <div className="mc-nav-center">
         <a href="/platform">Platform</a><a href="/services">Services</a><a href="/regions">Regions</a><a href="/operations">Operations</a><a href="/evidence">Evidence</a>
       </div>
-      <div className="mc-nav-right"><span className="mc-state"><i className="mc-dot"/>OWNER CONTROL</span><LocaleSwitcher locale={locale} /></div>
+      <div className="mc-nav-right"><span className="mc-state"><i className="mc-dot"/>OWNER CONTROL</span><a className="mc-secondary" href="/audit">Request assessment ↗</a><LocaleSwitcher locale={locale} /></div>
     </nav>
 
     <section className="mc-hero" id="top" aria-labelledby="hero-title">
@@ -55,12 +55,12 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
     <MindReplyCommercialLayer locale={locale} />
 
     <section className="mc-section" id="services" aria-labelledby="services-title">
-      <div className="mc-section-head"><span>INNOVATION & INTELLIGENCE · CORE TECHNOLOGY · OPERATIONS</span><h2 id="services-title">Eight capabilities connected to one accountable delivery path.</h2></div>
+      <div className="mc-section-head"><span>INNOVATION & INTELLIGENCE · CORE TECHNOLOGY · OPERATIONS</span><h2 id="services-title">The capabilities that move work from first assessment to a measurable handoff.</h2></div>
       <div className="mc-rail">{services.map((service) => <a className="mc-module" key={service.slug} href={`/services/${service.slug}`}><span className="num">{service.number}</span><h3>{service.title}</h3><p>{service.promise}</p><ul>{service.outcomes.map((outcome) => <li key={outcome}>{outcome}</li>)}</ul><span className="mc-module-link">Explore capability ↗</span></a>)}</div>
     </section>
 
     <section className="mc-section" aria-labelledby="delivery-title">
-      <div className="mc-section-head"><span>DELIVERY MODEL</span><h2 id="delivery-title">Assess → Build → Operate → Expand.</h2></div>
+      <div className="mc-section-head"><span>DELIVERY MODEL</span><h2 id="delivery-title">A clear delivery path: assess, agree, implement, review.</h2></div>
       <div className="mc-link-grid"><a className="mc-link-card" href="/audit"><span>01 · ASSESS</span><b>Find the highest-value gaps ↗</b></a><a className="mc-link-card" href="/platform"><span>02 · BUILD</span><b>Implement the required capability ↗</b></a><a className="mc-link-card" href="/operations"><span>03 · OPERATE</span><b>Monitor, improve and assure ↗</b></a><a className="mc-link-card" href="/regions"><span>04 · EXPAND</span><b>Deploy regionally from one core ↗</b></a></div>
     </section>
 
@@ -89,7 +89,7 @@ export function PublicHome({ locale }: { locale: SupportedLocale }) {
       </div></div>
     </section>
 
-    <section className="mc-closing"><p className="mc-kicker"><i/>NEXT STEP</p><h2>Start with the highest-value gap. Build only what can be verified.</h2><p>Choose a capability, request an assessment, and move into implementation with a clear delivery path and reviewable evidence.</p><a className="mc-primary" href="/audit">Start with an assessment ↗</a></section>
+    <section className="mc-closing"><p className="mc-kicker"><i/>NEXT STEP</p><h2>Start with the highest-value gap. Agree the scope. Verify the result.</h2><p>Tell us what needs to improve. We will shape a focused brief, agree the work before it starts, and keep delivery and handoff reviewable.</p><a className="mc-primary" href="/audit">Start with an assessment ↗</a></section>
     <footer className="mc-footer"><span>MindReply</span><span>INTELLIGENCE · TECHNOLOGY · OPERATIONS</span><div className="mc-footer-links"><a href="/status">System status ↗</a><a href="/contact">Contact ↗</a></div></footer>
   </main>;
 }

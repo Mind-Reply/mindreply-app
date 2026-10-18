@@ -51,3 +51,22 @@ export function toResponse(error: unknown): Response {
     { status: 500 },
   );
 }
+
+/**
+ * Backward-compatible error wrapper for the legacy database query layer.
+ * New code should prefer AppError and its explicit HTTP status.
+ */
+export class ChatbotError extends Error {
+  readonly type: string;
+
+  constructor(type: string, messageOrOptions?: string | ErrorOptions) {
+    super(
+      typeof messageOrOptions === "string"
+        ? messageOrOptions
+        : "Database operation failed",
+      typeof messageOrOptions === "object" ? messageOrOptions : undefined,
+    );
+    this.name = "ChatbotError";
+    this.type = type;
+  }
+}

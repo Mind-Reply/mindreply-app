@@ -51,6 +51,7 @@ const copy: Partial<Record<SupportedLocale, {
 
 export function MindReplyCommercialLayer({ locale }: { locale: SupportedLocale }) {
   const t = copy[locale] ?? copy.en;
+  if (!t) throw new Error("MindReply commercial copy requires an English fallback.");
 
   return (
     <section className="mc-section" aria-labelledby="commercial-layer-title">

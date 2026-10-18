@@ -3,9 +3,6 @@
  * Handles authentication, storage, analytics, and CMS connections
  */
 
-import { Ratelimit } from '@upstash/ratelimit';
-import { Redis } from '@upstash/redis';
-
 // ===== VERCEL BLOB STORAGE =====
 export const setupBlobStorage = () => {
   const token = process.env.VERCEL_BLOB_TOKEN;
@@ -19,37 +16,6 @@ export const setupBlobStorage = () => {
     token,
     uploadDir: process.env.NODE_ENV === 'production' ? 'production' : 'dev',
   };
-};
-
-// ===== VERCEL KV (REDIS) =====
-export const setupVercelKV = () => {
-  const url = process.env.VERCEL_KV_REST_API_URL;
-  const token = process.env.VERCEL_KV_REST_API_TOKEN;
-
-  if (!url || !token) {
-    console.warn('⚠️  VERCEL_KV not configured');
-    return null;
-  }
-
-  return new Redis({
-    url,
-    token,
-  });
-};
-
-// ===== RATE LIMITING =====
-export const setupRateLimiting = () => {
-  const redis = setupVercelKV();
-
-  if (!redis) return null;
-
-  return new Ratelimit({
-    redis,
-    limiter: Ratelimit.slidingWindow(
-      parseInt(process.env.RATE_LIMIT_REQUESTS || '100', 10),
-      parseInt(process.env.RATE_LIMIT_WINDOW_MS || '60000', 10) + 'ms'
-    ),
-  });
 };
 
 // ===== STRIPE INTEGRATION =====
@@ -132,8 +98,6 @@ export const initializeIntegrations = async () => {
 
   const integrations = {
     blob: setupBlobStorage(),
-    kv: setupVercelKV(),
-    rateLimit: setupRateLimiting(),
     stripe: setupStripe(),
     clerk: setupClerk(),
     llm: setupLLMProviders(),

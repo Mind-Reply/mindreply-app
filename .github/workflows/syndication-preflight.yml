@@ -1,6 +1,12 @@
 name: Syndication Preflight
 
 on:
+  pull_request:
+    paths:
+      - ".github/workflows/syndication-preflight.yml"
+      - "scripts/syndication-preflight.sh"
+      - "cision-global-wire-dispatch-v1.json"
+      - "prco-newsroom-config-v1.json"
   workflow_dispatch:
   schedule:
     - cron: "23 6 * * 1-5"
@@ -20,10 +26,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install jq
-        run: |
-          sudo apt-get update
-          sudo apt-get install --yes jq
-
       - name: Validate manifests without publishing
-        run: bash scripts/syndication-preflight.sh
+        run: |
+          set -euo pipefail
+          command -v jq >/dev/null || { echo "jq is required"; exit 1; }
+          bash scripts/syndication-preflight.sh

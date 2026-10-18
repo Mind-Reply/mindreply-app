@@ -20,9 +20,9 @@ const alternates = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(site),
-  title: { default: "MindReply — Answerable systems", template: "%s | MindReply" },
+  title: { default: "MindReply — Website & Workflow Improvement", template: "%s | MindReply" },
   description:
-    "Evidence-led operating systems for owner-led teams. Human judgment remains the final authority; important work stays reviewable and reversible.",
+    "Identify website conversion gaps, improve enquiry handling, and deliver focused website and workflow improvements with clear ownership and reviewable outcomes.",
   applicationName: "MindReply",
   authors: [{ name: "MindReply" }],
   referrer: "strict-origin-when-cross-origin",
@@ -40,15 +40,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "MindReply",
-    title: "MindReply — Answerable systems",
-    description: "Evidence-led operating systems where people retain the last word.",
+    title: "MindReply — Website & Workflow Improvement",
+    description: "Identify website conversion gaps, improve enquiry handling, and deliver focused website and workflow improvements with clear ownership.",
     url: "/",
     locale: "en_US",
   },
   twitter: {
     card: "summary",
-    title: "MindReply — Answerable systems",
-    description: "Evidence-led operating systems where people retain the last word.",
+    title: "MindReply — Website & Workflow Improvement",
+    description: "Website and workflow improvements with clear scope, accountable delivery and reviewable outcomes.",
   },
   alternates: { canonical: "/", languages: alternates },
 };

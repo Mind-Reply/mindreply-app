@@ -28,7 +28,7 @@ def base_record():
             "final_payable_total": None,
             "compatibility": "optional",
             "compatibility_evidence": "UNKNOWN",
-            "compliance": "required",
+            "compliance": "optional",
             "compliance_evidence": "UNKNOWN",
         }],
     }

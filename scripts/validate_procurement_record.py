@@ -119,7 +119,7 @@ def main() -> int:
         for index, record in enumerate(records, start=1):
             errors.extend(validate_record(record, f"{path.relative_to(ROOT)}[{index}]"))
     if errors:
-        print("\\n".join(f"ERROR: {error}" for error in errors))
+        print("\n".join(f"ERROR: {error}" for error in errors))
         return 1
     print(f"PASS: {count} procurement record(s) across {len(files)} file(s) validated.")
     if not files:

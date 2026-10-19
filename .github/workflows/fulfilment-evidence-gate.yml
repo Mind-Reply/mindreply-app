@@ -30,7 +30,7 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_validate_*evidence.py' -v
       - name: Run procurement record unit tests
         run: python -m unittest discover -s tests -p 'test_validate_procurement_record.py' -v
-      - name: Validate fulfilment evidence records
+      - name: Validate fulfilment dispatch records
         run: python scripts/validate_fulfilment_evidence.py
       - name: Validate procurement records
         run: python scripts/validate_procurement_record.py

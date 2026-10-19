@@ -26,7 +26,7 @@ def base_record():
             "stock_state": "unknown",
             "unit_price": {"amount": 1000, "currency": "EUR"},
             "final_payable_total": None,
-            "compatibility": "required",
+            "compatibility": "optional",
             "compatibility_evidence": "UNKNOWN",
             "compliance": "required",
             "compliance_evidence": "UNKNOWN",

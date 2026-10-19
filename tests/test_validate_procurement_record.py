@@ -67,6 +67,7 @@ class ProcurementRecordTests(unittest.TestCase):
 
     def test_required_compatibility_must_be_verified(self):
         record = base_record()
+        record["offers"][0]["compatibility"] = "required"
         record["offers"][0]["compatibility_evidence"] = "UNKNOWN"
         self.assertTrue(any("compatibility requirement" in e for e in validator.validate_record(record)))
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-type Persona = { id: string; name: string; voice: "Female" | "Male"; role: string; style: string; greeting: string };
+type Persona = { id: string; name: string; voice: "Female" | "Male" | "Neutral"; role: string; style: string; greeting: string };
 const personas: Persona[] = [
   { id: "V01", name: "Maya", voice: "Female", role: "Front-desk lead", style: "Warm · composed", greeting: "Hello, thank you for calling. You’re speaking with Maya. How may I help you today?" },
   { id: "V02", name: "Oliver", voice: "Male", role: "Front-desk lead", style: "Clear · assured", greeting: "Good day, thank you for calling. Oliver speaking. How can I direct your enquiry?" },
@@ -80,7 +80,7 @@ export default function VoicePersonasLab() {
       </header>
       <section className="vpl-hero">
         <div><p className="vpl-kicker">2027 RELEASE TRACK · VOICE OPERATIONS</p><h1>Reception, <em>reimagined.</em></h1><p className="vpl-lead">A focused voice bench for persona selection, spoken previews and receptionist-flow rehearsal. Pick a voice identity, hear a greeting, then step through a safe simulated call.</p></div>
-        <div className="vpl-score"><span>PERSONA ROSTER</span><strong>23</strong><div><b>12</b> female-labelled <i /> <b>10</b> male-labelled <i /> <b>1</b> neutral</div><small>Voice output depends on voices installed in your browser/device.</small></div>
+        <div className="vpl-score"><span>PERSONA ROSTER</span><strong>23</strong><div><b>11</b> female-labelled <i /> <b>11</b> male-labelled <i /> <b>1</b> neutral</div><small>Voice output depends on voices installed in your browser/device.</small></div>
       </section>
       <section className="vpl-metrics"><div><span>01 / PERSONAS</span><b>23 defined</b><small>Names · roles · delivery styles</small></div><div><span>02 / SPEECH</span><b>Browser-native</b><small>Local preview only; no WaveNet connection yet</small></div><div><span>03 / CALL FLOW</span><b>Simulation</b><small>No telephony, bookings or outbound messages</small></div><div><span>04 / RELEASE GATE</span><b>Not verified</b><small>Build, provider and deployment checks remain</small></div></section>
       <section className="vpl-workspace">

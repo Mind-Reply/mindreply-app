@@ -22,7 +22,8 @@ def base_record():
             "offer_id": "offer-001",
             "supplier": "Example Supplier",
             "source_url": "https://example.com/gpu",
-            "status": "UNVERIFIED",
+            "status": "DRAFT",
+            "evidence_status": "UNVERIFIED",
             "stock_state": "unknown",
             "unit_price": {"amount": 1000, "currency": "EUR"},
             "final_payable_total": None,
@@ -36,6 +37,9 @@ def base_record():
 
 class ProcurementRecordTests(unittest.TestCase):
     def test_valid_unverified_offer_is_allowed(self):
+        offer = base_record()["offers"][0]
+        self.assertEqual(offer["status"], "DRAFT")
+        self.assertEqual(offer["evidence_status"], "UNVERIFIED")
         self.assertEqual(validator.validate_record(base_record()), [])
 
     def test_rejects_automatic_purchase_execution(self):

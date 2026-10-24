@@ -1,14 +1,15 @@
 # Syncfusion MCP setup
 
-The repository's `.mcp.json` includes configuration templates for the Syncfusion Document SDK, ASP.NET Core, and React MCP servers, while preserving the existing Supabase connection.
+The repository's `.mcp.json` preserves the existing Supabase connection and defines 14 Syncfusion MCP server entries: Angular, React, Vue, JavaScript, TypeScript, Blazor, ASP.NET Core, ASP.NET MVC, MAUI, WPF, WinForms, WinUI, UWP, and Document SDK.
 
 ## Before connecting
 
-1. Install and verify the required .NET tools for `sf-documentsdk-mcp` and `sf-aspnetcore-mcp`; verify the React package and its published version before running it.
-2. Replace every `/absolute/path/to/secure-accounting-key.txt` placeholder in your **local** MCP configuration with the real absolute path to a securely stored Syncfusion key file. Do not commit the key or a machine-specific secret path.
-3. Confirm the accounting process can write to `/var/log/accounting/mcp_audit.log`, and that the directory and log file have restrictive permissions. Adjust the path for your operating system if needed.
-4. Treat `FINANCE_DATA_ISOLATION=TRUE` as a configuration signal, not proof of isolation. Enforce and test tenant/data boundaries in the server implementation before using real financial records.
-5. Start with synthetic accounting data. Verify each server starts, the expected tools are exposed, access is appropriately restricted, and audit entries are written without credentials or sensitive financial payloads.
+1. Treat every `YOUR_ACTUAL_API_KEY_STRING` value as a placeholder. Replace it **only in your local MCP configuration** with the valid Syncfusion API key. Do not commit the real key, paste it into a pull request, or put it in a tracked file.
+2. Confirm the required runtimes and launchers are installed: Node.js/npm for the `npx` entries and a compatible .NET SDK/runtime with `dnx` available for the .NET entries. Check each package/tool's current vendor instructions before starting it.
+3. Verify all 14 servers start individually and expose the expected tools. Do not assume a configured package name is published, compatible, or successfully installed merely because it appears in JSON.
+4. Confirm the accounting process can write to `/var/log/accounting/mcp_audit.log`, and that the directory and log file have restrictive permissions. Adjust the path for your operating system if needed.
+5. Treat `FINANCE_DATA_ISOLATION=TRUE` as a configuration signal, not proof of isolation. Enforce and test tenant/data boundaries in the server implementation before using real financial records.
+6. Start with synthetic data. Verify access boundaries and audit entries, and ensure logs do not contain credentials or sensitive financial payloads.
 
 ## Financial controls
 
@@ -16,4 +17,4 @@ Do not use this configuration alone as proof of revenue or profit. Profit report
 
 ## Current status
 
-This is a repository configuration change only. The GitHub-hosted configuration cannot resolve a developer's local key-file path, install tools on their machine, or establish that any MCP server is connected. Validate locally after replacing the placeholders.
+This is a repository configuration change only. GitHub cannot resolve a developer's local API key, install runtimes on their machine, or establish that any MCP server is connected. The key string in the committed configuration is a placeholder, not a credential. Validate locally after replacing placeholders.

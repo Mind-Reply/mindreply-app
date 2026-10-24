@@ -78,6 +78,7 @@ export default function DashboardPage() {
           <div className={styles.runtime}><i /> Source connected <b>main</b></div>
           <a href="/api/health">Health endpoint →</a>
           <a href="/operator">Operator Match →</a>
+          <a href="/supply-chain">Supply Chain Finance →</a>
         </div>
       </aside>
 

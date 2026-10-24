@@ -99,8 +99,7 @@ export default function SupplyChainPage() {
           <span className={styles.brandMark}>MR</span>
           <span><strong>MindReply</strong><small>OPERATIONS DESK</small></span>
         </a>
-        <p className={styles.navLabel}>FINANCE & OPERATIONS</p>
-        <nav className={styles.nav} aria-label="Supply chain sections">
+                <nav className={styles.nav} aria-label="Supply chain sections">
           {([
             ["overview", "Overview", "01"],
             ["finance", "Financing options", "02"],
@@ -120,8 +119,8 @@ export default function SupplyChainPage() {
 
       <section className={styles.main}>
         <header className={styles.header}>
-          <div><p className={styles.eyebrow}>SUPPLY CHAIN FINANCE / CONTROL ROOM</p><h1>Cash clarity. Supply resilience.</h1><p className={styles.subtitle}>One working view across working capital, supplier financing, risk and invoice approvals.</p></div>
-          <div className={styles.headerTag}><span /> DEMO INPUTS <small>editable</small></div>
+          <div><h1>Cash clarity. Supply resilience.</h1><p className={styles.subtitle}>One working view across working capital, supplier financing, risk and invoice approvals.</p></div>
+          
         </header>
 
         <section className={styles.notice} role="note">
@@ -138,7 +137,7 @@ export default function SupplyChainPage() {
               <article className={styles.metricCard}><span>Payables estimate</span><strong>{money(metrics.payablesValue)}</strong><p>Based on credit purchases ÷ 365 × DPO</p></article>
             </section>
             <section className={styles.panel}>
-              <div className={styles.panelHeading}><div><p className={styles.eyebrow}>01 / WORKING CAPITAL</p><h2>Adjust the operating assumptions</h2></div><span className={styles.localBadge}>Calculated in this page</span></div>
+              <div className={styles.panelHeading}><div><h2>Adjust the operating assumptions</h2></div></div>
               <div className={styles.inputGrid}>
                 {numberInput(dio, setDio, "Days inventory outstanding")}
                 {numberInput(dso, setDso, "Days sales outstanding")}
@@ -151,11 +150,11 @@ export default function SupplyChainPage() {
             </section>
             <section className={styles.twoColumn}>
               <article className={styles.panel}>
-                <div className={styles.panelHeading}><div><p className={styles.eyebrow}>02 / FINANCING</p><h2>Compare the route</h2></div><button className={styles.textButton} onClick={() => setActiveTab("finance")}>Review options →</button></div>
+                <div className={styles.panelHeading}><div><h2>Compare the route</h2></div><button className={styles.textButton} onClick={() => setActiveTab("finance")}>Review options →</button></div>
                 <div className={styles.optionList}>{financeOptions.map((option) => <button key={option.name} onClick={() => { setSelected(option.name); setActiveTab("finance"); }} className={styles.optionRow}><span>{option.name}</span><small>View trade-offs</small><b>→</b></button>)}</div>
               </article>
               <article className={styles.panel}>
-                <div className={styles.panelHeading}><div><p className={styles.eyebrow}>03 / RISK</p><h2>Control the exposure</h2></div><button className={styles.textButton} onClick={() => setActiveTab("risk")}>Open risk register →</button></div>
+                <div className={styles.panelHeading}><div><h2>Control the exposure</h2></div><button className={styles.textButton} onClick={() => setActiveTab("risk")}>Open risk register →</button></div>
                 <p className={styles.bodyCopy}>Track supplier concentration, delivery volatility, financial distress and invoice mismatches with a named owner and an actionable trigger.</p>
                 <div className={styles.controlSummary}><strong>4</strong><span>risk patterns to assess</span><strong>5</strong><span>invoice approval checks</span></div>
               </article>
@@ -165,7 +164,7 @@ export default function SupplyChainPage() {
 
         {activeTab === "finance" && (
           <section className={styles.panel}>
-            <div className={styles.panelHeading}><div><p className={styles.eyebrow}>FINANCING DECISION</p><h2>Compare mechanisms before selecting one</h2></div></div>
+            <div className={styles.panelHeading}><div><h2>Compare mechanisms before selecting one</h2></div></div>
             <div className={styles.financeGrid}>{financeOptions.map((option) => <button key={option.name} className={selected === option.name ? styles.financeCardActive : styles.financeCard} onClick={() => setSelected(option.name)}><span className={styles.selection}>{selected === option.name ? "SELECTED FOR REVIEW" : "COMPARE OPTION"}</span><h3>{option.name}</h3><p>{option.mechanism}</p><div><small>Potential benefit</small><p>{option.benefit}</p></div><div><small>Check before proceeding</small><p>{option.watch}</p></div></button>)}</div>
             <div className={styles.notice}><strong>Before commitment</strong><span>Obtain the provider's written terms, calculate total effective cost, check recourse and accounting implications, and confirm supplier consent and delegated approval. Selecting an option here does not initiate financing.</span></div>
           </section>
@@ -181,7 +180,7 @@ export default function SupplyChainPage() {
 
         {activeTab === "controls" && (
           <section className={styles.panel}>
-            <div className={styles.panelHeading}><div><p className={styles.eyebrow}>INVOICE CONTROL</p><h2>Confirm before approval</h2><p className={styles.bodyCopy}>Use this checklist to structure review. Checking a box is local to this page and does not approve an invoice or update a finance system.</p></div><div className={styles.progress}><strong>{checkedCount}/5</strong><small>checks marked</small></div></div>
+            <div className={styles.panelHeading}><div><h2>Confirm before approval</h2><p className={styles.bodyCopy}>Use this checklist to structure review. Checking a box is local to this page and does not approve an invoice or update a finance system.</p></div><div className={styles.progress}><strong>{checkedCount}/5</strong><small>checks marked</small></div></div>
             <div className={styles.checkList}>{checkLabels.map((label, index) => <label key={label} className={styles.checkRow}><input type="checkbox" checked={invoiceChecks[index]} onChange={(event) => setInvoiceChecks((current) => current.map((checked, i) => i === index ? event.target.checked : checked))} /><span><strong>{label}</strong><small>Checklist item {String(index + 1).padStart(2, "0")}</small></span><i>{invoiceChecks[index] ? "MARKED" : "PENDING"}</i></label>)}</div>
             <div className={styles.notice}><strong>Approval boundary</strong><span>Only an authorized approver in the official workflow can approve the invoice. Payment confirmation must distinguish instructed, processed, settled and reconciled states.</span></div>
           </section>

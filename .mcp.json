@@ -3,6 +3,32 @@
     "supabase": {
       "type": "http",
       "url": "https://mcp.supabase.com/mcp?project_ref=aziwdgndohdgnwztpwdi&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching"
+    },
+    "sf-documentsdk-mcp": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": ["tool", "run", "sf-documentsdk-mcp"],
+      "env": {
+        "Syncfusion_API_Key_Path": "/absolute/path/to/secure-accounting-key.txt",
+        "FINANCE_DATA_ISOLATION": "TRUE",
+        "AUDIT_LOG_PATH": "/var/log/accounting/mcp_audit.log"
+      }
+    },
+    "sf-aspnetcore-mcp": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": ["tool", "run", "sf-aspnetcore-mcp"],
+      "env": {
+        "Syncfusion_API_Key_Path": "/absolute/path/to/secure-accounting-key.txt"
+      }
+    },
+    "sf-react-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@syncfusion/react-mcp@latest"],
+      "env": {
+        "Syncfusion_API_Key_Path": "/absolute/path/to/secure-accounting-key.txt"
+      }
     }
   }
 }

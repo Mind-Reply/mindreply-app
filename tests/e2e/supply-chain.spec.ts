@@ -5,7 +5,7 @@ test('supply chain workspace renders working capital and financing options', asy
 
   await expect(page.getByRole('heading', { name: 'Cash clarity. Supply resilience.' })).toBeVisible();
   await expect(page.getByText('Cash conversion cycle')).toBeVisible();
-  await expect(page.getByText('47', { exact: true })).toBeVisible();
+  await expect(page.getByText(/47\s*days/)).toBeVisible();
 
   await page.getByRole('button', { name: /Financing options/ }).click();
   await expect(page.getByRole('heading', { name: 'Compare mechanisms before selecting one' })).toBeVisible();

@@ -4,22 +4,12 @@
       "type": "http",
       "url": "https://mcp.supabase.com/mcp?project_ref=aziwdgndohdgnwztpwdi&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching"
     },
-    "sf-documentsdk-mcp": {
+    "sf-angular-mcp": {
       "type": "stdio",
-      "command": "dotnet",
-      "args": ["tool", "run", "sf-documentsdk-mcp"],
+      "command": "npx",
+      "args": ["-y", "@syncfusion/angular-mcp@latest"],
       "env": {
-        "Syncfusion_API_Key_Path": "/absolute/path/to/secure-accounting-key.txt",
-        "FINANCE_DATA_ISOLATION": "TRUE",
-        "AUDIT_LOG_PATH": "/var/log/accounting/mcp_audit.log"
-      }
-    },
-    "sf-aspnetcore-mcp": {
-      "type": "stdio",
-      "command": "dotnet",
-      "args": ["tool", "run", "sf-aspnetcore-mcp"],
-      "env": {
-        "Syncfusion_API_Key_Path": "/absolute/path/to/secure-accounting-key.txt"
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING"
       }
     },
     "sf-react-mcp": {
@@ -27,7 +17,104 @@
       "command": "npx",
       "args": ["-y", "@syncfusion/react-mcp@latest"],
       "env": {
-        "Syncfusion_API_Key_Path": "/absolute/path/to/secure-accounting-key.txt"
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING"
+      }
+    },
+    "sf-vue-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@syncfusion/vue-mcp@latest"],
+      "env": {
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING"
+      }
+    },
+    "sf-javascript-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@syncfusion/javascript-mcp@latest"],
+      "env": {
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING"
+      }
+    },
+    "sf-typescript-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@syncfusion/typescript-mcp@latest"],
+      "env": {
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING"
+      }
+    },
+    "sf-blazor-mcp": {
+      "type": "stdio",
+      "command": "dnx",
+      "args": ["Syncfusion.Blazor.MCP@latest", "--yes"],
+      "env": {
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING"
+      }
+    },
+    "sf-aspnetcore-mcp": {
+      "type": "stdio",
+      "command": "dnx",
+      "args": ["Syncfusion.AspNetCore.MCP@latest", "--yes"],
+      "env": {
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING"
+      }
+    },
+    "sf-aspnetmvc-mcp": {
+      "type": "stdio",
+      "command": "dnx",
+      "args": ["Syncfusion.AspNetMvc.MCP@latest", "--yes"],
+      "env": {
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING"
+      }
+    },
+    "sf-maui-mcp": {
+      "type": "stdio",
+      "command": "dnx",
+      "args": ["Syncfusion.Maui.MCP@latest", "--yes"],
+      "env": {
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING"
+      }
+    },
+    "sf-wpf-mcp": {
+      "type": "stdio",
+      "command": "dnx",
+      "args": ["Syncfusion.WPF.MCP@latest", "--yes"],
+      "env": {
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING"
+      }
+    },
+    "sf-winforms-mcp": {
+      "type": "stdio",
+      "args": ["Syncfusion.WinForms.MCP@latest", "--yes"],
+      "env": {
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING"
+      }
+    },
+    "sf-winui-mcp": {
+      "type": "stdio",
+      "command": "dnx",
+      "args": ["Syncfusion.WinUI.MCP@latest", "--yes"],
+      "env": {
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING"
+      }
+    },
+    "sf-uwp-mcp": {
+      "type": "stdio",
+      "command": "dnx",
+      "args": ["Syncfusion.UWP.MCP@latest", "--yes"],
+      "env": {
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING"
+      }
+    },
+    "sf-documentsdk-mcp": {
+      "type": "stdio",
+      "command": "dnx",
+      "args": ["Syncfusion.DocumentSdk.MCP@latest", "--yes"],
+      "env": {
+        "Syncfusion_API_Key": "YOUR_ACTUAL_API_KEY_STRING",
+        "FINANCE_DATA_ISOLATION": "TRUE",
+        "AUDIT_LOG_PATH": "/var/log/accounting/mcp_audit.log"
       }
     }
   }

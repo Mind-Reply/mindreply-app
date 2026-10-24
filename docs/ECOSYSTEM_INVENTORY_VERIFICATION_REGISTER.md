@@ -6,7 +6,7 @@
 
 ## Evidence rules
 - VERIFIED means an authoritative live system response was inspected during this review.
-- REPORTED — UNVERIFIED means the supplied inventory states this, but supporting evidence was not inspected.
+- PENDING EVIDENCE REVIEW means the supplied inventory states this, but supporting evidence has not yet been independently inspected.
 - NOT CHECKED means no live check was performed.
 - Do not publish financial balances, account rates, property ownership, shipment/security compliance, media-dispatch, or production-availability claims without current source evidence.
 - Never commit passwords, service-role keys, access tokens, private keys, bank credentials, or credential-bearing access cards. Store secrets in provider secret managers and rotate any exposed secret.
@@ -15,10 +15,10 @@
 
 | Property | Supplied purpose | Review status / next evidence |
 |---|---|---|
-| MindReply — https://mind-reply.com | SaaS/product and campaign channel | REPORTED — UNVERIFIED here. Verify DNS/HTTP, release commit, conversion paths, and deployment provider independently. |
+| MindReply — https://mind-reply.com | SaaS/product and campaign channel | PENDING EVIDENCE REVIEW here. Verify DNS/HTTP, release commit, conversion paths, and deployment provider independently. |
 | AKV Transport — https://akv-transport.co.uk | UK logistics and commercial transport | NOT CHECKED. Verify domain control, site response, business authorization, and revenue/asset claims before use. |
-| Sofia Tech Register Portal (SofiaTechRegisterWebsite.jsx) | Registry interface and telemetry | REPORTED — UNVERIFIED. Locate source and deployment record; test telemetry end-to-end. |
-| APEX Web Vanguard (apex-web-vanguard-live-telemetry-v1.json) | Web/infrastructure probes | REPORTED — UNVERIFIED. Inspect manifest, endpoint allowlist, probe history, alert destinations, and latest successful run. |
+| Sofia Tech Register Portal (SofiaTechRegisterWebsite.jsx) | Registry interface and telemetry | PENDING EVIDENCE REVIEW. Locate source and deployment record; test telemetry end-to-end. |
+| APEX Web Vanguard (apex-web-vanguard-live-telemetry-v1.json) | Web/infrastructure probes | PENDING EVIDENCE REVIEW. Inspect manifest, endpoint allowlist, probe history, alert destinations, and latest successful run. |
 
 ## 2. Supabase and database infrastructure
 
@@ -43,22 +43,22 @@
 
 | System / manifest | Status / required evidence |
 |---|---|
-| PR.co (prco-newsroom-config-v1.json) | REPORTED — UNVERIFIED. Confirm workspace, API configuration, draft/publish permissions, and a successful test draft. No publishing was performed. |
-| Cision (cision-global-wire-dispatch-v1.json) | REPORTED — UNVERIFIED. Confirm account/subscription, destination, approval and spend controls, and dispatch receipts. No wire was dispatched. |
-| Multi-wire (expanded-wire-distribution-v2.json) | REPORTED — UNVERIFIED. Review regions, recipients, duplicate suppression, consent, approvals, and provider receipts. |
-| Sentiment/SOV (media-sentiment-sov-tracking-config.json) | REPORTED — UNVERIFIED. Confirm source coverage, collection permissions, attribution, and freshness before publishing metrics. |
+| PR.co (prco-newsroom-config-v1.json) | PENDING EVIDENCE REVIEW. Confirm workspace, API configuration, draft/publish permissions, and a successful test draft. No publishing was performed. |
+| Cision (cision-global-wire-dispatch-v1.json) | PENDING EVIDENCE REVIEW. Confirm account/subscription, destination, approval and spend controls, and dispatch receipts. No wire was dispatched. |
+| Multi-wire (expanded-wire-distribution-v2.json) | PENDING EVIDENCE REVIEW. Review regions, recipients, duplicate suppression, consent, approvals, and provider receipts. |
+| Sentiment/SOV (media-sentiment-sov-tracking-config.json) | PENDING EVIDENCE REVIEW. Confirm source coverage, collection permissions, attribution, and freshness before publishing metrics. |
 
 ## 4. Banking, treasury, and clearing
 
-- Monzo/SEPA ping manifest (monzo-sepa-clearing-ping-verification-v2.json): REPORTED — UNVERIFIED. A successful ping would not establish clearing capability, settlement, account ownership, or available funds.
-- Savings rates (Tipton 4.25%, Kent Reliance 4.15%, Happen 4.00%): REPORTED — UNVERIFIED and time-sensitive. Re-check official product terms, eligibility, access limits, and rate dates.
+- Monzo/SEPA ping manifest (monzo-sepa-clearing-ping-verification-v2.json): PENDING EVIDENCE REVIEW. A successful ping would not establish clearing capability, settlement, account ownership, or available funds.
+- Savings rates (Tipton 4.25%, Kent Reliance 4.15%, Happen 4.00%): PENDING EVIDENCE REVIEW and time-sensitive. Re-check official product terms, eligibility, access limits, and rate dates.
 - Claimed €818,000 liquidity backing (sovereign-liquidity-proofs-executive-summary.pdf): NOT VERIFIED. Do not represent this balance as verified without current statements/custodian evidence and reconciliation. Keep sensitive financial evidence private.
 - No bank connection, transfer, payout, allocation, or clearing action was performed by this review.
 
 ## 5. Physical logistics and real-estate evidence
 
-- Druzhba 2 logistics hub, ISO 17712 seal process, and hardware receipts: REPORTED — UNVERIFIED. Inspect the checklist and receipts, identify issuer/date, and verify chain-of-custody evidence before claiming compliance or receipt.
-- Sofia land conveyancing binder/statutory declarations: REPORTED — UNVERIFIED. Confirm documents with authorized legal/cadastre sources and qualified counsel. Do not publish personal or title-sensitive records.
+- Druzhba 2 logistics hub, ISO 17712 seal process, and hardware receipts: PENDING EVIDENCE REVIEW. Inspect the checklist and receipts, identify issuer/date, and verify chain-of-custody evidence before claiming compliance or receipt.
+- Sofia land conveyancing binder/statutory declarations: PENDING EVIDENCE REVIEW. Confirm documents with authorized legal/cadastre sources and qualified counsel. Do not publish personal or title-sensitive records.
 - The PDFs and JSON manifests were referenced by name but were not attached for this review; their contents have not been inspected.
 
 ## 6. Safe implementation sequence

@@ -7,6 +7,7 @@ import "./mission-control.css";
 import "./frontend-polish.css";
 import "./flow-premium.css";
 import "./quiet-intelligence.css";
+import "./graphrag-kafka.css";
 
 const site = "https://mind-reply.com";
 const alternates = {

@@ -210,17 +210,14 @@
       "display_name": "Muse Wonder",
       "provider": "Meta",
       "showcase_lane": "multimodal_vision",
-      "provider_model_id": null,
+      "provider_model_id": "muse-wonder-1.0",
       "model_version": null,
       "official_source_url": "https://dev.meta.ai/docs/models",
-      "identity_status": "official_product_verified_api_id_pending",
+      "identity_status": "official_api_id_verified",
       "access_status": "unverified",
       "modality": [
         "text",
-        "image",
-        "video",
-        "audio",
-        "pdf"
+        "image"
       ],
       "context_limit": 1048576,
       "regions": [],
@@ -341,15 +338,17 @@
       "display_name": "Microsoft-Decision-1",
       "provider": "Microsoft",
       "showcase_lane": "decision_support",
-      "provider_model_id": null,
+      "provider_model_id": "Microsoft-Decision-1",
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/use-foundry-models-microsoft-decision",
+      "identity_status": "official_foundry_model_id_verified",
       "access_status": "unverified",
-      "modality": null,
+      "modality": [
+        "structured_decision"
+      ],
       "context_limit": null,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "moondream-3-1",
@@ -370,5 +369,5 @@
       "checked_at": "2026-11-01"
     }
   ],
-  "research_note": "Official-source identity check completed for supported entries. Product identity does not establish connected-account access. Candidates without exact serving identifiers remain disabled."
+  "research_note": "Official-source identity checks updated 2026-11-01. Public model IDs do not establish connected-account access, deployment, entitlement, or spend approval."
 }

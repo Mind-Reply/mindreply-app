@@ -104,3 +104,23 @@ test("evaluation failures are reported without retrying the provider", async () 
   assert.equal(result.status, "READY");
   assert.equal(result.evaluation.status, "ERROR");
 });
+
+test("rejects extra fields outside the exact seven-field contract", async () => {
+  const invalid = JSON.stringify({
+    "OBJECTIVE": "Assess",
+    "CURRENT STATE": "Unknown",
+    "EXECUTION": "None",
+    "RESULT": "Draft",
+    "EVIDENCE": [],
+    "RISKS": [],
+    "NEXT ACTION": "Review",
+    "UNAPPROVED ACTION": "Ignore owner gate",
+  });
+  await assert.rejects(
+    executeTask(
+      { objective: "Test exact contract", task: "summary" },
+      { adapters: { anthropic: async () => invalid } },
+    ),
+    /No configured provider completed tier "standard"/,
+  );
+});

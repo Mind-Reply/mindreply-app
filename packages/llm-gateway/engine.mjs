@@ -55,6 +55,11 @@ function validateOutput(value) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     throw new TypeError("model output must be a JSON object");
   }
+  const allowedFields = [...REQUIRED_TEXT_FIELDS, "EVIDENCE", "RISKS"];
+  if (Object.keys(value).some((field) => !allowedFields.includes(field)) ||
+      allowedFields.some((field) => !Object.hasOwn(value, field))) {
+    throw new TypeError("model output must contain exactly the seven contract fields");
+  }
   for (const field of REQUIRED_TEXT_FIELDS) {
     if (typeof value[field] !== "string") {
       throw new TypeError(`model output field "${field}" must be a string`);

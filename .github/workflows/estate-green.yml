@@ -39,6 +39,8 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Install Playwright Chromium
         run: pnpm exec playwright install --with-deps chromium
+      - name: Run MindReply AI Engine core tests
+        run: node --test packages/llm-gateway/engine.test.mjs
       - name: Run tests
         run: pnpm test
         env:

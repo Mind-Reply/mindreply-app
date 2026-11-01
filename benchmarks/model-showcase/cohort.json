@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "status": "candidate_intake",
+  "status": "official_identity_research_partial",
   "as_of": "2026-11-01",
   "policy": {
     "provider_model_id_required_before_execution": true,
@@ -15,15 +15,18 @@
       "display_name": "GPT-6.1 Terra",
       "provider": "OpenAI",
       "showcase_lane": "architecture_orchestration",
-      "provider_model_id": null,
+      "provider_model_id": "gpt-6.1-terra",
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://developers.openai.com/api/docs/models",
+      "identity_status": "official_api_id_verified",
       "access_status": "unverified",
-      "modality": null,
-      "context_limit": null,
+      "modality": [
+        "text",
+        "image"
+      ],
+      "context_limit": 1050000,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "gpt-6-1-terra-pro",
@@ -45,75 +48,93 @@
       "display_name": "GPT-6 Astra",
       "provider": "OpenAI",
       "showcase_lane": "decision_support",
-      "provider_model_id": null,
+      "provider_model_id": "gpt-6-astra",
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://developers.openai.com/api/docs/models",
+      "identity_status": "official_api_id_verified",
       "access_status": "unverified",
-      "modality": null,
-      "context_limit": null,
+      "modality": [
+        "text",
+        "image"
+      ],
+      "context_limit": 1050000,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "claude-opus-5-5",
       "display_name": "Claude Opus 5.5",
       "provider": "Anthropic",
       "showcase_lane": "architecture_orchestration",
-      "provider_model_id": null,
+      "provider_model_id": "claude-opus-5-5",
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://platform.claude.com/docs/en/models/overview",
+      "identity_status": "official_api_id_verified",
       "access_status": "unverified",
-      "modality": null,
-      "context_limit": null,
+      "modality": [
+        "text",
+        "image"
+      ],
+      "context_limit": 1000000,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "claude-sonnet-5-5",
       "display_name": "Claude Sonnet 5.5",
       "provider": "Anthropic",
       "showcase_lane": "code_quality",
-      "provider_model_id": null,
+      "provider_model_id": "claude-sonnet-5-5",
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
+      "identity_status": "official_api_id_verified",
       "access_status": "unverified",
-      "modality": null,
-      "context_limit": null,
+      "modality": [
+        "text",
+        "image"
+      ],
+      "context_limit": 1000000,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "claude-haiku-5-5",
       "display_name": "Claude Haiku 5.5",
       "provider": "Anthropic",
       "showcase_lane": "classification_extraction",
-      "provider_model_id": null,
+      "provider_model_id": "claude-haiku-5-5",
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://platform.claude.com/docs/en/models/overview",
+      "identity_status": "official_api_id_verified",
       "access_status": "unverified",
-      "modality": null,
-      "context_limit": null,
+      "modality": [
+        "text",
+        "image"
+      ],
+      "context_limit": 1000000,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "gemini-4-argon",
       "display_name": "Gemini 4 Argon",
       "provider": "Google DeepMind",
       "showcase_lane": "research_synthesis",
-      "provider_model_id": null,
+      "provider_model_id": "gemini-4-argon",
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://ai.google.dev/gemini-api/docs/models/gemini-4-argon",
+      "identity_status": "official_api_id_verified",
       "access_status": "unverified",
-      "modality": null,
-      "context_limit": null,
+      "modality": [
+        "text",
+        "image",
+        "video",
+        "audio",
+        "pdf"
+      ],
+      "context_limit": 1048576,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "embeddinggemma-2",
@@ -150,15 +171,18 @@
       "display_name": "DeepSeek V4.1 Flash",
       "provider": "DeepSeek",
       "showcase_lane": "code_quality_open_weight",
-      "provider_model_id": null,
-      "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "provider_model_id": "deepseek-flash",
+      "model_version": "DeepSeek-V4.1-Flash-1017",
+      "official_source_url": "https://api-docs.deepseek.com/updates/",
+      "identity_status": "official_api_alias_verified",
       "access_status": "unverified",
-      "modality": null,
+      "modality": [
+        "text",
+        "image"
+      ],
       "context_limit": null,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "kimi-k3-1-pro",
@@ -182,13 +206,19 @@
       "showcase_lane": "multimodal_vision",
       "provider_model_id": null,
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://dev.meta.ai/docs/models",
+      "identity_status": "official_product_verified_api_id_pending",
       "access_status": "unverified",
-      "modality": null,
-      "context_limit": null,
+      "modality": [
+        "text",
+        "image",
+        "video",
+        "audio",
+        "pdf"
+      ],
+      "context_limit": 1048576,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "muse-spark-open",
@@ -197,13 +227,18 @@
       "showcase_lane": "open_weight_deployment",
       "provider_model_id": null,
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://dev.meta.ai/docs/muse-spark-open",
+      "identity_status": "official_open_weights_verified_hosted_route_pending",
       "access_status": "unverified",
-      "modality": null,
-      "context_limit": null,
+      "modality": [
+        "text",
+        "image",
+        "video",
+        "audio"
+      ],
+      "context_limit": 1048576,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "llama-4-maverick",
@@ -212,13 +247,16 @@
       "showcase_lane": "open_weight_deployment",
       "provider_model_id": null,
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://ai.meta.com/resources/models-and-libraries/llama-downloads/",
+      "identity_status": "official_weights_verified_serving_id_pending",
       "access_status": "unverified",
-      "modality": null,
+      "modality": [
+        "text",
+        "image"
+      ],
       "context_limit": null,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "llama-4-scout",
@@ -227,28 +265,35 @@
       "showcase_lane": "open_weight_deployment",
       "provider_model_id": null,
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://ai.meta.com/resources/models-and-libraries/llama-downloads/",
+      "identity_status": "official_weights_verified_serving_id_pending",
       "access_status": "unverified",
-      "modality": null,
-      "context_limit": null,
+      "modality": [
+        "text",
+        "image"
+      ],
+      "context_limit": 10000000,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "nemotron-3-5-super-vl",
       "display_name": "Nemotron 3.5 Super VL",
       "provider": "NVIDIA",
       "showcase_lane": "multimodal_vision",
-      "provider_model_id": null,
+      "provider_model_id": "nvidia/nemotron-3.5-super-vl-120b-a12b",
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://build.nvidia.com/nvidia/nemotron-3.5-super-vl-120b-a12b/modelcard",
+      "identity_status": "official_hosted_model_id_verified",
       "access_status": "unverified",
-      "modality": null,
-      "context_limit": null,
+      "modality": [
+        "text",
+        "image",
+        "video"
+      ],
+      "context_limit": 1000000,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "beam-1-0-501b-moe",
@@ -256,29 +301,34 @@
       "provider": "Reflection AI",
       "showcase_lane": "decision_support",
       "provider_model_id": null,
-      "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "model_version": "Beam 501B total / 23B active",
+      "official_source_url": "https://reflection.ai/beam-model-card",
+      "identity_status": "official_model_identity_verified_serving_id_pending",
       "access_status": "unverified",
-      "modality": null,
-      "context_limit": null,
+      "modality": [
+        "text"
+      ],
+      "context_limit": 1000000,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "mistral-large-4",
       "display_name": "Mistral Large 4",
       "provider": "Mistral AI",
       "showcase_lane": "code_quality_open_weight",
-      "provider_model_id": null,
+      "provider_model_id": "mistral-large-4",
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://docs.mistral.ai/api/endpoint/responses",
+      "identity_status": "official_api_id_verified",
       "access_status": "unverified",
-      "modality": null,
-      "context_limit": null,
+      "modality": [
+        "text",
+        "image"
+      ],
+      "context_limit": 1000000,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "microsoft-decision-1",
@@ -300,15 +350,19 @@
       "display_name": "Moondream 3.1",
       "provider": "Moondream",
       "showcase_lane": "multimodal_vision",
-      "provider_model_id": null,
+      "provider_model_id": "moondream3.1-9B-A2B",
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://docs.moondream.ai/api/",
+      "identity_status": "official_api_id_verified",
       "access_status": "unverified",
-      "modality": null,
+      "modality": [
+        "image",
+        "text"
+      ],
       "context_limit": null,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     }
-  ]
+  ],
+  "research_note": "Official-source identity check completed for supported entries. Product identity does not establish connected-account access. Candidates without exact serving identifiers remain disabled."
 }

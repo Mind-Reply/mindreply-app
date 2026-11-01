@@ -1,6 +1,5 @@
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-import path from "node:path";
 
 const configPath = fileURLToPath(new URL("./model-tiering.json", import.meta.url));
 const config = JSON.parse(await readFile(configPath, "utf8"));
@@ -153,6 +152,7 @@ export async function executeTask(task, options = {}) {
     const adapter = adapters[model.provider];
     if (typeof adapter !== "function") continue;
 
+    let output;
     try {
       const raw = await adapter({
         model: model.id,
@@ -160,27 +160,7 @@ export async function executeTask(task, options = {}) {
         responseFormat: "json",
         taskId: task.id ?? null,
       });
-      const output = parseModelOutput(raw);
-      const route = { tier: tierName, provider: model.provider, model: model.id };
-      const evaluation = typeof evaluate === "function"
-        ? await evaluate({ task, output, route })
-        : { status: "NOT_CONFIGURED" };
-
-      const result = {
-        status: "READY",
-        objective: task.objective,
-        route,
-        output,
-        evaluation,
-        evidence: {
-          source: "model_response",
-          provider: model.provider,
-          model: model.id,
-          independentlyVerified: false,
-        },
-      };
-      await onEvent?.({ type: "task_completed", taskId: task.id ?? null, route, evaluation });
-      return result;
+      output = parseModelOutput(raw);
     } catch (error) {
       failures.push({ provider: model.provider, model: model.id, message: error.message });
       await onEvent?.({
@@ -190,7 +170,34 @@ export async function executeTask(task, options = {}) {
         model: model.id,
         message: error.message,
       });
+      continue;
     }
+
+    const route = { tier: tierName, provider: model.provider, model: model.id };
+    let evaluation = { status: "NOT_CONFIGURED" };
+    if (typeof evaluate === "function") {
+      try {
+        evaluation = await evaluate({ task, output, route });
+      } catch (error) {
+        evaluation = { status: "ERROR", message: error.message };
+      }
+    }
+
+    const result = {
+      status: "READY",
+      objective: task.objective,
+      route,
+      output,
+      evaluation,
+      evidence: {
+        source: "model_response",
+        provider: model.provider,
+        model: model.id,
+        independentlyVerified: false,
+      },
+    };
+    await onEvent?.({ type: "task_completed", taskId: task.id ?? null, route, evaluation });
+    return result;
   }
 
   throw new Error(

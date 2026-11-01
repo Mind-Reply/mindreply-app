@@ -87,3 +87,20 @@ test("rejects malformed model output rather than returning unstructured text", a
     /No configured provider completed tier "standard"/,
   );
 });
+
+test("evaluation failures are reported without retrying the provider", async () => {
+  let providerCalls = 0;
+  const result = await executeTask(
+    { objective: "Test evaluation isolation", task: "summary" },
+    {
+      adapters: {
+        anthropic: async () => { providerCalls += 1; return validOutput; },
+        openai: async () => { providerCalls += 1; return validOutput; },
+      },
+      evaluate: async () => { throw new Error("evaluation unavailable"); },
+    },
+  );
+  assert.equal(providerCalls, 1);
+  assert.equal(result.status, "READY");
+  assert.equal(result.evaluation.status, "ERROR");
+});

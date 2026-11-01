@@ -1,6 +1,6 @@
 # MindReply Model Engineering Showcase
 
-Status: READY FOR IMPLEMENTATION / candidate intake only. No provider connection, API call, paid run, production permission, or leaderboard rank is implied.
+Status: candidate intake and offline harness. No provider connection, paid run, production permission, or leaderboard rank is implied.
 
 ## Purpose
 
@@ -17,7 +17,7 @@ Compare candidate model routes on the same versioned, synthetic engineering and 
 
 ## Cohort
 
-See `cohort.json`. All provider model IDs are intentionally null until checked against official provider documentation and the connected account. Candidate names are not executable identifiers.
+See `cohort.json`. It contains 20 candidate entries. Exact identifiers are populated only where an official provider source established a model or serving identifier. Other candidates remain explicitly marked as identity or serving-route pending. **Connected-account access is unverified for every candidate.** Candidate names are not executable identifiers unless `provider_model_id` is populated and the account route is separately approved.
 
 ## Fixed case set
 
@@ -58,10 +58,17 @@ Latency and measured cost are displayed separately and used as operational decis
 
 ## Validation
 
-Use `python benchmarks/model-showcase/validate_results.py path/to/results.jsonl` to validate a JSONL result file. The validator checks required fields and basic value ranges; it does not verify provider claims, evidence contents, model identity, or score correctness.
+Run the structure and cohort tests with:
+
+```bash
+python -m unittest discover -s benchmarks/model-showcase -p 'test_*.py' -v
+python benchmarks/model-showcase/validate_results.py path/to/results.jsonl
+```
+
+The validator checks result-file structure and basic value ranges; it does not verify provider claims, evidence contents, model identity, or score correctness.
 
 ## Storage and integrations
 
-- GitHub: versioned fixtures, adapter PRs, run manifests, reviewer notes and CI evidence.
-- Supabase MindR: proposed future persistence only. Existing `a11_*` tables are agent/research orchestration, not a dedicated benchmark schema. A separate migration and RLS review must be proposed and reviewed before any database write.
+- GitHub: versioned fixtures, adapters, CI, run manifests, reviewer notes and evidence.
+- Supabase MindR: proposed future persistence only. Existing `a11_*` tables are agent/research orchestration, not a dedicated benchmark schema. A separate migration and RLS review must be approved before any database write.
 - Stripe: reconcile collected/settled revenue, refunds, disputes and fees attributable to a workflow when evaluating commercial contribution. Stripe is not the source of model API usage cost.

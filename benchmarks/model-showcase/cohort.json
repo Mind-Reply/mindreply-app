@@ -141,10 +141,10 @@
       "display_name": "EmbeddingGemma 2",
       "provider": "Google DeepMind",
       "showcase_lane": "embeddings_retrieval",
-      "provider_model_id": null,
+      "provider_model_id": "google/embeddinggemma-2",
       "model_version": null,
       "official_source_url": "https://ai.google.dev/gemma/docs/embeddinggemma/model_card_2",
-      "identity_status": "official_model_identity_verified_serving_route_pending",
+      "identity_status": "official_model_repository_id_verified_self_hosted_route_pending",
       "access_status": "unverified",
       "modality": [
         "text",
@@ -153,7 +153,7 @@
         "video",
         "audio"
       ],
-      "context_limit": null,
+      "context_limit": 8192,
       "regions": [],
       "checked_at": "2026-11-01"
     },
@@ -162,15 +162,19 @@
       "display_name": "Qwen 3.8 Max",
       "provider": "Alibaba",
       "showcase_lane": "code_quality_open_weight",
-      "provider_model_id": null,
+      "provider_model_id": "qwen3.8-max",
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://www.alibabacloud.com/help/en/model-studio/text-generation-model",
+      "identity_status": "official_api_model_id_verified",
       "access_status": "unverified",
-      "modality": null,
-      "context_limit": null,
+      "modality": [
+        "text",
+        "image",
+        "video"
+      ],
+      "context_limit": 1000000,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "deepseek-v4-1-flash",
@@ -197,13 +201,13 @@
       "showcase_lane": "research_synthesis",
       "provider_model_id": null,
       "model_version": null,
-      "official_source_url": null,
-      "identity_status": "unverified",
+      "official_source_url": "https://www.alibabacloud.com/help/en/model-studio/text-generation-model",
+      "identity_status": "submitted_name_not_confirmed_official_catalogue_lists_kimi-k3",
       "access_status": "unverified",
       "modality": null,
       "context_limit": null,
       "regions": [],
-      "checked_at": null
+      "checked_at": "2026-11-01"
     },
     {
       "candidate_id": "muse-wonder",
@@ -369,5 +373,5 @@
       "checked_at": "2026-11-01"
     }
   ],
-  "research_note": "Official-source identity checks updated 1 November 2026. Public model IDs do not establish connected-account access, deployment, entitlement, or spend approval."
+  "research_note": "Qwen 3.8 Max API identifier verified as qwen3.8-max. EmbeddingGemma 2 repository ID verified as google/embeddinggemma-2; this is a downloadable model identifier, not a hosted Google API endpoint. The submitted Kimi K3.1 Pro label was not confirmed; Alibaba's official catalogue lists kimi-k3, which must not be silently treated as the same version or tier. Provider account access remains unverified."
 }

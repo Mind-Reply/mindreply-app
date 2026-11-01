@@ -1,0 +1,30 @@
+name: Model Showcase Validation
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/model-showcase/**"
+      - ".github/workflows/model-showcase-validation.yml"
+  push:
+    branches: [main]
+    paths:
+      - "benchmarks/model-showcase/**"
+      - ".github/workflows/model-showcase-validation.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-showcase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate cohort and fixtures
+        run: python -m unittest discover -s benchmarks/model-showcase -p 'test_*.py' -v
+      - name: Validate JSONL case syntax
+        run: python -c "import json; from pathlib import Path; [json.loads(line) for line in Path('benchmarks/model-showcase/cases.jsonl').read_text().splitlines() if line.strip()]"

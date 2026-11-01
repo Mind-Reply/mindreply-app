@@ -29,6 +29,16 @@ These are role definitions, not appointments or claims of staffed teams.
 
 A lead may coordinate multiple specialist agents or human contributors. A role name must never be presented as a named or employed person unless separately evidenced.
 
+## Authority alignment with the existing A11 hierarchy
+
+This department is a functional operating layer, not a second command hierarchy. The existing private A11 hierarchy remains authoritative: `a11_ceo_private` is the sole decision owner and final arbiter. Existing specialist roles are reused rather than duplicated:
+- `a11_research_analyst` — research intake, source evaluation and evidence notes.
+- `a11_implementation_engineer` — code, repository work, pull requests and implementation.
+- `a11_security_network_architect` — security, network and secret-handling review.
+- `a11_fulfillment_orchestrator` — routing and execution of small reversible work items.
+
+The department lead titles above describe accountability areas; they do not automatically create new named agents, grant permissions or establish staffed teams. Any additional agent requires an explicit registry/configuration change, a narrow permission contract, evaluation cases, a runtime owner and evidence of successful execution. The owner hierarchy and its approval boundaries remain unchanged.
+
 ## Research operating model
 
 Research is a first-class engineering activity, not an informal prelude. Every research assignment follows:

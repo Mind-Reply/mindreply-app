@@ -150,13 +150,42 @@ async function projectRefund(event: Stripe.Event) {
     refunded?: boolean;
   };
   if (!raw.id) return;
-  const amount = raw.amount_refunded ?? raw.amount ?? 0;
+
+  const isAggregateChargeEvent = event.type === "charge.refunded";
+  const amount = isAggregateChargeEvent
+    ? raw.amount_refunded ?? 0
+    : raw.amount ?? 0;
   const paymentIntentId = objectId(raw.payment_intent);
   const chargeId = objectId(raw.charge);
 
+  // Refund objects describe one refund attempt. They may still be pending or
+  // fail, and they do not prove the aggregate amount refunded on the charge.
+  // Only charge.refunded carries the aggregate charge totals used to update
+  // customer-facing order/payment state.
+  const aggregateRefundStatus =
+    isAggregateChargeEvent &&
+    typeof raw.amount === "number" &&
+    typeof raw.amount_refunded === "number" &&
+    raw.amount_refunded > 0
+      ? raw.amount_refunded >= raw.amount
+        ? "refunded"
+        : "partially_refunded"
+      : null;
+
+  const adjustmentStatus = isAggregateChargeEvent
+    ? aggregateRefundStatus ?? (raw.refunded ? "refunded" : "recorded")
+    : raw.status ?? (event.type === "refund.failed" ? "failed" : "recorded");
+
   await prisma.stripeAdjustment.upsert({
     where: { stripeObjectId: event.id },
-    update: { paymentIntentId, stripeChargeId: chargeId, amount, currency: raw.currency ?? null, status: raw.status ?? (raw.refunded ? "refunded" : "recorded"), livemode: event.livemode },
+    update: {
+      paymentIntentId,
+      stripeChargeId: chargeId,
+      amount,
+      currency: raw.currency ?? null,
+      status: adjustmentStatus,
+      livemode: event.livemode,
+    },
     create: {
       stripeObjectId: event.id,
       kind: "refund",
@@ -164,39 +193,37 @@ async function projectRefund(event: Stripe.Event) {
       stripeChargeId: chargeId,
       amount,
       currency: raw.currency ?? null,
-      status: raw.status ?? (raw.refunded ? "refunded" : "recorded"),
+      status: adjustmentStatus,
       livemode: event.livemode,
     },
   });
 
-  if (paymentIntentId) {
-    const iinOrder = await prisma.iINOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
-    if (iinOrder) {
-      await prisma.iINOrder.update({
-        where: { id: iinOrder.id },
-        data: {
-          paymentStatus: iinOrder.paymentStatus === "refunded" || raw.refunded
-            ? "refunded"
-            : "partially_refunded",
-        },
-      });
-    }
-    const order = await prisma.oneTimeOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
-    if (order) {
-      await prisma.oneTimeOrder.update({
-        where: { id: order.id },
-        data: {
-          paymentStatus: order.paymentStatus === "refunded" || raw.refunded
-            ? "refunded"
-            : "partially_refunded",
-        },
-      });
-    }
-    await prisma.payment.updateMany({
-      where: { stripePaymentIntentId: paymentIntentId },
-      data: { status: raw.refunded ? "refunded" : "partially_refunded" },
+  if (!paymentIntentId || !aggregateRefundStatus) return;
+
+  const iinOrder = await prisma.iINOrder.findFirst({
+    where: { stripePaymentIntentId: paymentIntentId },
+  });
+  if (iinOrder) {
+    await prisma.iINOrder.update({
+      where: { id: iinOrder.id },
+      data: { paymentStatus: aggregateRefundStatus },
     });
   }
+
+  const order = await prisma.oneTimeOrder.findFirst({
+    where: { stripePaymentIntentId: paymentIntentId },
+  });
+  if (order) {
+    await prisma.oneTimeOrder.update({
+      where: { id: order.id },
+      data: { paymentStatus: aggregateRefundStatus },
+    });
+  }
+
+  await prisma.payment.updateMany({
+    where: { stripePaymentIntentId: paymentIntentId },
+    data: { status: aggregateRefundStatus },
+  });
 }
 
 async function projectDispute(event: Stripe.Event) {
@@ -441,8 +468,10 @@ export async function handleStripeEvent(event: Stripe.Event) {
       }
 
       case "charge.refunded":
+      case "charge.refund.updated":
       case "refund.created":
-      case "refund.updated": {
+      case "refund.updated":
+      case "refund.failed": {
         await projectRefund(event);
         break;
       }

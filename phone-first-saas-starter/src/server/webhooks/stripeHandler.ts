@@ -29,6 +29,58 @@ function mapSubscriptionStatus(status: string): SubscriptionStatus | null {
   }
 }
 
+async function projectIINCheckout(event: Stripe.Event, session: Stripe.Checkout.Session, forcedStatus?: "failed") {
+  const metadata = session.metadata ?? {};
+  const organizationId = metadata.organization_id;
+  const clerkId = metadata.clerk_id;
+  const offerKey = metadata.offer_key;
+  const department = metadata.department;
+  const productId = metadata.product_id;
+  const priceId = metadata.price_id;
+  const quantity = Number(metadata.quantity ?? "1");
+
+  if (!organizationId || !clerkId || !offerKey || !department || !productId || !priceId) return;
+  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 100) return;
+  if (session.mode !== "payment" || event.livemode) return;
+
+  const incomingStatus = forcedStatus ?? (session.payment_status === "paid" ? "paid" : "pending");
+  const existing = await prisma.iINOrder.findUnique({
+    where: { stripeCheckoutSessionId: session.id },
+  });
+  const safeStatus = existing?.paymentStatus === "paid" && incomingStatus !== "paid"
+    ? "paid"
+    : incomingStatus;
+
+  await prisma.iINOrder.upsert({
+    where: { stripeCheckoutSessionId: session.id },
+    update: {
+      stripePaymentIntentId: objectId(session.payment_intent),
+      stripeCustomerId: objectId(session.customer),
+      amountTotal: session.amount_total ?? existing?.amountTotal ?? 0,
+      currency: session.currency ?? existing?.currency ?? "usd",
+      paymentStatus: safeStatus,
+      ...(safeStatus === "paid" ? { paidAt: existing?.paidAt ?? new Date(event.created * 1000) } : {}),
+    },
+    create: {
+      stripeCheckoutSessionId: session.id,
+      stripePaymentIntentId: objectId(session.payment_intent),
+      stripeCustomerId: objectId(session.customer),
+      organizationId,
+      clerkId,
+      offerKey,
+      department,
+      productId,
+      priceId,
+      quantity,
+      amountTotal: session.amount_total ?? 0,
+      currency: session.currency ?? "usd",
+      paymentStatus: incomingStatus,
+      livemode: event.livemode,
+      paidAt: incomingStatus === "paid" ? new Date(event.created * 1000) : null,
+    },
+  });
+}
+
 async function projectInvoice(event: Stripe.Event) {
   const raw = event.data.object as unknown as {
     id: string;
@@ -118,6 +170,20 @@ async function projectRefund(event: Stripe.Event) {
   });
 
   if (paymentIntentId) {
+    const iinOrder = await prisma.iINOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
+    if (iinOrder) {
+      await prisma.iINOrder.update({
+        where: { id: iinOrder.id },
+        data: { paymentStatus: raw.refunded ? "refunded" : "partially_refunded" },
+      });
+    }
+    const iinOrder = await prisma.iINOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
+    if (iinOrder) {
+      await prisma.iINOrder.update({
+        where: { id: iinOrder.id },
+        data: { paymentStatus: "disputed" },
+      });
+    }
     const order = await prisma.oneTimeOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
     if (order) {
       await prisma.oneTimeOrder.update({
@@ -212,7 +278,8 @@ export async function handleStripeEvent(event: Stripe.Event) {
   try {
     switch (event.type) {
       case "checkout.session.completed":
-      case "checkout.session.async_payment_succeeded": {
+      case "checkout.session.async_payment_succeeded":
+      case "checkout.session.async_payment_failed": {
         const s = event.data.object as Stripe.Checkout.Session;
         if (s.metadata?.package_key === WEBSITE_COMPLETION_PACKAGE) {
           if (s.payment_status === "paid" && s.mode === "payment" && s.currency === "gbp" && s.amount_total === 60_000 && !event.livemode) {
@@ -243,6 +310,17 @@ export async function handleStripeEvent(event: Stripe.Event) {
           }
           break;
         }
+
+        if (s.mode === "payment" && s.metadata?.offer_key) {
+          await projectIINCheckout(
+            event,
+            s,
+            event.type === "checkout.session.async_payment_failed" ? "failed" : undefined,
+          );
+          break;
+        }
+
+        if (event.type === "checkout.session.async_payment_failed") break;
 
         const clerkId = s.metadata?.clerkId ?? s.metadata?.clerk_id;
         const organizationId = s.metadata?.organizationId ?? s.metadata?.organization_id;
@@ -303,6 +381,10 @@ export async function handleStripeEvent(event: Stripe.Event) {
         await prisma.payment.updateMany({
           where: { stripePaymentIntentId: paymentIntent.id },
           data: { status: paymentIntent.status },
+        });
+        await prisma.iINOrder.updateMany({
+          where: { stripePaymentIntentId: paymentIntent.id },
+          data: { paymentStatus: paymentIntent.status },
         });
         break;
       }

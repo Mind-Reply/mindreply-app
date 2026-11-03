@@ -23,7 +23,13 @@ export async function POST(request: Request) {
     }
 
     const subscription = await prisma.subscription.findUnique({ where: { organizationId: body.organizationId } });
-    if (!subscription?.stripeCustomerId) {
+    const priorOrder = await prisma.iINOrder.findFirst({
+      where: { organizationId: body.organizationId, stripeCustomerId: { not: null } },
+      orderBy: { createdAt: "desc" },
+      select: { stripeCustomerId: true },
+    });
+    const stripeCustomerId = subscription?.stripeCustomerId ?? priorOrder?.stripeCustomerId;
+    if (!stripeCustomerId) {
       return NextResponse.json({ error: "The organization has no linked Stripe customer." }, { status: 409 });
     }
 
@@ -47,7 +53,7 @@ export async function POST(request: Request) {
 
     const stripe = getStripe();
     const invoice = await stripe.invoices.create({
-      customer: subscription.stripeCustomerId,
+      customer: stripeCustomerId,
       collection_method: "send_invoice",
       days_until_due: 30,
       auto_advance: false,
@@ -64,7 +70,7 @@ export async function POST(request: Request) {
         const offer = offers[index];
         const item = selected[index];
         await stripe.invoiceItems.create({
-          customer: subscription.stripeCustomerId,
+          customer: stripeCustomerId,
           invoice: invoice.id,
           price: offer.price.id,
           quantity: item.quantity,

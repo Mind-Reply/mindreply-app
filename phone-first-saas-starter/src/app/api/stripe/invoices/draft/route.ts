@@ -14,6 +14,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Billing administrator permission is required." }, { status: 403 });
     }
 
+    const idempotencyKey = request.headers.get("idempotency-key") ?? "";
+    if (!/^[A-Za-z0-9_-]{16,80}$/.test(idempotencyKey)) {
+      return NextResponse.json({ error: "A valid Idempotency-Key header is required." }, { status: 400 });
+    }
+
     const body = (await request.json().catch(() => ({}))) as {
       organizationId?: unknown;
       items?: unknown;
@@ -63,6 +68,8 @@ export async function POST(request: Request) {
         created_by_clerk_id: clerkId,
         workflow: "owner_review_draft",
       },
+    }, {
+      idempotencyKey: `iin-invoice-draft-${clerkId}-${idempotencyKey}`,
     });
 
     try {
@@ -80,6 +87,8 @@ export async function POST(request: Request) {
             organization_id: body.organizationId,
             billing_environment: "test",
           },
+        }, {
+          idempotencyKey: `iin-invoice-line-${clerkId}-${idempotencyKey}-${index}`,
         });
       }
     } catch (error) {

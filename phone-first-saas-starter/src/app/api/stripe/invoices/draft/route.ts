@@ -55,6 +55,10 @@ export async function POST(request: Request) {
     if (offers.some((offer) => offer.mode !== "payment")) {
       return NextResponse.json({ error: "Draft invoices can only use one-time service offers." }, { status: 400 });
     }
+    const invoiceCurrencies = new Set(offers.map((offer) => offer.price.currency));
+    if (invoiceCurrencies.size !== 1) {
+      return NextResponse.json({ error: "All draft invoice items must use the same currency." }, { status: 400 });
+    }
 
     const stripe = getStripe();
     const invoice = await stripe.invoices.create({

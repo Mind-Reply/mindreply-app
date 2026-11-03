@@ -5,6 +5,147 @@ import { claimIdempotency, saveIdempotencyResult } from "@/db/idempotency";
 
 const WEBSITE_COMPLETION_PACKAGE = "website_completion_gbp_600";
 
+function objectId(value: unknown): string | null {
+  if (typeof value === "string") return value;
+  if (value && typeof value === "object" && "id" in value && typeof value.id === "string") return value.id;
+  return null;
+}
+
+function unixDate(value: unknown): Date | null {
+  return typeof value === "number" && Number.isFinite(value) && value > 0 ? new Date(value * 1000) : null;
+}
+
+async function projectInvoice(event: Stripe.Event) {
+  const raw = event.data.object as unknown as {
+    id: string;
+    customer?: unknown;
+    subscription?: unknown;
+    status?: string | null;
+    amount_due?: number;
+    amount_paid?: number;
+    currency?: string;
+    due_date?: number | null;
+    status_transitions?: { paid_at?: number | null };
+    hosted_invoice_url?: string | null;
+    invoice_pdf?: string | null;
+  };
+  if (!raw.id) return;
+
+  const fallbackStatus =
+    event.type === "invoice.paid" || event.type === "invoice.payment_succeeded"
+      ? "paid"
+      : event.type === "invoice.voided"
+        ? "void"
+        : event.type === "invoice.marked_uncollectible"
+          ? "uncollectible"
+          : "open";
+
+  await prisma.stripeInvoice.upsert({
+    where: { stripeInvoiceId: raw.id },
+    update: {
+      stripeCustomerId: objectId(raw.customer),
+      stripeSubscriptionId: objectId(raw.subscription),
+      status: raw.status ?? fallbackStatus,
+      amountDue: raw.amount_due ?? 0,
+      amountPaid: raw.amount_paid ?? 0,
+      currency: raw.currency ?? "usd",
+      livemode: event.livemode,
+      dueAt: unixDate(raw.due_date),
+      paidAt: unixDate(raw.status_transitions?.paid_at),
+      hostedInvoiceUrl: raw.hosted_invoice_url ?? null,
+      invoicePdf: raw.invoice_pdf ?? null,
+    },
+    create: {
+      stripeInvoiceId: raw.id,
+      stripeCustomerId: objectId(raw.customer),
+      stripeSubscriptionId: objectId(raw.subscription),
+      status: raw.status ?? fallbackStatus,
+      amountDue: raw.amount_due ?? 0,
+      amountPaid: raw.amount_paid ?? 0,
+      currency: raw.currency ?? "usd",
+      livemode: event.livemode,
+      dueAt: unixDate(raw.due_date),
+      paidAt: unixDate(raw.status_transitions?.paid_at),
+      hostedInvoiceUrl: raw.hosted_invoice_url ?? null,
+      invoicePdf: raw.invoice_pdf ?? null,
+    },
+  });
+}
+
+async function projectRefund(event: Stripe.Event) {
+  const raw = event.data.object as unknown as {
+    id: string;
+    payment_intent?: unknown;
+    charge?: unknown;
+    amount?: number;
+    amount_refunded?: number;
+    currency?: string;
+    status?: string | null;
+    refunded?: boolean;
+  };
+  if (!raw.id) return;
+  const amount = raw.amount_refunded ?? raw.amount ?? 0;
+  const paymentIntentId = objectId(raw.payment_intent);
+  const chargeId = objectId(raw.charge);
+
+  await prisma.stripeAdjustment.upsert({
+    where: { stripeObjectId: event.id },
+    update: { paymentIntentId, stripeChargeId: chargeId, amount, currency: raw.currency ?? null, status: raw.status ?? (raw.refunded ? "refunded" : "recorded"), livemode: event.livemode },
+    create: {
+      stripeObjectId: event.id,
+      kind: "refund",
+      paymentIntentId,
+      stripeChargeId: chargeId,
+      amount,
+      currency: raw.currency ?? null,
+      status: raw.status ?? (raw.refunded ? "refunded" : "recorded"),
+      livemode: event.livemode,
+    },
+  });
+
+  if (paymentIntentId) {
+    const order = await prisma.oneTimeOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
+    if (order) {
+      await prisma.oneTimeOrder.update({
+        where: { id: order.id },
+        data: { paymentStatus: raw.refunded ? "refunded" : "partially_refunded" },
+      });
+    }
+    await prisma.payment.updateMany({
+      where: { stripePaymentIntentId: paymentIntentId },
+      data: { status: raw.refunded ? "refunded" : "partially_refunded" },
+    });
+  }
+}
+
+async function projectDispute(event: Stripe.Event) {
+  const raw = event.data.object as unknown as {
+    id: string;
+    charge?: unknown;
+    payment_intent?: unknown;
+    amount?: number;
+    currency?: string;
+    status?: string;
+  };
+  if (!raw.id) return;
+  const paymentIntentId = objectId(raw.payment_intent);
+  const chargeId = objectId(raw.charge);
+  await prisma.stripeAdjustment.upsert({
+    where: { stripeObjectId: event.id },
+    update: { paymentIntentId, stripeChargeId: chargeId, amount: raw.amount ?? 0, currency: raw.currency ?? null, status: raw.status ?? event.type, livemode: event.livemode },
+    create: {
+      stripeObjectId: event.id,
+      kind: "dispute",
+      paymentIntentId,
+      stripeChargeId: chargeId,
+      amount: raw.amount ?? 0,
+      currency: raw.currency ?? null,
+      status: raw.status ?? event.type,
+      livemode: event.livemode,
+    },
+  });
+}
+
 export async function handleStripeEvent(event: Stripe.Event) {
   const claim = await claimIdempotency(event.id);
   if (!claim.claimed) return { duplicate: true };
@@ -15,8 +156,7 @@ export async function handleStripeEvent(event: Stripe.Event) {
       case "checkout.session.async_payment_succeeded": {
         const s = event.data.object as Stripe.Checkout.Session;
         if (s.metadata?.package_key === WEBSITE_COMPLETION_PACKAGE) {
-          // A completed redirect is not sufficient: only persist paid orders.
-          if (s.payment_status === "paid" && s.mode === "payment" && s.currency === "gbp" && s.amount_total === 60_000) {
+          if (s.payment_status === "paid" && s.mode === "payment" && s.currency === "gbp" && s.amount_total === 60_000 && !event.livemode) {
             await prisma.oneTimeOrder.upsert({
               where: { stripeCheckoutSessionId: s.id },
               update: {
@@ -45,17 +185,20 @@ export async function handleStripeEvent(event: Stripe.Event) {
           break;
         }
 
-        const clerkId = s.metadata?.clerkId;
-        if (clerkId && s.customer) {
+        const clerkId = s.metadata?.clerkId ?? s.metadata?.clerk_id;
+        const organizationId = s.metadata?.organizationId ?? s.metadata?.organization_id;
+        const customerId = objectId(s.customer);
+        if (clerkId && customerId) {
           const user = await prisma.user.findUnique({ where: { clerkId } });
-          if (user?.organizationId) {
+          const targetOrganizationId = organizationId ?? user?.organizationId;
+          if (targetOrganizationId) {
             await prisma.subscription.upsert({
-              where: { organizationId: user.organizationId },
-              update: { stripeCustomerId: String(s.customer) },
+              where: { organizationId: targetOrganizationId },
+              update: { stripeCustomerId: customerId },
               create: {
-                organizationId: user.organizationId,
-                stripeCustomerId: String(s.customer),
-                status: "TRIALING",
+                organizationId: targetOrganizationId,
+                stripeCustomerId: customerId,
+                status: "INCOMPLETE",
               },
             });
           }
@@ -67,8 +210,8 @@ export async function handleStripeEvent(event: Stripe.Event) {
       case "customer.subscription.updated":
       case "customer.subscription.deleted": {
         const sub = event.data.object as Stripe.Subscription;
-        const customer = String(sub.customer);
-        const existing = await prisma.subscription.findFirst({ where: { stripeCustomerId: customer } });
+        const customer = objectId(sub.customer);
+        const existing = customer ? await prisma.subscription.findFirst({ where: { stripeCustomerId: customer } }) : null;
         if (existing) {
           const item = sub.items.data[0];
           await prisma.subscription.update({
@@ -84,32 +227,44 @@ export async function handleStripeEvent(event: Stripe.Event) {
         break;
       }
 
+      case "invoice.paid":
       case "invoice.payment_succeeded":
-      case "invoice.payment_failed": {
-        // Invoice events are intentionally idempotent and retained by the event ledger.
-        // Subscription status remains authoritative for access control.
+      case "invoice.payment_failed":
+      case "invoice.finalized":
+      case "invoice.voided":
+      case "invoice.marked_uncollectible": {
+        await projectInvoice(event);
         break;
       }
 
-      case "payment_intent.succeeded": {
-        const p = event.data.object as Stripe.PaymentIntent;
-        const customer = typeof p.customer === "string" ? p.customer : null;
-        const sub = customer ? await prisma.subscription.findFirst({ where: { stripeCustomerId: customer } }) : null;
-        if (sub) {
-          await prisma.payment.upsert({
-            where: { stripePaymentIntentId: p.id },
-            update: { status: p.status, amount: p.amount, currency: p.currency },
-            create: {
-              stripePaymentIntentId: p.id,
-              organizationId: sub.organizationId,
-              status: p.status,
-              amount: p.amount,
-              currency: p.currency,
-            },
-          });
-        }
+      case "payment_intent.succeeded":
+      case "payment_intent.payment_failed": {
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+        await prisma.payment.updateMany({
+          where: { stripePaymentIntentId: paymentIntent.id },
+          data: { status: paymentIntent.status },
+        });
         break;
       }
+
+      case "charge.refunded":
+      case "refund.created":
+      case "refund.updated": {
+        await projectRefund(event);
+        break;
+      }
+
+      case "charge.dispute.created":
+      case "charge.dispute.updated":
+      case "charge.dispute.closed": {
+        await projectDispute(event);
+        break;
+      }
+
+      default:
+        // Unrecognized and non-financial event types are still durably receipted
+        // by the webhook route, then safely acknowledged here.
+        break;
     }
 
     const result = { processed: true, type: event.type };

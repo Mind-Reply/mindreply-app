@@ -10,6 +10,20 @@ jobs:
     name: verify
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ci -d ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -74,6 +88,12 @@ jobs:
           DATABASE_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
           DIRECT_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
         run: pnpm prisma:generate
+      - name: Apply billing migrations to disposable PostgreSQL
+        working-directory: phone-first-saas-starter
+        env:
+          DATABASE_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
+          DIRECT_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
+        run: pnpm prisma:migrate:deploy && pnpm exec prisma migrate status
       - name: Lint billing package
         working-directory: phone-first-saas-starter
         run: pnpm lint

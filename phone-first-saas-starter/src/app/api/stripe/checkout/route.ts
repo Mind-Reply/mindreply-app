@@ -39,8 +39,6 @@ export async function POST(request: Request) {
       cancel_url: `${baseUrl}/pricing?checkout=cancelled`,
       customer: subscription?.stripeCustomerId ?? undefined,
       metadata,
-    }, {
-      idempotencyKey: `subscription-checkout-${clerkId}-${plan}-${quantity}`,
     });
 
     return NextResponse.json({ url: session.url }, { headers: { "Cache-Control": "no-store" } });

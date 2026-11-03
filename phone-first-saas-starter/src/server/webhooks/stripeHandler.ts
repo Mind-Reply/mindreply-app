@@ -177,13 +177,6 @@ async function projectRefund(event: Stripe.Event) {
         data: { paymentStatus: raw.refunded ? "refunded" : "partially_refunded" },
       });
     }
-    const iinOrder = await prisma.iINOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
-    if (iinOrder) {
-      await prisma.iINOrder.update({
-        where: { id: iinOrder.id },
-        data: { paymentStatus: "disputed" },
-      });
-    }
     const order = await prisma.oneTimeOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
     if (order) {
       await prisma.oneTimeOrder.update({
@@ -230,6 +223,13 @@ async function projectDispute(event: Stripe.Event) {
       where: { stripePaymentIntentId: paymentIntentId },
       data: { status: "disputed" },
     });
+    const iinOrder = await prisma.iINOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
+    if (iinOrder) {
+      await prisma.iINOrder.update({
+        where: { id: iinOrder.id },
+        data: { paymentStatus: "disputed" },
+      });
+    }
     const order = await prisma.oneTimeOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
     if (order) {
       await prisma.oneTimeOrder.update({

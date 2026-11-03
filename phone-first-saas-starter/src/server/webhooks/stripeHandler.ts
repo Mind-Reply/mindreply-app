@@ -174,14 +174,22 @@ async function projectRefund(event: Stripe.Event) {
     if (iinOrder) {
       await prisma.iINOrder.update({
         where: { id: iinOrder.id },
-        data: { paymentStatus: raw.refunded ? "refunded" : "partially_refunded" },
+        data: {
+          paymentStatus: iinOrder.paymentStatus === "refunded" || raw.refunded
+            ? "refunded"
+            : "partially_refunded",
+        },
       });
     }
     const order = await prisma.oneTimeOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
     if (order) {
       await prisma.oneTimeOrder.update({
         where: { id: order.id },
-        data: { paymentStatus: raw.refunded ? "refunded" : "partially_refunded" },
+        data: {
+          paymentStatus: order.paymentStatus === "refunded" || raw.refunded
+            ? "refunded"
+            : "partially_refunded",
+        },
       });
     }
     await prisma.payment.updateMany({

@@ -128,11 +128,7 @@ describe("POST /api/stripe/invoices/draft", () => {
       expect.objectContaining({
         customer: "cus_test_123",
         invoice: "in_test_123",
-        pricing: {
-          type: "price_details",
-          price_details: { price: "price_test_research", product: "prod_test_research" },
-          unit_amount_decimal: null,
-        },
+        pricing: { price: "price_test_research" },
         quantity: 3,
         metadata: expect.objectContaining({
           offer_key: "research_service",

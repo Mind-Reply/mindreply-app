@@ -49,9 +49,17 @@ export async function createPortal() {
   const clerkId = await requireAuth();
   const user = await prisma.user.findUnique({ where: { clerkId } });
   const sub = user?.organizationId ? await prisma.subscription.findUnique({ where: { organizationId: user.organizationId } }) : null;
-  if (!sub?.stripeCustomerId) return { ok: false, error: "No Stripe customer yet" };
+  const priorOrder = user?.organizationId
+    ? await prisma.iINOrder.findFirst({
+        where: { organizationId: user.organizationId, stripeCustomerId: { not: null } },
+        orderBy: { createdAt: "desc" },
+        select: { stripeCustomerId: true },
+      })
+    : null;
+  const stripeCustomerId = sub?.stripeCustomerId ?? priorOrder?.stripeCustomerId;
+  if (!stripeCustomerId) return { ok: false, error: "No Stripe customer yet" };
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
   if (!baseUrl) return { ok: false, error: "NEXT_PUBLIC_APP_URL is not configured." };
-  const session = await getStripe().billingPortal.sessions.create({ customer: sub.stripeCustomerId, return_url: `${baseUrl}/settings` });
+  const session = await getStripe().billingPortal.sessions.create({ customer: stripeCustomerId, return_url: `${baseUrl}/settings` });
   return { ok: true, url: session.url };
 }

@@ -88,3 +88,33 @@ CREATE TABLE "StripeAdjustment" (
 CREATE UNIQUE INDEX "StripeAdjustment_stripeObjectId_key" ON "StripeAdjustment"("stripeObjectId");
 CREATE INDEX "StripeAdjustment_paymentIntentId_createdAt_idx" ON "StripeAdjustment"("paymentIntentId", "createdAt");
 CREATE INDEX "StripeAdjustment_kind_createdAt_idx" ON "StripeAdjustment"("kind", "createdAt");
+
+
+CREATE TABLE "IINOrder" (
+  "id" TEXT NOT NULL,
+  "stripeCheckoutSessionId" TEXT NOT NULL,
+  "stripePaymentIntentId" TEXT,
+  "stripeCustomerId" TEXT,
+  "organizationId" TEXT NOT NULL,
+  "clerkId" TEXT NOT NULL,
+  "offerKey" TEXT NOT NULL,
+  "department" TEXT NOT NULL,
+  "productId" TEXT NOT NULL,
+  "priceId" TEXT NOT NULL,
+  "quantity" INTEGER NOT NULL,
+  "amountTotal" INTEGER NOT NULL,
+  "currency" TEXT NOT NULL,
+  "paymentStatus" TEXT NOT NULL,
+  "livemode" BOOLEAN NOT NULL,
+  "paidAt" TIMESTAMP(3),
+  "metadata" JSONB,
+  "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP(3) NOT NULL,
+  CONSTRAINT "IINOrder_pkey" PRIMARY KEY ("id")
+);
+CREATE UNIQUE INDEX "IINOrder_stripeCheckoutSessionId_key" ON "IINOrder"("stripeCheckoutSessionId");
+CREATE UNIQUE INDEX "IINOrder_stripePaymentIntentId_key" ON "IINOrder"("stripePaymentIntentId");
+CREATE INDEX "IINOrder_organizationId_createdAt_idx" ON "IINOrder"("organizationId", "createdAt");
+CREATE INDEX "IINOrder_department_createdAt_idx" ON "IINOrder"("department", "createdAt");
+CREATE INDEX "IINOrder_paymentStatus_createdAt_idx" ON "IINOrder"("paymentStatus", "createdAt");
+CREATE INDEX "IINOrder_livemode_createdAt_idx" ON "IINOrder"("livemode", "createdAt");

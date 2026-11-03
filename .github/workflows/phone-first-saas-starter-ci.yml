@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+      - feat/a11k-stripe-network-billing
     paths:
       - "phone-first-saas-starter/**"
       - ".github/workflows/phone-first-saas-starter-ci.yml"

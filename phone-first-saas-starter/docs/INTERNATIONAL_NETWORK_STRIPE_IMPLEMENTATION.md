@@ -60,7 +60,9 @@ Configure on the correct deployed sandbox endpoint after deployment identity is 
 - Subscription: `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`.
 - Invoice: `invoice.paid`, `invoice.payment_failed`, `invoice.finalized`, `invoice.voided`, `invoice.marked_uncollectible`.
 - Payment: `payment_intent.succeeded`, `payment_intent.payment_failed`.
-- Refund: `charge.refunded`, `refund.created`, `refund.updated`.
+- Refund: `charge.refunded`, `charge.refund.updated`, `refund.created`, `refund.updated`, `refund.failed`.
+
+Refund-object events are retained as adjustment evidence but do not change an order's aggregate payment status while a refund may still be pending or failed. Only the aggregate `charge.refunded` event updates order/payment refund state, using `amount_refunded` against the original charge amount.
 - Dispute: `charge.dispute.created`, `charge.dispute.updated`, `charge.dispute.closed`.
 - Payout: `payout.created`, `payout.updated`, `payout.paid`, `payout.failed`, `payout.canceled`.
 - Meter administration: `billing.meter.created`, `billing.meter.updated`, `billing.meter.deactivated`, `billing.meter.reactivated`.

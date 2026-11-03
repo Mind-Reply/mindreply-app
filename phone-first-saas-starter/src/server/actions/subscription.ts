@@ -11,6 +11,14 @@ export async function createCheckout(input?: unknown) {
   if (!parsed.success) return { ok: false, error: parsed.error.flatten() };
   const synced = await syncCurrentUser();
   const existing = synced.organizationId ? await prisma.subscription.findUnique({ where: { organizationId: synced.organizationId } }) : null;
+  const priorOrder = synced.organizationId
+    ? await prisma.iINOrder.findFirst({
+        where: { organizationId: synced.organizationId, stripeCustomerId: { not: null } },
+        orderBy: { createdAt: "desc" },
+        select: { stripeCustomerId: true },
+      })
+    : null;
+  const stripeCustomerId = existing?.stripeCustomerId ?? priorOrder?.stripeCustomerId;
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
   if (!baseUrl) return { ok: false, error: "NEXT_PUBLIC_APP_URL is not configured." };
 
@@ -35,7 +43,7 @@ export async function createCheckout(input?: unknown) {
       },
       success_url: `${baseUrl}/dashboard?checkout=success`,
       cancel_url: `${baseUrl}/pricing?checkout=cancelled`,
-      customer: existing?.stripeCustomerId ?? undefined,
+      customer: stripeCustomerId ?? undefined,
       metadata,
     });
     return session.url ? { ok: true, url: session.url } : { ok: false, error: "Stripe did not return a Checkout URL." };

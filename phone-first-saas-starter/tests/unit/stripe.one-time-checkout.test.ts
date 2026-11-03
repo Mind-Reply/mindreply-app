@@ -14,6 +14,7 @@ const validPrice = {
   id: "price_website_completion",
   active: true,
   type: "one_time",
+  livemode: false,
   currency: "gbp",
   unit_amount: 60_000,
 };
@@ -54,6 +55,15 @@ describe("POST /api/stripe/one-time-checkout", () => {
 
     expect(response.status).toBe(503);
     expect(pricesRetrieve).not.toHaveBeenCalled();
+  });
+
+  it("rejects a live-mode Price even when all other fields match", async () => {
+    pricesRetrieve.mockResolvedValue({ ...validPrice, livemode: true });
+
+    const response = await POST(request({ email: "buyer@example.com" }));
+
+    expect(response.status).toBe(503);
+    expect(sessionsCreate).not.toHaveBeenCalled();
   });
 
   it("refuses an inactive or incorrectly priced Stripe Price", async () => {

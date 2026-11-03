@@ -12,6 +12,9 @@ const PLAN_PRICE_ENV: Record<MindReplyPlan, string> = {
 export function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error("STRIPE_SECRET_KEY is required at runtime");
+  if (!key.startsWith("sk_test_") && !key.startsWith("rk_test_")) {
+    throw new Error("STRIPE_TEST_KEY_REQUIRED: this billing package is sandbox-only.");
+  }
   return new Stripe(key);
 }
 

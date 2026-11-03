@@ -8,6 +8,8 @@ const mocks = vi.hoisted(() => ({
   getStripe: vi.fn(),
   invoiceCreate: vi.fn(),
   invoiceItemCreate: vi.fn(),
+  invoiceRetrieve: vi.fn(),
+  stripeInvoiceUpsert: vi.fn(),
   resolveIINOffer: vi.fn(),
 }));
 
@@ -17,6 +19,7 @@ vi.mock("@/lib/prisma", () => ({
     user: { findUnique: mocks.userFindUnique },
     subscription: { findUnique: mocks.subscriptionFindUnique },
     iINOrder: { findFirst: mocks.iinOrderFindFirst },
+    stripeInvoice: { upsert: mocks.stripeInvoiceUpsert },
   },
 }));
 vi.mock("@/lib/stripe", () => ({ getStripe: mocks.getStripe }));
@@ -51,8 +54,21 @@ describe("POST /api/stripe/invoices/draft", () => {
     });
     mocks.invoiceCreate.mockResolvedValue({ id: "in_test_123", status: "draft" });
     mocks.invoiceItemCreate.mockResolvedValue({ id: "ii_test_123" });
+    mocks.invoiceRetrieve.mockResolvedValue({
+      id: "in_test_123",
+      status: "draft",
+      amount_due: 15_000,
+      amount_paid: 0,
+      total: 15_000,
+      currency: "eur",
+      due_date: null,
+      status_transitions: { paid_at: null },
+      hosted_invoice_url: null,
+      invoice_pdf: null,
+    });
+    mocks.stripeInvoiceUpsert.mockResolvedValue({});
     mocks.getStripe.mockReturnValue({
-      invoices: { create: mocks.invoiceCreate },
+      invoices: { create: mocks.invoiceCreate, retrieve: mocks.invoiceRetrieve },
       invoiceItems: { create: mocks.invoiceItemCreate },
     });
   });
@@ -89,6 +105,8 @@ describe("POST /api/stripe/invoices/draft", () => {
     expect(await response.json()).toEqual({
       invoiceId: "in_test_123",
       status: "draft",
+      amountDue: 15_000,
+      currency: "eur",
       finalized: false,
       sent: false,
       paymentCollectionStarted: false,
@@ -123,6 +141,21 @@ describe("POST /api/stripe/invoices/draft", () => {
       }),
       { idempotencyKey: "iin-invoice-line-clerk_admin_1-invoice_req_12345678-0" },
     );
+    expect(mocks.stripeInvoiceUpsert).toHaveBeenCalledWith(expect.objectContaining({
+      where: { stripeInvoiceId: "in_test_123" },
+      create: expect.objectContaining({
+        stripeCustomerId: "cus_test_123",
+        status: "draft",
+        amountDue: 15_000,
+        amountPaid: 0,
+        currency: "eur",
+        livemode: false,
+        metadata: expect.objectContaining({
+          workflow: "owner_review_draft",
+          organization_id: "org_123",
+        }),
+      }),
+    }));
     // The route intentionally stops after creating the draft and its line items.
     expect(mocks.invoiceCreate).toHaveBeenCalledTimes(1);
     expect(mocks.invoiceItemCreate).toHaveBeenCalledTimes(1);

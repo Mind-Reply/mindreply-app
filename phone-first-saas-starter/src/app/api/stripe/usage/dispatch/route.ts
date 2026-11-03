@@ -26,6 +26,21 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Limit must be an integer between 1 and 25." }, { status: 400 });
     }
 
+    // Recover abandoned dispatch claims as uncertain outcomes. A worker may
+    // have reached Stripe before losing its DB connection, so these rows are
+    // never blindly submitted again.
+    const staleSubmissionBefore = new Date(Date.now() - 5 * 60 * 1000);
+    await prisma.usageMeterEvent.updateMany({
+      where: {
+        status: "SUBMITTING",
+        updatedAt: { lt: staleSubmissionBefore },
+      },
+      data: {
+        status: "SUBMISSION_UNKNOWN",
+        lastError: "StaleDispatchClaimRequiresReconciliation",
+      },
+    });
+
     const pending = await prisma.usageMeterEvent.findMany({
       where: {
         status: "RECORDED_PENDING_METER",

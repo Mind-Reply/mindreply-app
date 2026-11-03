@@ -29,7 +29,7 @@ function mapSubscriptionStatus(status: string): SubscriptionStatus | null {
   }
 }
 
-async function projectIINCheckout(event: Stripe.Event, session: Stripe.Checkout.Session, forcedStatus?: "failed") {
+async function projectIINCheckout(event: Stripe.Event, session: Stripe.Checkout.Session, forcedStatus?: "failed" | "expired") {
   const metadata = session.metadata ?? {};
   const organizationId = metadata.organization_id;
   const clerkId = metadata.clerk_id;
@@ -219,22 +219,25 @@ async function projectDispute(event: Stripe.Event) {
   });
 
   if (paymentIntentId) {
+    const outcome = event.type === "charge.dispute.closed"
+      ? raw.status === "won" ? "dispute_won" : raw.status === "lost" ? "dispute_lost" : "dispute_closed"
+      : "disputed";
     await prisma.payment.updateMany({
       where: { stripePaymentIntentId: paymentIntentId },
-      data: { status: "disputed" },
+      data: { status: outcome },
     });
     const iinOrder = await prisma.iINOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
     if (iinOrder) {
       await prisma.iINOrder.update({
         where: { id: iinOrder.id },
-        data: { paymentStatus: "disputed" },
+        data: { paymentStatus: outcome },
       });
     }
     const order = await prisma.oneTimeOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
     if (order) {
       await prisma.oneTimeOrder.update({
         where: { id: order.id },
-        data: { paymentStatus: "disputed" },
+        data: { paymentStatus: outcome },
       });
     }
   }
@@ -279,7 +282,8 @@ export async function handleStripeEvent(event: Stripe.Event) {
     switch (event.type) {
       case "checkout.session.completed":
       case "checkout.session.async_payment_succeeded":
-      case "checkout.session.async_payment_failed": {
+      case "checkout.session.async_payment_failed":
+      case "checkout.session.expired": {
         const s = event.data.object as Stripe.Checkout.Session;
         if (s.metadata?.package_key === WEBSITE_COMPLETION_PACKAGE) {
           if (s.payment_status === "paid" && s.mode === "payment" && s.currency === "gbp" && s.amount_total === 60_000 && !event.livemode) {
@@ -315,12 +319,16 @@ export async function handleStripeEvent(event: Stripe.Event) {
           await projectIINCheckout(
             event,
             s,
-            event.type === "checkout.session.async_payment_failed" ? "failed" : undefined,
+            event.type === "checkout.session.async_payment_failed"
+              ? "failed"
+              : event.type === "checkout.session.expired"
+                ? "expired"
+                : undefined,
           );
           break;
         }
 
-        if (event.type === "checkout.session.async_payment_failed") break;
+        if (event.type === "checkout.session.async_payment_failed" || event.type === "checkout.session.expired") break;
 
         const clerkId = s.metadata?.clerkId ?? s.metadata?.clerk_id;
         const organizationId = s.metadata?.organizationId ?? s.metadata?.organization_id;

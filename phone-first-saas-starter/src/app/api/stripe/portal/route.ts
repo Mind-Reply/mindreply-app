@@ -12,7 +12,15 @@ export async function POST() {
     const subscription = user?.organizationId
       ? await prisma.subscription.findUnique({ where: { organizationId: user.organizationId } })
       : null;
-    if (!subscription?.stripeCustomerId) {
+    const priorOrder = user?.organizationId
+      ? await prisma.iINOrder.findFirst({
+          where: { organizationId: user.organizationId, stripeCustomerId: { not: null } },
+          orderBy: { createdAt: "desc" },
+          select: { stripeCustomerId: true },
+        })
+      : null;
+    const stripeCustomerId = subscription?.stripeCustomerId ?? priorOrder?.stripeCustomerId;
+    if (!stripeCustomerId) {
       return NextResponse.json({ error: "No Stripe customer is linked to this organization." }, { status: 409 });
     }
 
@@ -20,7 +28,7 @@ export async function POST() {
     if (!returnUrl) return NextResponse.json({ error: "Billing portal is not configured." }, { status: 503 });
 
     const session = await getStripe().billingPortal.sessions.create({
-      customer: subscription.stripeCustomerId,
+      customer: stripeCustomerId,
       return_url: `${returnUrl}/settings`,
     });
     return NextResponse.json({ url: session.url }, { headers: { "Cache-Control": "no-store" } });

@@ -80,12 +80,7 @@ export async function POST(request: Request) {
           customer: stripeCustomerId,
           invoice: invoice.id,
           pricing: {
-            type: "price_details",
-            price_details: {
-              price: offer.price.id,
-              product: offer.product.id,
-            },
-            unit_amount_decimal: null,
+            price: offer.price.id,
           },
           quantity: item.quantity,
           metadata: {

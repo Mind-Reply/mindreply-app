@@ -30,6 +30,9 @@ CREATE TABLE "UsageMeterEvent" (
   "unit" TEXT NOT NULL,
   "stripeCustomerId" TEXT,
   "stripeMeterName" TEXT,
+  "stripeMeterEventIdentifier" TEXT,
+  "submittedAt" TIMESTAMP(3),
+  "lastError" TEXT,
   "status" TEXT NOT NULL DEFAULT 'RECORDED_PENDING_METER',
   "occurredAt" TIMESTAMP(3) NOT NULL,
   "metadata" JSONB,
@@ -38,6 +41,7 @@ CREATE TABLE "UsageMeterEvent" (
   CONSTRAINT "UsageMeterEvent_pkey" PRIMARY KEY ("id")
 );
 CREATE UNIQUE INDEX "UsageMeterEvent_idempotencyKey_key" ON "UsageMeterEvent"("idempotencyKey");
+CREATE UNIQUE INDEX "UsageMeterEvent_stripeMeterEventIdentifier_key" ON "UsageMeterEvent"("stripeMeterEventIdentifier");
 CREATE INDEX "UsageMeterEvent_organizationId_createdAt_idx" ON "UsageMeterEvent"("organizationId", "createdAt");
 CREATE INDEX "UsageMeterEvent_status_createdAt_idx" ON "UsageMeterEvent"("status", "createdAt");
 CREATE INDEX "UsageMeterEvent_department_workloadType_occurredAt_idx" ON "UsageMeterEvent"("department", "workloadType", "occurredAt");

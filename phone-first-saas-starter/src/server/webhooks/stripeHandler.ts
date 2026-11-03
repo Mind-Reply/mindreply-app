@@ -15,6 +15,20 @@ function unixDate(value: unknown): Date | null {
   return typeof value === "number" && Number.isFinite(value) && value > 0 ? new Date(value * 1000) : null;
 }
 
+function mapSubscriptionStatus(status: string): SubscriptionStatus | null {
+  switch (status) {
+    case "incomplete": return "INCOMPLETE";
+    case "trialing": return "TRIALING";
+    case "active": return "ACTIVE";
+    case "past_due": return "PAST_DUE";
+    case "canceled":
+    case "incomplete_expired": return "CANCELED";
+    case "unpaid": return "UNPAID";
+    case "paused": return "PAUSED";
+    default: return null;
+  }
+}
+
 async function projectInvoice(event: Stripe.Event) {
   const raw = event.data.object as unknown as {
     id: string;
@@ -144,6 +158,20 @@ async function projectDispute(event: Stripe.Event) {
       livemode: event.livemode,
     },
   });
+
+  if (paymentIntentId) {
+    await prisma.payment.updateMany({
+      where: { stripePaymentIntentId: paymentIntentId },
+      data: { status: "disputed" },
+    });
+    const order = await prisma.oneTimeOrder.findFirst({ where: { stripePaymentIntentId: paymentIntentId } });
+    if (order) {
+      await prisma.oneTimeOrder.update({
+        where: { id: order.id },
+        data: { paymentStatus: "disputed" },
+      });
+    }
+  }
 }
 
 async function projectPayout(event: Stripe.Event) {
@@ -245,11 +273,12 @@ export async function handleStripeEvent(event: Stripe.Event) {
         const existing = customer ? await prisma.subscription.findFirst({ where: { stripeCustomerId: customer } }) : null;
         if (existing) {
           const item = sub.items.data[0];
+          const mappedStatus = mapSubscriptionStatus(sub.status);
           await prisma.subscription.update({
             where: { id: existing.id },
             data: {
               stripeSubscriptionId: sub.id,
-              status: sub.status.toUpperCase() as SubscriptionStatus,
+              ...(mappedStatus ? { status: mappedStatus } : {}),
               priceId: item?.price.id,
               currentPeriodEnd: item?.current_period_end ? new Date(item.current_period_end * 1000) : null,
             },

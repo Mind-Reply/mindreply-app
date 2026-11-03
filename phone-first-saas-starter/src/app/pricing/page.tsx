@@ -18,7 +18,7 @@ export default function Pricing() {
     setBusyPlan(plan);
     setError(null);
     try {
-      const result = await createCheckout({ plan });
+      const result = await createCheckout({ plan, idempotencyKey: crypto.randomUUID() });
       if (result.ok && result.url) {
         window.location.assign(result.url);
         return;

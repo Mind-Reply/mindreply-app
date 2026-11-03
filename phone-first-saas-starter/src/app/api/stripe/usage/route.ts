@@ -59,8 +59,14 @@ export async function POST(request: Request) {
     if (typeof body.workloadType !== "string" || !workloads.has(body.workloadType)) {
       return NextResponse.json({ error: "Unknown billable workload type." }, { status: 400 });
     }
-    if (typeof body.quantity !== "number" || !Number.isFinite(body.quantity) || body.quantity <= 0 || body.quantity > 1_000_000_000) {
-      return NextResponse.json({ error: "Quantity must be a positive finite number within the supported range." }, { status: 400 });
+    if (
+      typeof body.quantity !== "number" ||
+      !Number.isFinite(body.quantity) ||
+      body.quantity <= 0 ||
+      body.quantity > 1_000_000_000 ||
+      Number(body.quantity.toFixed(8)) !== body.quantity
+    ) {
+      return NextResponse.json({ error: "Quantity must be positive, finite, within range, and use at most 8 decimal places." }, { status: 400 });
     }
     if (typeof body.unit !== "string" || !/^[a-zA-Z][a-zA-Z0-9_-]{0,31}$/.test(body.unit)) {
       return NextResponse.json({ error: "Invalid usage unit." }, { status: 400 });

@@ -45,6 +45,7 @@ function request(body = '{"id":"evt_test_123"}') {
 describe("POST /api/webhooks/stripe", () => {
   beforeEach(() => {
     vi.resetAllMocks();
+    mocks.order.length = 0;
     vi.stubEnv("STRIPE_WEBHOOK_SECRET", "whsec_test_secret");
     mocks.getStripe.mockReturnValue({ webhooks: { constructEvent: mocks.constructEvent } });
     mocks.constructEvent.mockReturnValue(testEvent);

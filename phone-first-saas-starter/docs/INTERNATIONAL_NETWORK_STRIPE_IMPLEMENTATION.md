@@ -56,7 +56,7 @@ The event receipt stores event ID, type, object ID, environment and processing s
 
 Configure on the correct deployed sandbox endpoint after deployment identity is confirmed:
 
-- Checkout: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`.
+- Checkout: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`; IIN orders remain pending until paid, and expiry/failure is recorded.
 - Subscription: `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`.
 - Invoice: `invoice.paid`, `invoice.payment_failed`, `invoice.finalized`, `invoice.voided`, `invoice.marked_uncollectible`.
 - Payment: `payment_intent.succeeded`, `payment_intent.payment_failed`.
@@ -95,6 +95,7 @@ No API key or webhook secret is committed. Live-mode credentials are rejected by
 The Prisma schema and migration add:
 - durable Stripe event receipts;
 - department/workload usage ledger records;
+- organization-linked IIN order ledger (Checkout Session, payment intent, offer, department, quantity, amount, currency, payment state and environment);
 - invoice projections;
 - refund, dispute and payout adjustment projections.
 

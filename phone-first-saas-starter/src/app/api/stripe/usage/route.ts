@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAuth, syncCurrentUser } from "@/lib/clerk";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
@@ -80,7 +81,7 @@ export async function POST(request: Request) {
 
     const idempotencyKey = `${user.organizationId}:${key}`;
     const metadata = body.metadata && typeof body.metadata === "object" && !Array.isArray(body.metadata)
-      ? body.metadata as object
+      ? body.metadata as Prisma.InputJsonValue
       : undefined;
     if (metadata && JSON.stringify(metadata).length > 2048) {
       return NextResponse.json({ error: "Usage metadata exceeds the 2 KB limit." }, { status: 400 });

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/clerk";
 import { prisma } from "@/lib/prisma";
 import { getStripe } from "@/lib/stripe";
-import { isIINOfferKey, resolveIINOffer } from "@/server/stripe/catalog";
+import { isIINOfferKey, resolveIINOffer, type IINOfferKey } from "@/server/stripe/catalog";
 
 export const runtime = "nodejs";
 
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "The organization has no linked Stripe customer." }, { status: 409 });
     }
 
-    const selected: Array<{ offerKey: string; quantity: number }> = [];
+    const selected: Array<{ offerKey: IINOfferKey; quantity: number }> = [];
     for (const item of body.items) {
       if (!item || typeof item !== "object" || !("offerKey" in item) || !("quantity" in item)) {
         return NextResponse.json({ error: "Invalid invoice item." }, { status: 400 });
@@ -79,7 +79,14 @@ export async function POST(request: Request) {
         await stripe.invoiceItems.create({
           customer: stripeCustomerId,
           invoice: invoice.id,
-          price: offer.price.id,
+          pricing: {
+            type: "price_details",
+            price_details: {
+              price: offer.price.id,
+              product: offer.product.id,
+            },
+            unit_amount_decimal: null,
+          },
           quantity: item.quantity,
           metadata: {
             offer_key: offer.key,

@@ -8,6 +8,10 @@ export const runtime = "nodejs";
 export async function POST(request: Request) {
   try {
     const clerkId = await requireAuth();
+    const idempotencyKey = request.headers.get("idempotency-key") ?? "";
+    if (!/^[A-Za-z0-9_-]{16,80}$/.test(idempotencyKey)) {
+      return NextResponse.json({ error: "A valid Idempotency-Key header is required." }, { status: 400 });
+    }
     const body = (await request.json().catch(() => ({}))) as { plan?: unknown; quantity?: unknown };
     const plan = body.plan === "sovereign" || body.plan === "enterprise" ? body.plan : "operator";
     const configuredPriceId = stripePriceId(plan);
@@ -49,6 +53,8 @@ export async function POST(request: Request) {
       cancel_url: `${baseUrl}/pricing?checkout=cancelled`,
       customer: stripeCustomerId ?? undefined,
       metadata,
+    }, {
+      idempotencyKey: `subscription-checkout-api-${clerkId}-${idempotencyKey}`,
     });
 
     return NextResponse.json({ url: session.url }, { headers: { "Cache-Control": "no-store" } });

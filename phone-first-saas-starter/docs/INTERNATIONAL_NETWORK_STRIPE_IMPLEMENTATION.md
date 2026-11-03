@@ -105,7 +105,7 @@ The existing MindR schema was inspected read-only; no Supabase DDL/DML, RLS poli
 
 ## Migration and tests
 
-The Prisma schema and migration add:
+The isolated starter database has an explicit Prisma baseline in `prisma/migrations/0001_init/migration.sql`; it creates the core organization, user, project, subscription, payment, audit and idempotency tables. The separate website-completion migration adds `OneTimeOrder`. The IIN migration adds:
 - durable Stripe event receipts;
 - department/workload usage ledger records;
 - organization-linked IIN order ledger (Checkout Session, payment intent, offer, department, quantity, amount, currency, payment state and environment);
@@ -115,8 +115,12 @@ The Prisma schema and migration add:
 Migration file:
 `prisma/migrations/20261103100000_add_stripe_event_usage_ledger/migration.sql`
 
+Estate verification runs the migrations only against a disposable PostgreSQL service, then runs Prisma migration-drift comparison against the schema. This is isolated CI evidence; it is not a migration against MindR or any production database.
+
 Tests added:
-- Checkout allowlist, idempotency, quantity validation and missing-price behavior.
+- Stripe client test-key enforcement.
+- Subscription and IIN Checkout allowlists, idempotency, sandbox Price validation and quantity validation.
+- Owner-only draft invoice creation, Stripe Price attachment and local invoice-ledger projection.
 - Webhook signature verification, durable-first persistence, sandbox-only rejection, duplicate handling and retryable failures.
 
 **Not yet evidenced:** Prisma migration applied to an isolated database, Prisma Client generation, TypeScript/lint/build/test results, sandbox event delivery through the deployed route, Checkout completion, customer portal, draft invoice creation, meter submission or reconciliation. No Stripe Product/Price/customer/session/invoice/meter/webhook endpoint was created or modified during this implementation work.

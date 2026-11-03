@@ -348,15 +348,44 @@ export async function handleStripeEvent(event: Stripe.Event) {
       case "customer.subscription.deleted": {
         const sub = event.data.object as Stripe.Subscription;
         const customer = objectId(sub.customer);
-        const existing = customer ? await prisma.subscription.findFirst({ where: { stripeCustomerId: customer } }) : null;
+        const clerkId = sub.metadata?.clerkId ?? sub.metadata?.clerk_id;
+        const organizationId = sub.metadata?.organizationId ?? sub.metadata?.organization_id;
+        const user = !organizationId && clerkId
+          ? await prisma.user.findUnique({ where: { clerkId } })
+          : null;
+        const targetOrganizationId = organizationId ?? user?.organizationId ?? null;
+        const existing = await prisma.subscription.findFirst({
+          where: {
+            OR: [
+              { stripeSubscriptionId: sub.id },
+              ...(customer ? [{ stripeCustomerId: customer }] : []),
+              ...(targetOrganizationId ? [{ organizationId: targetOrganizationId }] : []),
+            ],
+          },
+        });
+        const item = sub.items.data[0];
+        const mappedStatus = mapSubscriptionStatus(sub.status);
+        const subscriptionData = {
+          ...(customer ? { stripeCustomerId: customer } : {}),
+          stripeSubscriptionId: sub.id,
+          ...(mappedStatus ? { status: mappedStatus } : {}),
+          priceId: item?.price.id,
+          currentPeriodEnd: item?.current_period_end ? new Date(item.current_period_end * 1000) : null,
+        };
         if (existing) {
-          const item = sub.items.data[0];
-          const mappedStatus = mapSubscriptionStatus(sub.status);
           await prisma.subscription.update({
             where: { id: existing.id },
-            data: {
+            data: subscriptionData,
+          });
+        } else if (targetOrganizationId && customer && mappedStatus) {
+          await prisma.subscription.upsert({
+            where: { organizationId: targetOrganizationId },
+            update: subscriptionData,
+            create: {
+              organizationId: targetOrganizationId,
+              stripeCustomerId: customer,
               stripeSubscriptionId: sub.id,
-              ...(mappedStatus ? { status: mappedStatus } : {}),
+              status: mappedStatus,
               priceId: item?.price.id,
               currentPeriodEnd: item?.current_period_end ? new Date(item.current_period_end * 1000) : null,
             },

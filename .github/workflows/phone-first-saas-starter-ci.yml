@@ -1,0 +1,53 @@
+name: phone-first-saas-starter validation
+
+on:
+  pull_request:
+    paths:
+      - "phone-first-saas-starter/**"
+      - ".github/workflows/phone-first-saas-starter-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "phone-first-saas-starter/**"
+      - ".github/workflows/phone-first-saas-starter-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: phone-first-saas-starter
+    env:
+      DATABASE_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
+      DIRECT_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
+      CLERK_SECRET_KEY: "sk_test_ci_placeholder"
+      STRIPE_SECRET_KEY: "rk_test_ci_placeholder"
+      STRIPE_WEBHOOK_SECRET: "whsec_ci_placeholder"
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_ci_placeholder"
+      STRIPE_METER_BILLING_ENABLED: "false"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+      - name: Generate Prisma Client
+        run: pnpm prisma:generate
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Unit tests
+        run: pnpm test
+      - name: Build
+        run: pnpm build

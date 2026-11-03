@@ -208,3 +208,31 @@ model StripeAdjustment {
   @@index([paymentIntentId, createdAt])
   @@index([kind, createdAt])
 }
+
+
+model IINOrder {
+  id                      String   @id @default(cuid())
+  stripeCheckoutSessionId String   @unique
+  stripePaymentIntentId   String?  @unique
+  stripeCustomerId        String?
+  organizationId          String
+  clerkId                 String
+  offerKey                String
+  department              String
+  productId               String
+  priceId                 String
+  quantity                Int
+  amountTotal             Int
+  currency                String
+  paymentStatus           String
+  livemode                Boolean
+  paidAt                  DateTime?
+  metadata                Json?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  @@index([organizationId, createdAt])
+  @@index([department, createdAt])
+  @@index([paymentStatus, createdAt])
+  @@index([livemode, createdAt])
+}

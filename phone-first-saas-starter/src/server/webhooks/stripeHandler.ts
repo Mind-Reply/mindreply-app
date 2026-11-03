@@ -146,6 +146,37 @@ async function projectDispute(event: Stripe.Event) {
   });
 }
 
+async function projectPayout(event: Stripe.Event) {
+  const raw = event.data.object as unknown as {
+    id: string;
+    amount?: number;
+    currency?: string;
+    status?: string;
+    arrival_date?: number;
+  };
+  if (!raw.id) return;
+  await prisma.stripeAdjustment.upsert({
+    where: { stripeObjectId: event.id },
+    update: {
+      kind: "payout",
+      amount: raw.amount ?? 0,
+      currency: raw.currency ?? null,
+      status: raw.status ?? event.type,
+      livemode: event.livemode,
+    },
+    create: {
+      stripeObjectId: event.id,
+      kind: "payout",
+      paymentIntentId: null,
+      stripeChargeId: null,
+      amount: raw.amount ?? 0,
+      currency: raw.currency ?? null,
+      status: raw.status ?? event.type,
+      livemode: event.livemode,
+    },
+  });
+}
+
 export async function handleStripeEvent(event: Stripe.Event) {
   const claim = await claimIdempotency(event.id);
   if (!claim.claimed) return { duplicate: true };
@@ -258,6 +289,15 @@ export async function handleStripeEvent(event: Stripe.Event) {
       case "charge.dispute.updated":
       case "charge.dispute.closed": {
         await projectDispute(event);
+        break;
+      }
+
+      case "payout.created":
+      case "payout.updated":
+      case "payout.paid":
+      case "payout.failed":
+      case "payout.canceled": {
+        await projectPayout(event);
         break;
       }
 

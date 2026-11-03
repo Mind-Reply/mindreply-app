@@ -92,6 +92,17 @@ Required server-side configuration includes:
 
 No API key or webhook secret is committed. Live-mode credentials are rejected by the usage dispatcher, and the webhook route rejects live-mode events. Automatic tax is not enabled because tax registration and jurisdictional obligations have not been confirmed. Stripe Connect is not configured.
 
+
+## Database boundary — do not create a second MindR financial ledger
+
+A read-only inspection of the existing MindR Supabase project found established `public.stripe_events`, `public.stripe_webhook_events`, `public.payments` and `public.revenue_ledger` tables. The existing schema includes unique Stripe event/payment references, gross/fee/net/refund/dispute/payout fields and service-role-only policies for webhook event tables. The project also has existing Stripe event and revenue-ledger migrations.
+
+The Prisma models/migration in this starter package are a **separate application-database design**. Do not point this migration at the existing MindR Supabase database or merge its financial data into those tables blindly. Before production integration, select one of these paths:
+1. Deploy the starter with a separately governed isolated database and explicitly designate it as the application order/usage store while linking to the canonical MindR ledger through a reviewed adapter; or
+2. Port the event/order/usage projections to the existing MindR event and revenue-ledger schema using a dedicated server-side Supabase service-role adapter and a reviewed additive migration.
+
+The existing MindR schema was inspected read-only; no Supabase DDL/DML, RLS policies, functions, secrets or endpoints were changed. No new Supabase branch was available for isolated migration testing at the time of inspection.
+
 ## Migration and tests
 
 The Prisma schema and migration add:

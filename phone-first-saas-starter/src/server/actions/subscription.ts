@@ -45,6 +45,8 @@ export async function createCheckout(input?: unknown) {
       cancel_url: `${baseUrl}/pricing?checkout=cancelled`,
       customer: stripeCustomerId ?? undefined,
       metadata,
+    }, {
+      idempotencyKey: `subscription-checkout-${clerkId}-${parsed.data.idempotencyKey}`,
     });
     return session.url ? { ok: true, url: session.url } : { ok: false, error: "Stripe did not return a Checkout URL." };
   } catch (error) {

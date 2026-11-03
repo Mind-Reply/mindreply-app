@@ -91,7 +91,7 @@ export async function POST(request: Request) {
           idempotencyKey: `iin-invoice-line-${clerkId}-${idempotencyKey}-${index}`,
         });
       }
-    } catch (error) {
+    } catch {
       console.error("Stripe draft invoice item creation failed.", { invoiceId: invoice.id });
       return NextResponse.json({
         error: "Draft invoice was created but one or more line items could not be attached. It was not finalized or sent.",

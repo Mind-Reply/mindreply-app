@@ -420,8 +420,14 @@ export async function handleStripeEvent(event: Stripe.Event) {
           data: { status: paymentIntent.status },
         });
         await prisma.iINOrder.updateMany({
-          where: { stripePaymentIntentId: paymentIntent.id },
-          data: { paymentStatus: paymentIntent.status },
+          where: {
+            stripePaymentIntentId: paymentIntent.id,
+            paymentStatus: { notIn: ["refunded", "partially_refunded", "disputed", "dispute_won", "dispute_lost"] },
+          },
+          data: {
+            paymentStatus: event.type === "payment_intent.succeeded" ? "paid" : "failed",
+            ...(event.type === "payment_intent.succeeded" ? { paidAt: new Date(event.created * 1000) } : {}),
+          },
         });
         break;
       }

@@ -154,6 +154,9 @@ model UsageMeterEvent {
   unit              String
   stripeCustomerId  String?
   stripeMeterName   String?
+  stripeMeterEventIdentifier String? @unique
+  submittedAt       DateTime?
+  lastError         String?
   status            String   @default("RECORDED_PENDING_METER")
   occurredAt        DateTime
   metadata          Json?

@@ -49,7 +49,9 @@ async function projectIINCheckout(event: Stripe.Event, session: Stripe.Checkout.
   });
   const safeStatus = existing?.paymentStatus === "paid" && incomingStatus !== "paid"
     ? "paid"
-    : incomingStatus;
+    : (existing?.paymentStatus === "failed" || existing?.paymentStatus === "expired") && incomingStatus === "pending"
+      ? existing.paymentStatus
+      : incomingStatus;
 
   await prisma.iINOrder.upsert({
     where: { stripeCheckoutSessionId: session.id },

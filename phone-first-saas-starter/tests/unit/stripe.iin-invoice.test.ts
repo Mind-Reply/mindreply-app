@@ -157,6 +157,33 @@ describe("POST /api/stripe/invoices/draft", () => {
     expect(mocks.invoiceItemCreate).toHaveBeenCalledTimes(1);
   });
 
+  it("rejects mixed-currency invoice items before creating a Stripe invoice", async () => {
+    mocks.resolveIINOffer.mockResolvedValueOnce({
+      key: "research_service",
+      department: "research_discovery",
+      mode: "payment",
+      price: { id: "price_test_eur", currency: "eur" },
+      product: { id: "prod_test_eur" },
+    }).mockResolvedValueOnce({
+      key: "research_service",
+      department: "research_discovery",
+      mode: "payment",
+      price: { id: "price_test_gbp", currency: "gbp" },
+      product: { id: "prod_test_gbp" },
+    });
+
+    const response = await POST(makeRequest({
+      organizationId: "org_123",
+      items: [
+        { offerKey: "research_service", quantity: 1 },
+        { offerKey: "research_service", quantity: 1 },
+      ],
+    }));
+
+    expect(response.status).toBe(400);
+    expect(mocks.invoiceCreate).not.toHaveBeenCalled();
+  });
+
   it("rejects subscription Prices from the draft service-invoice path", async () => {
     mocks.resolveIINOffer.mockResolvedValue({
       key: "research_service",

@@ -23,7 +23,17 @@ export async function POST(request: Request) {
     const user = await syncCurrentUser();
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
     if (!baseUrl) return NextResponse.json({ error: "NEXT_PUBLIC_APP_URL is not configured." }, { status: 503 });
-    const subscription = user.organizationId ? await prisma.subscription.findUnique({ where: { organizationId: user.organizationId } }) : null;
+    const subscription = user.organizationId
+      ? await prisma.subscription.findUnique({ where: { organizationId: user.organizationId } })
+      : null;
+    const priorOrder = user.organizationId
+      ? await prisma.iINOrder.findFirst({
+          where: { organizationId: user.organizationId, stripeCustomerId: { not: null } },
+          orderBy: { createdAt: "desc" },
+          select: { stripeCustomerId: true },
+        })
+      : null;
+    const stripeCustomerId = subscription?.stripeCustomerId ?? priorOrder?.stripeCustomerId;
     const metadata = { clerkId, organizationId: user.organizationId ?? "", plan, billing_environment: "test" };
     const trialDays = stripeTrialDays();
 
@@ -37,7 +47,7 @@ export async function POST(request: Request) {
       },
       success_url: `${baseUrl}/dashboard?checkout=success`,
       cancel_url: `${baseUrl}/pricing?checkout=cancelled`,
-      customer: subscription?.stripeCustomerId ?? undefined,
+      customer: stripeCustomerId ?? undefined,
       metadata,
     });
 

@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/Button";
 import { useState } from "react";
 
 const plans = [
-  { id: "operator", name: "Operator", price: "€29", description: "For focused teams building repeatable revenue." },
-  { id: "sovereign", name: "Sovereign", price: "€99", description: "For organizations that need control and scale." },
-  { id: "enterprise", name: "Enterprise", price: "Custom", description: "For complex operations and dedicated service." },
+  { id: "operator", name: "Operator", priceNote: "Sandbox price pending approval", description: "For focused teams building repeatable revenue." },
+  { id: "sovereign", name: "Sovereign", priceNote: "Sandbox price pending approval", description: "For organizations that need control and scale." },
+  { id: "enterprise", name: "Enterprise", priceNote: "Custom quote · sandbox Price not configured", description: "For complex operations and dedicated service." },
 ] as const;
 
 export default function Pricing() {
@@ -42,7 +42,7 @@ export default function Pricing() {
         {plans.map((plan) => (
           <article key={plan.id} className="rounded-2xl border bg-white p-6">
             <h2 className="text-lg font-semibold">{plan.name}</h2>
-            <p className="mt-3 text-4xl font-black">{plan.price}<span className="text-base font-normal text-slate-500"> / month</span></p>
+            <p className="mt-3 min-h-12 text-sm font-semibold text-slate-700">{plan.priceNote}</p>
             <p className="mt-3 min-h-12 text-slate-600">{plan.description}</p>
             <Button
               className="mt-6 w-full"

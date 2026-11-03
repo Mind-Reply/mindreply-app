@@ -46,6 +46,7 @@ export async function POST(request: Request) {
       department: offer.department,
       product_id: offer.product.id,
       price_id: offer.price.id,
+      quantity: String(quantity),
     };
 
     const params: Parameters<typeof stripe.checkout.sessions.create>[0] = {

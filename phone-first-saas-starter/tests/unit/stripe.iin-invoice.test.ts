@@ -123,8 +123,9 @@ describe("POST /api/stripe/invoices/draft", () => {
       }),
       { idempotencyKey: "iin-invoice-line-clerk_admin_1-invoice_req_12345678-0" },
     );
-    // The route intentionally has no finalize or send operation.
-    expect(Object.keys(mocks.getStripe.mock.results[0].value.invoices)).toEqual(["create"]);
+    // The route intentionally stops after creating the draft and its line items.
+    expect(mocks.invoiceCreate).toHaveBeenCalledTimes(1);
+    expect(mocks.invoiceItemCreate).toHaveBeenCalledTimes(1);
   });
 
   it("rejects subscription Prices from the draft service-invoice path", async () => {

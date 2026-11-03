@@ -106,9 +106,58 @@ export async function POST(request: Request) {
       }, { status: 502 });
     }
 
+    const completedInvoice = await stripe.invoices.retrieve(invoice.id);
+    await prisma.stripeInvoice.upsert({
+      where: { stripeInvoiceId: completedInvoice.id },
+      update: {
+        stripeCustomerId,
+        status: completedInvoice.status ?? "draft",
+        amountDue: completedInvoice.amount_due ?? completedInvoice.total ?? 0,
+        amountPaid: completedInvoice.amount_paid ?? 0,
+        currency: completedInvoice.currency ?? "usd",
+        livemode: false,
+        dueAt: typeof completedInvoice.due_date === "number" ? new Date(completedInvoice.due_date * 1000) : null,
+        paidAt: completedInvoice.status_transitions?.paid_at
+          ? new Date(completedInvoice.status_transitions.paid_at * 1000)
+          : null,
+        hostedInvoiceUrl: completedInvoice.hosted_invoice_url ?? null,
+        invoicePdf: completedInvoice.invoice_pdf ?? null,
+        metadata: {
+          billing_environment: "test",
+          organization_id: body.organizationId,
+          workflow: "owner_review_draft",
+          created_by_clerk_id: clerkId,
+        },
+      },
+      create: {
+        stripeInvoiceId: completedInvoice.id,
+        stripeCustomerId,
+        stripeSubscriptionId: null,
+        status: completedInvoice.status ?? "draft",
+        amountDue: completedInvoice.amount_due ?? completedInvoice.total ?? 0,
+        amountPaid: completedInvoice.amount_paid ?? 0,
+        currency: completedInvoice.currency ?? "usd",
+        livemode: false,
+        dueAt: typeof completedInvoice.due_date === "number" ? new Date(completedInvoice.due_date * 1000) : null,
+        paidAt: completedInvoice.status_transitions?.paid_at
+          ? new Date(completedInvoice.status_transitions.paid_at * 1000)
+          : null,
+        hostedInvoiceUrl: completedInvoice.hosted_invoice_url ?? null,
+        invoicePdf: completedInvoice.invoice_pdf ?? null,
+        metadata: {
+          billing_environment: "test",
+          organization_id: body.organizationId,
+          workflow: "owner_review_draft",
+          created_by_clerk_id: clerkId,
+        },
+      },
+    });
+
     return NextResponse.json({
-      invoiceId: invoice.id,
-      status: invoice.status ?? "draft",
+      invoiceId: completedInvoice.id,
+      status: completedInvoice.status ?? "draft",
+      amountDue: completedInvoice.amount_due ?? completedInvoice.total ?? 0,
+      currency: completedInvoice.currency ?? "usd",
       finalized: false,
       sent: false,
       paymentCollectionStarted: false,

@@ -47,6 +47,63 @@ jobs:
           PLAYWRIGHT_WEB_SERVER_COMMAND: pnpm --filter web-replycontrol dev
       - name: Build application
         run: pnpm build
+      - name: Set up Node.js for isolated billing package
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Set up pinned pnpm for isolated billing package
+        shell: bash
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare pnpm@9.15.0 --activate
+          node --version
+          pnpm --version
+      - name: Install isolated billing package dependencies
+        working-directory: phone-first-saas-starter
+        run: pnpm install --no-frozen-lockfile
+      - name: Validate billing package Prisma schema
+        working-directory: phone-first-saas-starter
+        env:
+          DATABASE_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
+          DIRECT_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
+        run: pnpm exec prisma validate
+      - name: Generate billing package Prisma Client
+        working-directory: phone-first-saas-starter
+        env:
+          DATABASE_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
+          DIRECT_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
+        run: pnpm prisma:generate
+      - name: Lint billing package
+        working-directory: phone-first-saas-starter
+        run: pnpm lint
+      - name: Typecheck billing package
+        working-directory: phone-first-saas-starter
+        run: pnpm typecheck
+      - name: Test billing package
+        working-directory: phone-first-saas-starter
+        env:
+          DATABASE_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
+          DIRECT_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
+          CLERK_SECRET_KEY: "sk_test_ci_placeholder"
+          STRIPE_SECRET_KEY: "rk_test_ci_placeholder"
+          STRIPE_WEBHOOK_SECRET: "whsec_ci_placeholder"
+          NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_ci_placeholder"
+          STRIPE_METER_BILLING_ENABLED: "false"
+        run: pnpm test
+      - name: Build billing package
+        working-directory: phone-first-saas-starter
+        env:
+          DATABASE_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
+          DIRECT_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
+          CLERK_SECRET_KEY: "sk_test_ci_placeholder"
+          STRIPE_SECRET_KEY: "rk_test_ci_placeholder"
+          STRIPE_WEBHOOK_SECRET: "whsec_ci_placeholder"
+          NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_ci_placeholder"
+          STRIPE_METER_BILLING_ENABLED: "false"
+        run: pnpm build
       - name: Publish verification evidence
         if: always()
         shell: bash
@@ -61,45 +118,3 @@ jobs:
             echo "- Committed environment-file detection remains a blocking credential safeguard."
           } >> "$GITHUB_STEP_SUMMARY"
 # Evidence-first verification; dependency, test, and build failures are blocking.
-
-  validate-iin-billing-package:
-    name: Validate A11-K billing package
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    defaults:
-      run:
-        working-directory: phone-first-saas-starter
-    env:
-      DATABASE_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
-      DIRECT_URL: "postgresql://ci:ci@127.0.0.1:5432/ci?schema=public"
-      CLERK_SECRET_KEY: "sk_test_ci_placeholder"
-      STRIPE_SECRET_KEY: "rk_test_ci_placeholder"
-      STRIPE_WEBHOOK_SECRET: "whsec_ci_placeholder"
-      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_ci_placeholder"
-      STRIPE_METER_BILLING_ENABLED: "false"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - name: Set up isolated package workspace
-        uses: pnpm/action-setup@v4
-        with:
-          version: "9.15.0"
-      - name: Install package dependencies
-        run: pnpm install --no-frozen-lockfile
-      - name: Validate Prisma schema
-        run: pnpm exec prisma validate
-      - name: Generate Prisma Client
-        run: pnpm prisma:generate
-      - name: Lint package
-        run: pnpm lint
-      - name: Typecheck package
-        run: pnpm typecheck
-      - name: Run billing unit tests
-        run: pnpm test
-      - name: Build package
-        run: pnpm build

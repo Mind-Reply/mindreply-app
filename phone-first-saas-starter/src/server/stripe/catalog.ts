@@ -20,10 +20,10 @@ type OfferDefinition = {
 };
 
 const OFFERS: Record<IINOfferKey, OfferDefinition> = {
-  operator_subscription: { priceEnv: "STRIPE_PRICE_ID_OPERATOR", mode: "subscription", department: "platform" },
+  operator_subscription: { priceEnv: "STRIPE_PRICE_ID_OPERATOR", mode: "subscription", department: "platform_operations" },
   sovereign_subscription: { priceEnv: "STRIPE_PRICE_ID_SOVEREIGN", mode: "subscription", department: "platform" },
   enterprise_subscription: { priceEnv: "STRIPE_PRICE_ID_ENTERPRISE", mode: "subscription", department: "enterprise_operations" },
-  website_completion: { priceEnv: "STRIPE_PRICE_ID_WEBSITE_COMPLETION", mode: "payment", department: "specialist_engineering" },
+  website_completion: { priceEnv: "STRIPE_PRICE_ID_WEBSITE_COMPLETION", mode: "payment", department: "engineering" },
   engineering_service: { priceEnv: "STRIPE_PRICE_ID_ENGINEERING_SERVICE", mode: "payment", department: "engineering" },
   research_service: { priceEnv: "STRIPE_PRICE_ID_RESEARCH_SERVICE", mode: "payment", department: "research_discovery" },
   robotics_service: { priceEnv: "STRIPE_PRICE_ID_ROBOTICS_SERVICE", mode: "payment", department: "robotics" },

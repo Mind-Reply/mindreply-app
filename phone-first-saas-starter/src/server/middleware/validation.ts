@@ -7,6 +7,7 @@ export const projectSchema = z.object({
 
 export const checkoutSchema = z.object({
   plan: z.enum(["operator", "sovereign", "enterprise"]).default("operator"),
+  idempotencyKey: z.string().regex(/^[A-Za-z0-9_-]{16,80}$/),
 });
 
 export function parse<T>(schema: z.ZodSchema<T>, input: unknown) {

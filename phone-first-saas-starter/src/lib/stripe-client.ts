@@ -1,10 +1,15 @@
 "use client";
 
-export async function createCheckoutSession(priceId?: string) {
+export type SubscriptionPlan = "operator" | "sovereign" | "enterprise";
+
+export async function createCheckoutSession(plan: SubscriptionPlan = "operator", quantity = 1) {
   const response = await fetch("/api/stripe/checkout", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ priceId }),
+    headers: {
+      "Content-Type": "application/json",
+      "Idempotency-Key": crypto.randomUUID(),
+    },
+    body: JSON.stringify({ plan, quantity }),
   });
 
   const payload = (await response.json()) as { url?: string; error?: string };

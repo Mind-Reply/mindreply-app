@@ -123,3 +123,116 @@ model IdempotencyRecord {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+model StripeEvent {
+  id          String   @id
+  type        String
+  objectId    String?
+  livemode    Boolean
+  apiVersion  String?
+  status      String   @default("RECEIVED")
+  attempts    Int      @default(0)
+  lastError   String?
+  receivedAt  DateTime @default(now())
+  processedAt DateTime?
+  updatedAt   DateTime @updatedAt
+
+  @@index([status, updatedAt])
+  @@index([type, receivedAt])
+  @@index([livemode, receivedAt])
+}
+
+model UsageMeterEvent {
+  id                String   @id @default(cuid())
+  idempotencyKey    String   @unique
+  organizationId    String
+  clerkId           String
+  department        String
+  workloadType      String
+  quantity          Decimal  @db.Decimal(24, 8)
+  unit              String
+  stripeCustomerId  String?
+  stripeMeterName   String?
+  stripeMeterEventIdentifier String? @unique
+  submittedAt       DateTime?
+  lastError         String?
+  status            String   @default("RECORDED_PENDING_METER")
+  occurredAt        DateTime
+  metadata          Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([organizationId, createdAt])
+  @@index([status, createdAt])
+  @@index([department, workloadType, occurredAt])
+}
+
+model StripeInvoice {
+  id                  String   @id @default(cuid())
+  stripeInvoiceId     String   @unique
+  stripeCustomerId    String?
+  stripeSubscriptionId String?
+  status              String
+  amountDue           Int
+  amountPaid          Int
+  currency            String
+  livemode            Boolean
+  dueAt               DateTime?
+  paidAt              DateTime?
+  hostedInvoiceUrl    String?
+  invoicePdf          String?
+  metadata            Json?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([stripeCustomerId, createdAt])
+  @@index([status, createdAt])
+  @@index([livemode, createdAt])
+}
+
+model StripeAdjustment {
+  id                    String   @id @default(cuid())
+  stripeObjectId        String   @unique
+  kind                  String
+  paymentIntentId       String?
+  stripeChargeId        String?
+  amount                Int
+  currency              String?
+  status                String
+  livemode              Boolean
+  metadata              Json?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([paymentIntentId, createdAt])
+  @@index([kind, createdAt])
+}
+
+
+model IINOrder {
+  id                      String   @id @default(cuid())
+  stripeCheckoutSessionId String   @unique
+  stripePaymentIntentId   String?  @unique
+  stripeCustomerId        String?
+  organizationId          String
+  clerkId                 String
+  offerKey                String
+  department              String
+  productId               String
+  priceId                 String
+  quantity                Int
+  amountTotal             Int
+  currency                String
+  paymentStatus           String
+  livemode                Boolean
+  paidAt                  DateTime?
+  metadata                Json?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  @@index([organizationId, createdAt])
+  @@index([department, createdAt])
+  @@index([paymentStatus, createdAt])
+  @@index([livemode, createdAt])
+}

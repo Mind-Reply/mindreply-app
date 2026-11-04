@@ -11,31 +11,65 @@ export async function createCheckout(input?: unknown) {
   if (!parsed.success) return { ok: false, error: parsed.error.flatten() };
   const synced = await syncCurrentUser();
   const existing = synced.organizationId ? await prisma.subscription.findUnique({ where: { organizationId: synced.organizationId } }) : null;
+  const priorOrder = synced.organizationId
+    ? await prisma.iINOrder.findFirst({
+        where: { organizationId: synced.organizationId, stripeCustomerId: { not: null } },
+        orderBy: { createdAt: "desc" },
+        select: { stripeCustomerId: true },
+      })
+    : null;
+  const stripeCustomerId = existing?.stripeCustomerId ?? priorOrder?.stripeCustomerId;
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
   if (!baseUrl) return { ok: false, error: "NEXT_PUBLIC_APP_URL is not configured." };
-  let priceId: string;
-  try { priceId = stripePriceId(parsed.data.plan as MindReplyPlan); } catch { return { ok: false, error: "Stripe price configuration is incomplete." }; }
-  const session = await getStripe().checkout.sessions.create({
-    mode: "subscription",
-    line_items: [{ price: priceId, quantity: 1 }],
-    payment_method_collection: "always",
-    subscription_data: { trial_period_days: stripeTrialDays(), metadata: { clerkId, plan: parsed.data.plan } },
-    success_url: `${baseUrl}/dashboard?checkout=success`,
-    cancel_url: `${baseUrl}/pricing?checkout=cancelled`,
-    customer: existing?.stripeCustomerId ?? undefined,
-    customer_creation: existing?.stripeCustomerId ? undefined : "always",
-    metadata: { clerkId, plan: parsed.data.plan },
-  });
-  return session.url ? { ok: true, url: session.url } : { ok: false, error: "Stripe did not return a Checkout URL." };
+
+  try {
+    const stripe = getStripe();
+    const plan = parsed.data.plan as MindReplyPlan;
+    const priceId = stripePriceId(plan);
+    const price = await stripe.prices.retrieve(priceId);
+    if (!price.active || price.livemode || price.type !== "recurring") {
+      return { ok: false, error: "Configured subscription Price is unavailable in the sandbox." };
+    }
+
+    const trialDays = stripeTrialDays();
+    const metadata = { clerkId, organizationId: synced.organizationId ?? "", plan, billing_environment: "test" };
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      line_items: [{ price: price.id, quantity: 1 }],
+      payment_method_collection: "always",
+      subscription_data: {
+        metadata,
+        ...(trialDays > 0 ? { trial_period_days: trialDays } : {}),
+      },
+      success_url: `${baseUrl}/dashboard?checkout=success`,
+      cancel_url: `${baseUrl}/pricing?checkout=cancelled`,
+      customer: stripeCustomerId ?? undefined,
+      metadata,
+    }, {
+      idempotencyKey: `subscription-checkout-${clerkId}-${parsed.data.idempotencyKey}`,
+    });
+    return session.url ? { ok: true, url: session.url } : { ok: false, error: "Stripe did not return a Checkout URL." };
+  } catch (error) {
+    console.error("Subscription Checkout could not be created.", error);
+    return { ok: false, error: "Stripe subscription pricing or sandbox configuration is incomplete." };
+  }
 }
 
 export async function createPortal() {
   const clerkId = await requireAuth();
   const user = await prisma.user.findUnique({ where: { clerkId } });
   const sub = user?.organizationId ? await prisma.subscription.findUnique({ where: { organizationId: user.organizationId } }) : null;
-  if (!sub?.stripeCustomerId) return { ok: false, error: "No Stripe customer yet" };
+  const priorOrder = user?.organizationId
+    ? await prisma.iINOrder.findFirst({
+        where: { organizationId: user.organizationId, stripeCustomerId: { not: null } },
+        orderBy: { createdAt: "desc" },
+        select: { stripeCustomerId: true },
+      })
+    : null;
+  const stripeCustomerId = sub?.stripeCustomerId ?? priorOrder?.stripeCustomerId;
+  if (!stripeCustomerId) return { ok: false, error: "No Stripe customer yet" };
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
   if (!baseUrl) return { ok: false, error: "NEXT_PUBLIC_APP_URL is not configured." };
-  const session = await getStripe().billingPortal.sessions.create({ customer: sub.stripeCustomerId, return_url: `${baseUrl}/settings` });
+  const session = await getStripe().billingPortal.sessions.create({ customer: stripeCustomerId, return_url: `${baseUrl}/settings` });
   return { ok: true, url: session.url };
 }

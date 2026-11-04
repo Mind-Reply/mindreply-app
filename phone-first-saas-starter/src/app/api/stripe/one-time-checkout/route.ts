@@ -25,12 +25,17 @@ export async function POST(request: Request) {
     if (
       !price.active ||
       price.type !== "one_time" ||
+      price.livemode !== false ||
       price.currency !== "gbp" ||
       price.unit_amount !== AMOUNT_PENCE
     ) {
       console.error("Website Completion price configuration failed validation.");
       return NextResponse.json({ error: "Checkout is temporarily unavailable." }, { status: 503 });
     }
+
+    const productId = typeof price.product === "string" ? price.product : price.product.id;
+    const product = await stripe.products.retrieve(productId);
+    if (!product.active) return NextResponse.json({ error: "Checkout is temporarily unavailable." }, { status: 503 });
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",

@@ -9,7 +9,7 @@ jobs:
   integrity:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Git whitespace check
         run: git diff --check
       - name: Reject tracked local environment files

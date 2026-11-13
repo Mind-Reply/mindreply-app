@@ -4,6 +4,8 @@ import Stripe from "stripe";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+const processedEvents = new Set<string>();
+
 export async function POST(request: Request) {
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -23,7 +25,7 @@ export async function POST(request: Request) {
   const rawBody = await request.text();
 
   if (!signature) {
-    return NextResponse.json({ error: "Missing Stripe signature header." }, { status: 400 });
+    return NextResponse.json({ received: false, error: "Missing Stripe signature header." }, { status: 400 });
   }
 
   try {
@@ -31,17 +33,32 @@ export async function POST(request: Request) {
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
+
+      if (session.payment_status !== "paid") {
+        return NextResponse.json({ received: true, ignored: true, eventType: event.type }, { status: 200 });
+      }
+
+      if (processedEvents.has(event.id)) {
+        return NextResponse.json({ received: true, duplicate: true, eventType: event.type }, { status: 200 });
+      }
+
+      processedEvents.add(event.id);
+
       console.info("Stripe checkout completed", {
+        eventId: event.id,
         sessionId: session.id,
-        customer: session.customer,
         paymentStatus: session.payment_status,
+        customer: session.customer,
         metadata: session.metadata,
       });
+
+      // In production, this is the point where the order or access grant is created,
+      // only after a verified webhook confirms the payment was successful.
     }
 
-    return NextResponse.json({ received: true }, { status: 200 });
+    return NextResponse.json({ received: true, eventType: event.type }, { status: 200 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Invalid Stripe signature.";
-    return NextResponse.json({ error: message }, { status: 400 });
+    return NextResponse.json({ received: false, error: message }, { status: 400 });
   }
 }

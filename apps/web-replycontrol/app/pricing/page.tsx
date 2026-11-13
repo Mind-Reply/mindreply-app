@@ -25,7 +25,7 @@ export default function PricingPage() {
 
       window.location.href = payload.url;
     } catch (caughtError) {
-      const message = caughtError instanceof Error ? error.message : "Unable to start checkout.";
+      const message = caughtError instanceof Error ? caughtError.message : "Unable to start checkout.";
       setError(message);
     } finally {
       setIsLoading(false);

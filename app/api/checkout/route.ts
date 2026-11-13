@@ -1,33 +1,56 @@
-# RWA Bridge Configuration
-LEGAL_ENTITY_API_URL=https://api.otoco.io/v1
-AGENT_WALLET_ADDRESS=0x321...AI_AGENT
-AGENT_SESSION_KEY=0x_scoped_session_token
+import { NextResponse } from "next/server";
+import Stripe from "stripe";
 
-# Next.js Configuration
-NODE_ENV=production
-NEXT_TELEMETRY_DISABLED=1
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-# Supabase project (publishable values may be used by trusted clients)
-SUPABASE_URL=https://example.supabase.co
-SUPABASE_PUBLISHABLE_KEY=sb_publishable_example
-SUPABASE_JWKS_URL=https://example.supabase.co/auth/v1/.well-known/jwks.json
+export async function POST(request: Request) {
+  const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+  const priceId =
+    process.env.STRIPE_PRICE_ID_WEBSITE_COMPLETION ||
+    process.env.STRIPE_PRICE_ID ||
+    "";
 
-# Server-only values — never commit real values or expose them to browser bundles
-SUPABASE_SECRET_KEY=sb_secret_REPLACE_IN_SECRET_MANAGER
-SUPABASE_DATABASE_URL=postgresql://postgres:REPLACE_PERCENT_ENCODED_PASSWORD@db.example.supabase.co:5432/postgres
+  if (!stripeSecretKey || !priceId) {
+    return NextResponse.json(
+      {
+        error:
+          "Stripe is not configured. Set STRIPE_SECRET_KEY and STRIPE_PRICE_ID_WEBSITE_COMPLETION.",
+      },
+      { status: 500 }
+    );
+  }
 
-# Stripe test-mode configuration
-STRIPE_SECRET_KEY=sk_test_REPLACE_ME
-STRIPE_WEBHOOK_SECRET=whsec_REPLACE_ME
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_REPLACE_ME
-STRIPE_PRICE_ID_WEBSITE_COMPLETION=price_REPLACE_ME
+  const stripe = new Stripe(stripeSecretKey);
 
-# Optional: Gateway Services (if using EfficientCore gateway)
-LITELLM_API_URL=http://litellm:4000
-QDRANT_API_URL=http://qdrant:6333
-SEARXNG_API_URL=http://searxng:8080
-BROWSERLESS_URL=ws://browserless:3000
+  let body: { customerEmail?: string } = {};
+  try {
+    body = (await request.json()) as { customerEmail?: string };
+  } catch {
+    body = {};
+  }
 
-# Pressure Agent — server-only, minimum 32 characters
-PRESSURE_AGENT_SECRET=replace-with-a-random-secret-at-least-32-characters
+  const origin =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (typeof request.url === "string" ? new URL(request.url).origin : "http://localhost:3000");
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      line_items: [{ price: priceId, quantity: 1 }],
+      customer_email: body.customerEmail || undefined,
+      success_url: `${origin}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/billing/cancel?status=cancelled`,
+      metadata: {
+        product: "website_completion_package",
+        source: "mindreply",
+      },
+      allow_promotion_codes: false,
+    });
+
+    return NextResponse.json({ url: session.url, sessionId: session.id });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to create checkout session.";
+    return NextResponse.json({ error: message }, { status: 400 });
+  }
+}

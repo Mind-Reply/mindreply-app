@@ -6,51 +6,42 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-  const priceId =
-    process.env.STRIPE_PRICE_ID_WEBSITE_COMPLETION ||
-    process.env.STRIPE_PRICE_ID ||
-    "";
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  if (!stripeSecretKey || !priceId) {
+  if (!stripeSecretKey || !webhookSecret) {
     return NextResponse.json(
       {
-        error:
-          "Stripe is not configured. Set STRIPE_SECRET_KEY and STRIPE_PRICE_ID_WEBSITE_COMPLETION.",
+        received: false,
+        error: "Stripe webhook is not configured. Set STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET.",
       },
       { status: 500 }
     );
   }
 
   const stripe = new Stripe(stripeSecretKey);
+  const signature = request.headers.get("stripe-signature");
+  const rawBody = await request.text();
 
-  let body: { customerEmail?: string } = {};
-  try {
-    body = (await request.json()) as { customerEmail?: string };
-  } catch {
-    body = {};
+  if (!signature) {
+    return NextResponse.json({ error: "Missing Stripe signature header." }, { status: 400 });
   }
 
-  const origin =
-    process.env.NEXT_PUBLIC_APP_URL ||
-    (typeof request.url === "string" ? new URL(request.url).origin : "http://localhost:3000");
-
   try {
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      line_items: [{ price: priceId, quantity: 1 }],
-      customer_email: body.customerEmail || undefined,
-      success_url: `${origin}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/billing/cancel?status=cancelled`,
-      metadata: {
-        product: "website_completion_package",
-        source: "mindreply",
-      },
-      allow_promotion_codes: false,
-    });
+    const event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
 
-    return NextResponse.json({ url: session.url, sessionId: session.id });
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object as Stripe.Checkout.Session;
+      console.info("Stripe checkout completed", {
+        sessionId: session.id,
+        customer: session.customer,
+        paymentStatus: session.payment_status,
+        metadata: session.metadata,
+      });
+    }
+
+    return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to create checkout session.";
+    const message = error instanceof Error ? error.message : "Invalid Stripe signature.";
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }

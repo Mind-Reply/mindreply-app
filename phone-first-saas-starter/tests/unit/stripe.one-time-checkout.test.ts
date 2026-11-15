@@ -1,8 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { getStripe, pricesRetrieve, sessionsCreate } = vi.hoisted(() => ({
+const { getStripe, pricesRetrieve, productsRetrieve, sessionsCreate } = vi.hoisted(() => ({
   getStripe: vi.fn(),
   pricesRetrieve: vi.fn(),
+  productsRetrieve: vi.fn(),
   sessionsCreate: vi.fn(),
 }));
 
@@ -34,9 +35,11 @@ describe("POST /api/stripe/one-time-checkout", () => {
     vi.stubEnv("NEXT_PUBLIC_APP_URL", "https://example.test");
     getStripe.mockReturnValue({
       prices: { retrieve: pricesRetrieve },
+      products: { retrieve: productsRetrieve },
       checkout: { sessions: { create: sessionsCreate } },
     });
     pricesRetrieve.mockResolvedValue(validPrice);
+    productsRetrieve.mockResolvedValue({ id: "prod_website_completion", active: true });
     sessionsCreate.mockResolvedValue({ url: "https://checkout.stripe.test/session" });
   });
 

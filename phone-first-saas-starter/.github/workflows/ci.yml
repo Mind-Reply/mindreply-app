@@ -5,14 +5,14 @@ jobs:
     runs-on: ubuntu-latest
     defaults: { run: { working-directory: phone-first-saas-starter } }
     env:
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_ci_placeholder
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_Y2xlcmsubWluZHJlcGx5LnRlc3Qk
       CLERK_SECRET_KEY: sk_test_ci_placeholder
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with: { version: 9.15.0 }
       - uses: actions/setup-node@v4
-        with: { node-version: 20 }
+        with: { node-version: 26 }
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm prisma:generate
       - run: pnpm lint

@@ -62,3 +62,25 @@ No live telemetry, autonomous orchestration, recurring schedule, or background p
 This audit is documentation-only. It does not modify the submodule, archive/delete repositories, change production configuration, add credentials, deploy services, or activate any background worker.
 
 **Current status:** canonical product root VERIFIED from repository README; Nexus source provenance PARTIALLY VERIFIED; complete migration, executable NEXUS-SPINE runtime, and live telemetry remain UNVERIFIED.
+
+
+## Additional canonical-tree inspection
+
+The canonical repository's `ARCHITECTURE/PRODUCTION_MAP.md` names `apps/a11k-nexus` as an orchestration/integration surface. Direct fetches of `apps/a11k-nexus/README.md`, `apps/a11k-nexus/package.json`, `infrastructure/nexus/README.md`, and `infrastructure/nexus/package.json` returned 404 on the inspected `main` ref. This does not prove those directories are absent (they may contain other filenames or gitlink entries), but it means no executable Nexus entrypoint or package manifest was verified at those expected paths.
+
+The canonical `docs/ELYSIUM_INVENTORY.md` lists the Elysium packages and API paths, including compile, gate, pack, and health routes, but it is explicitly labeled as an inventory for the historical `angellllkr-eng/mind-reply-core` repo. The current copy in `mindreply-app` therefore remains historical inventory evidence until its package paths and runtime endpoints are independently checked in the active product root.
+
+The `ESTATE.yaml` file reviewed on `main` (reviewed_at 2026-08-10) lists `angellllkr-eng/nexus-core` under `keep_temporarily_extract_value`, not under canonical repositories. It also says runtime status requires recent machine-observed evidence and leaves deployments/integrations empty. This reinforces migration-source status; it does not establish a live Nexus runtime.
+
+### Refined migration matrix
+
+| Asset / claim | Current evidence | Disposition |
+|---|---|---|
+| `angellllkr-eng/nexus-core` | README says private satellite/source-freeze | Migration/provenance source |
+| `Mind-Reply/mind-reply-core/infrastructure/nexus/` | Referenced as canonical by satellite README, but parent repo is archived and path README/package fetches returned 404 | Historical target; inspect tree/gitlink before relying |
+| `mindreply-app/infrastructure/nexus/` | Declared in `.gitmodules`; expected README/package paths returned 404 | Submodule path unresolved; do not remove or rewrite yet |
+| `mindreply-app/apps/a11k-nexus/` | Named in production map; expected README/package paths returned 404 | Surface named architecturally; implementation entrypoint not verified |
+| `NEXUS-SPINE` | Governance documents call it proposed / unverified as live telemetry bus | Architecture proposal only |
+| Elysium package/API inventory | Inventory exists in canonical repo but names historical core repo in its header | Requires path-by-path validation in active repo |
+
+Next implementation work is therefore a source-tree/gitlink inventory, not activation or deployment. Do not infer a successful merge from the old consolidation report.

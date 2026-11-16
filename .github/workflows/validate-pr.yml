@@ -3,10 +3,23 @@ name: Validate Pull Request
 on:
   pull_request:
     branches: [main]
+    paths:
+      - "apps/web-replycontrol/**"
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "package.json"
+      - ".nvmrc"
+      - ".github/workflows/validate-pr.yml"
+      - "ops/protected-release/validate-pr.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: validate-pr-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   web-replycontrol:
@@ -26,7 +39,7 @@ jobs:
         with:
           node-version: "26"
           cache: pnpm
-      - name: Verify runtime and package manager
+      - name: Verify runtime
         run: |
           node --version
           pnpm --version

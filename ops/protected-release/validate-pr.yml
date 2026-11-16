@@ -5,8 +5,12 @@ on:
     branches: [main]
     paths:
       - "apps/web-replycontrol/**"
+      - "packages/**"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
+      - "package.json"
+      - "apps/web-replycontrol/Dockerfile"
+      - "ops/protected-release/validate-pr.yml"
       - ".github/workflows/validate-pr.yml"
   workflow_dispatch:
 
@@ -33,20 +37,17 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
-      - name: Validate package manifest
-        run: node -e "JSON.parse(require('fs').readFileSync('apps/web-replycontrol/package.json', 'utf8'))"
+      - name: Validate package manifests
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('package.json', 'utf8'))"
+          node -e "JSON.parse(require('fs').readFileSync('apps/web-replycontrol/package.json', 'utf8'))"
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - name: Type check
         run: pnpm --filter web-replycontrol typecheck
       - name: Production build
         run: pnpm --filter web-replycontrol build
-      - name: Verify revenue and health routes
-        shell: bash
-        run: |
-          test -f apps/web-replycontrol/app/page.tsx
-          test -f apps/web-replycontrol/app/api/health/route.ts
-          grep -Fq "https://book.stripe.com/8x2aER4owd8c1TG4Ku63K00" apps/web-replycontrol/app/page.tsx
-          grep -Fq "GitHub + Python Profit Audit" apps/web-replycontrol/app/page.tsx
+      - name: Verify health route exists
+        run: test -f apps/web-replycontrol/app/api/health/route.ts

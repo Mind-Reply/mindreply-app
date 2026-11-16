@@ -33,7 +33,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Checkout is temporarily unavailable." }, { status: 503 });
     }
 
-    const productId = typeof price.product === "string" ? price.product : price.product.id;
+    const productId = typeof price.product === "string" ? price.product : price.product?.id;
+    if (!productId) {
+      console.error("Website Completion Price has no valid product reference.");
+      return NextResponse.json({ error: "Checkout is temporarily unavailable." }, { status: 503 });
+    }
     const product = await stripe.products.retrieve(productId);
     if (!product.active) return NextResponse.json({ error: "Checkout is temporarily unavailable." }, { status: 503 });
 

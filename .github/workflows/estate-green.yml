@@ -40,7 +40,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: "24"
+          node-version: "26"
       - name: Enable pinned pnpm
         shell: bash
         run: |
@@ -64,7 +64,7 @@ jobs:
       - name: Set up Node.js for isolated billing package
         uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: "26"
       - name: Set up pinned pnpm for isolated billing package
         shell: bash
         run: |
@@ -115,7 +115,7 @@ jobs:
           STRIPE_SECRET_KEY: "rk_test_ci_placeholder"
           STRIPE_WEBHOOK_SECRET: "whsec_ci_placeholder"
           NEXT_PUBLIC_APP_URL: "http://localhost:3000"
-          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_ci_placeholder"
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_Y2xlcmsubWluZHJlcGx5LnRlc3Qk"
           STRIPE_METER_BILLING_ENABLED: "false"
         run: pnpm test
       - name: Build billing package
@@ -127,7 +127,7 @@ jobs:
           STRIPE_SECRET_KEY: "rk_test_ci_placeholder"
           STRIPE_WEBHOOK_SECRET: "whsec_ci_placeholder"
           NEXT_PUBLIC_APP_URL: "http://localhost:3000"
-          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_ci_placeholder"
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_Y2xlcmsubWluZHJlcGx5LnRlc3Qk"
           STRIPE_METER_BILLING_ENABLED: "false"
         run: pnpm build
       - name: Publish verification evidence

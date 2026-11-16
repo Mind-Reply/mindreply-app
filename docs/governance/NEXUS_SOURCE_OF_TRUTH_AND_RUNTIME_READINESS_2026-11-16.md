@@ -84,3 +84,30 @@ The `ESTATE.yaml` file reviewed on `main` (reviewed_at 2026-08-10) lists `angell
 | Elysium package/API inventory | Inventory exists in canonical repo but names historical core repo in its header | Requires path-by-path validation in active repo |
 
 Next implementation work is therefore a source-tree/gitlink inventory, not activation or deployment. Do not infer a successful merge from the old consolidation report.
+
+
+## Nexus satellite contract inventory (file-level)
+
+The accessible Nexus satellite revision exposes these three primary contract documents:
+
+- `docs/CORE_CHARTER.md`: defines Anchor, Relay, Facet, Seal and Echo; requires stable interfaces, idempotency, explicit errors, structured audit records and no secrets in shared packages.
+- `docs/QUIET_ROUTING.md`: defines Whisper, Weave, Forge, Checkpoint, Handback and Recovery routes; requires retrieval provenance fields and fail-closed visibility/security behavior.
+- `docs/BRIDGE_CONTRACT.md`: defines Bridge, Parcel, Contract, Watch and Replay; lists workflow, retrieval, billing, source-control and Postgres adapter classes; requires owner, credential scope, schemas, timeout, retry, idempotency, health and retention declarations.
+
+The satellite README explicitly states it is a private source-freeze repository and not an independent product root. Repository code search for package manifests and executable source returned no matching results in the inspected satellite revision. That search is not a complete Git tree listing; therefore, it is insufficient to certify that no executable files exist.
+
+The satellite PR index also contains PR #3 ("Reconstruct Nexus as a provider-neutral integration fabric"), PR #4 (semantic core contracts), PR #2 (Quiet Routing), and PR #7 (frontier validation). These are useful provenance pointers, but PR search metadata alone does not prove all changes are merged into the canonical product root. No code has been copied based solely on these descriptions.
+
+## CI evidence for this audit
+
+For the audit commit `3ad5efc3826e392cfd87c0d8fb65d85dfe8cc919`, GitHub Actions reported:
+- Evidence Gate: success.
+- Repository Integrity Gate: success.
+- Compliance: success.
+- Estate Verification: failure.
+
+The Estate Verification job completed the workspace dependency installation, MindReply core tests, general tests, Prisma schema validation, disposable PostgreSQL migration checks, billing lint, typecheck, billing tests, and the main application build. Its final isolated billing-package build step failed during static prerendering because the CI Clerk publishable key is the literal placeholder `pk_test_ci_placeholder`. The log reports the key as invalid on routes including `/dashboard`, `/`, `/pricing`, and `/settings`.
+
+This is a CI configuration/test-fixture issue, not a Nexus implementation test. Do not replace the placeholder with a production key or expose a credential in the repository. A safe fix requires a valid dedicated non-production Clerk test key stored in the repository's secure CI settings, or a deterministic build-time mock/skip strategy for auth-dependent static rendering.
+
+The financial reconciliation documentation PR's workflow run ended in `startup_failure` and returned no job records. It therefore has no passing test evidence yet.

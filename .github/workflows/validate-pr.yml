@@ -9,18 +9,32 @@ permissions:
   contents: read
 
 jobs:
-  runtime-bootstrap:
-    name: Node 26 runner bootstrap
+  web-replycontrol:
+    name: web-replycontrol
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+          run_install: false
       - name: Set up Node.js 26
         uses: actions/setup-node@v4
         with:
           node-version: "26"
-      - name: Verify runtime
+          cache: pnpm
+      - name: Verify runtime and package manager
         run: |
           node --version
-          npm --version
+          pnpm --version
+      - name: Install workspace dependencies
+        run: pnpm install --no-frozen-lockfile
+      - name: Type check web application
+        run: pnpm --filter web-replycontrol typecheck
+      - name: Build web application
+        run: pnpm --filter web-replycontrol build
+      - name: Verify health route exists
+        run: test -f apps/web-replycontrol/app/api/health/route.ts

@@ -111,3 +111,34 @@ The Estate Verification job completed the workspace dependency installation, Min
 This is a CI configuration/test-fixture issue, not a Nexus implementation test. Do not replace the placeholder with a production key or expose a credential in the repository. A safe fix requires a valid dedicated non-production Clerk test key stored in the repository's secure CI settings, or a deterministic build-time mock/skip strategy for auth-dependent static rendering.
 
 The financial reconciliation documentation PR's workflow run ended in `startup_failure` and returned no job records. It therefore has no passing test evidence yet.
+
+## Exact Git-tree and pinned-submodule verification (2026-11-16)
+
+A recursive Git tree read resolves the earlier expected-path 404 ambiguity:
+
+- The canonical `mindreply-app` `main` tree contains `infrastructure/nexus` as a Git submodule entry (`mode 160000`, type `commit`) pinned to `72c2e3a6cbb049985ca295653f41fe991a2973da`.
+- The canonical `.gitmodules` maps that path to `https://github.com/angellllkr-eng/nexus-core.git`. It is not an embedded source directory.
+- The pinned Nexus commit is titled `chore: seed nexus-core repo with README and hardened gitignore` (2026-07-30). Its complete recursive tree contains exactly two files: `.gitignore` and `README.md`. It contains no executable code, package manifest, tests, workflow, or runtime entrypoint.
+- The satellite repository's current `main` is a later, separate tree with 15 entries: workflow/agent files, one config file, contract/operating documents, root README and gitignore. The inspected full tree contains no package manifest, source directory, executable entrypoint, or tests. The current satellite README calls this repository PRIVATE SATELLITE / SOURCE-FREEZE and points to the archived core path.
+- The canonical `apps/a11k-nexus` tree contains only `public/index.html` and `vercel.json`. The page labels itself `VERIDEX · PLAN ONLY`, states that a plan is not a dispatch, and says it does not contact agents, open tickets, or change systems. It is a static planning interface, not a runtime.
+- The canonical source map therefore has a stale/minimal submodule pointer, a documentation/config-only satellite head, and a static planning surface. No executable Nexus runtime is established.
+
+### Corrected file-level disposition
+
+| Source | Exact observed content | Disposition |
+|---|---|---|
+| Canonical `infrastructure/nexus` | Gitlink to Nexus commit `72c2e3a...` | Submodule pointer only; not embedded |
+| Nexus pinned commit `72c2e3a...` | `.gitignore`, `README.md` only | Seed/provenance metadata; no runtime |
+| Nexus satellite current `main` | 15 entries, contracts/config/workflow docs only | Documentation and governance source; no runtime package found in complete tree |
+| `apps/a11k-nexus` | Static `public/index.html` and `vercel.json` | Plan-only UI surface; no dispatch or backend |
+| Archived `mind-reply-core/infrastructure/nexus` | Not yet independently tree-verified through the available repository endpoint | Remains an open provenance comparison; do not assume contents or absence |
+
+The pinned submodule commit and current satellite `main` must not be conflated: the latter contains later contract documents, but those files are not included in the canonical product's pinned submodule revision.
+
+## CI and review status correction
+
+The Estate Verification run `43941998091` completed with failure only at the isolated billing package build step. The full log identifies the failing package as `phone-first-saas-starter`; Next.js static prerendering fails because Clerk rejects the literal CI placeholder `pk_test_ci_placeholder`. Core tests, general tests, main application build, billing schema/migrations/drift, lint, typecheck, and billing tests passed. This failure is independent of Nexus code.
+
+The FIN-A PR #4 run `43937091468` is recorded by GitHub as `startup_failure`, with workflow path `BuildFailed`, an empty workflow name, no associated PR object in the run payload, and zero jobs. The current branch's `fin-a-quality.yml` exists and defines a read-only quality workflow, but the available evidence does not identify why GitHub failed to initialize that historical run. Treat CI as unverified; do not claim the workflow passed.
+
+PR #151 remains open and unmerged. The latest automated Codex review comment reports review failure due to usage limits, not a completed review or a substantive code finding. No approval or merge is implied.

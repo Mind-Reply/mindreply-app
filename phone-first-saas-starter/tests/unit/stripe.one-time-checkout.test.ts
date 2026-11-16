@@ -18,6 +18,7 @@ const validPrice = {
   livemode: false,
   currency: "gbp",
   unit_amount: 60_000,
+  product: "prod_website_completion",
 };
 
 function request(body: unknown) {
@@ -66,6 +67,16 @@ describe("POST /api/stripe/one-time-checkout", () => {
     const response = await POST(request({ email: "buyer@example.com" }));
 
     expect(response.status).toBe(503);
+    expect(sessionsCreate).not.toHaveBeenCalled();
+  });
+
+  it("fails closed when the Stripe Price has no product reference", async () => {
+    pricesRetrieve.mockResolvedValue({ ...validPrice, product: undefined });
+
+    const response = await POST(request({ email: "buyer@example.com" }));
+
+    expect(response.status).toBe(503);
+    expect(productsRetrieve).not.toHaveBeenCalled();
     expect(sessionsCreate).not.toHaveBeenCalled();
   });
 

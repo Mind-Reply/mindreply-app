@@ -1,6 +1,6 @@
 # Multi-stage build for Node.js Next.js application
 # Stage 1: Dependencies (cached layer)
-FROM node:24-alpine AS deps
+FROM node:26-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN pnpm install --frozen-lockfile --prod=false
 ---
 
 # Stage 2: Builder
-FROM node:24-alpine AS builder
+FROM node:26-alpine AS builder
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
@@ -40,7 +40,7 @@ RUN pnpm run build
 ---
 
 # Stage 3: Runtime (optimized for production)
-FROM node:24-alpine AS runner
+FROM node:26-alpine AS runner
 RUN apk add --no-cache libc6-compat dumb-init
 WORKDIR /app
 

@@ -1,7 +1,7 @@
 # Monorepo-aware multi-stage build for web-replycontrol
 # Build context MUST be the repository root (see docker-compose.yml).
 
-FROM node:26-alpine AS deps
+FROM node:24-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 RUN npm install -g pnpm@10.32.1 --silent
@@ -15,7 +15,7 @@ COPY packages ./packages
 RUN pnpm install --frozen-lockfile --filter=web-replycontrol...
 
 # ---- Builder ----
-FROM node:26-alpine AS builder
+FROM node:24-alpine AS builder
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 RUN npm install -g pnpm@10.32.1 --silent
@@ -31,7 +31,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm --filter web-replycontrol build
 
 # ---- Production runtime ----
-FROM node:26-alpine AS production
+FROM node:24-alpine AS production
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 ENV NODE_ENV=production

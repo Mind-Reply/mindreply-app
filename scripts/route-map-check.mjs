@@ -66,7 +66,7 @@ function clientRoute(raw) {
 function relative(file) {
   return path.relative(ROOT, file).replace(/\\/g, "/");
 }
-function scanClientFile(file, frontend, warnings) {
+function scanClientFile(file, frontend, warnings, navigationReferences) {
   if (!EXTENSIONS.has(path.extname(file)) || file.includes(path.sep + "api" + path.sep)) return;
   const source = clean(fs.readFileSync(file, "utf8"));
   function record(raw, method, offset, kind) {
@@ -82,7 +82,37 @@ function scanClientFile(file, frontend, warnings) {
     const url = match[1].match(/\burl\s*:\s*(["'\x60])([^"'\x60]*?\/api(?:\/[^"'\x60]*)?)\1/);
     if (url) record(url[2], methodOf(match[1], "GET"), match.index || 0, "axios-config");
   }
+  // Resolve typed request helpers with literal API-path unions and fetch(parameter, options).
+  const helperRanges = [];
+  const helperRe = /(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(\s*([A-Za-z_$][\w$]*)\s*:\s*(("[^"]+"|'[^']+')(?:\s*\|\s*("[^"]+"|'[^']+'))*)[\s\S]*?\)\s*\{/g;
+  for (const helper of source.matchAll(helperRe)) {
+    const bodyStart = (helper.index || 0) + helper[0].length;
+    let depth = 1, cursor = bodyStart;
+    while (cursor < source.length && depth > 0) {
+      if (source[cursor] === "{") depth++;
+      else if (source[cursor] === "}") depth--;
+      cursor++;
+    }
+    const body = source.slice(bodyStart, cursor - 1);
+    const param = helper[2];
+    const fetchParam = new RegExp("\\bfetch\\s*\\(\\s*" + param + "\\s*,\\s*([\\s\\S]{0,500}?)\\)");
+    const fetchMatch = body.match(fetchParam);
+    if (!fetchMatch) continue;
+    const method = methodOf(fetchMatch[1], "GET");
+    const routes = [...helper[3].matchAll(/"([^"]+)"|'([^']+)'/g)].map((item) => item[1] || item[2]);
+    for (const call of source.matchAll(new RegExp("\\b" + helper[1] + "\\s*\\(\\s*([\"'])(/api(?:/[^\"']*)?)\\1\\s*\\)", "g"))) {
+      if (routes.includes(call[2])) record(call[2], method, call.index || 0, "request-helper");
+    }
+    helperRanges.push([bodyStart, cursor]);
+  }
+  const externalTemplate = /\bfetch\s*\(\s*\x60https?:\/\//g;
+  const externalOffsets = new Set([...source.matchAll(externalTemplate)].map((item) => item.index || 0));
   const classified = new Set(frontend.filter((item) => item.file === relative(file)).map((item) => item.route));
+  const navRe = /<a\b[^>]*\bhref\s*=\s*(["'])(\/api(?:\/[^"']*)?)\1/gi;
+  for (const match of source.matchAll(navRe)) {
+    const route = clientRoute(match[2]);
+    if (route) navigationReferences.push({ route, method: "GET", file: relative(file), line: source.slice(0, match.index || 0).split("\n").length, source: "anchor-href" });
+  }
   const literalRe = /(["'\x60])(\/api(?:\/[A-Za-z0-9_./:[\]$-]+)?)\1/g;
   for (const match of source.matchAll(literalRe)) {
     const route = clientRoute(match[2]);
@@ -92,7 +122,7 @@ function scanClientFile(file, frontend, warnings) {
       message: "API path literal found outside a recognized fetch/axios call; inspect the custom request wrapper."
     });
   }
-  const dynamicCalls = [...source.matchAll(/\b(?:fetch|axios(?:\.request)?)\s*\(\s*(?!["'\x60{])/g)];
+  const dynamicCalls = [...source.matchAll(/\b(?:fetch|axios(?:\.request)?)\s*\(\s*(?!["'\x60{])/g)].filter((match) => !helperRanges.some(([start, end]) => (match.index || 0) >= start && (match.index || 0) < end)).filter((match) => !externalOffsets.has(match.index || 0));
   for (const match of dynamicCalls) warnings.push({
     type: "dynamic-client-call", file: relative(file),
     line: source.slice(0, match.index || 0).split("\n").length,
@@ -103,6 +133,7 @@ for (const app of APPS) {
   const backend = new Map();
   const frontend = [];
   const warnings = [];
+  const navigationReferences = [];
   const missing = [];
   const appDir = path.join(ROOT, app.appDir);
   const apiRoot = path.join(appDir, "api");
@@ -116,7 +147,7 @@ for (const app of APPS) {
     methods.forEach((method) => backend.get(route).methods.add(method));
     backend.get(route).files.push(relative(file));
   });
-  for (const root of app.clientRoots) walk(path.join(ROOT, root), (file) => scanClientFile(file, frontend, warnings));
+  for (const root of app.clientRoots) walk(path.join(ROOT, root), (file) => scanClientFile(file, frontend, warnings, navigationReferences));
   for (const call of frontend) {
     const candidates = [...backend.values()].filter((item) => routeMatches(item.route, call.route));
     if (!candidates.length) missing.push({ ...call, problem: "NO_BACKEND_ROUTE" });
@@ -133,6 +164,7 @@ for (const app of APPS) {
     summary: { backendRoutes: backend.size, frontendCalls: frontend.length, missingContracts: missing.length, warnings: warnings.length, unreferencedBackendRoutes: unreferenced.length },
     backendRoutes: [...backend.values()].map((item) => ({ route: item.route, methods: [...item.methods].sort(), files: item.files })),
     frontendCalls: frontend,
+    navigationReferences,
     missingContracts: missing,
     warnings,
     unreferencedBackendRoutes: unreferenced

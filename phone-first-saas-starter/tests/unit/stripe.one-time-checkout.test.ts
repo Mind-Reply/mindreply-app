@@ -80,6 +80,28 @@ describe("POST /api/stripe/one-time-checkout", () => {
     expect(sessionsCreate).not.toHaveBeenCalled();
   });
 
+  it("accepts an expanded Stripe Product reference", async () => {
+    pricesRetrieve.mockResolvedValue({
+      ...validPrice,
+      product: { id: "prod_expanded_website_completion" },
+    });
+
+    const response = await POST(request({ email: "buyer@example.com" }));
+
+    expect(response.status).toBe(200);
+    expect(productsRetrieve).toHaveBeenCalledWith("prod_expanded_website_completion");
+    expect(sessionsCreate).toHaveBeenCalledOnce();
+  });
+
+  it("refuses an inactive Stripe Product", async () => {
+    productsRetrieve.mockResolvedValue({ id: "prod_website_completion", active: false });
+
+    const response = await POST(request({ email: "buyer@example.com" }));
+
+    expect(response.status).toBe(503);
+    expect(sessionsCreate).not.toHaveBeenCalled();
+  });
+
   it("refuses an inactive or incorrectly priced Stripe Price", async () => {
     pricesRetrieve.mockResolvedValue({ ...validPrice, active: false });
 
@@ -96,6 +118,7 @@ describe("POST /api/stripe/one-time-checkout", () => {
     expect(response.headers.get("cache-control")).toBe("no-store");
     expect(await response.json()).toEqual({ url: "https://checkout.stripe.test/session" });
     expect(pricesRetrieve).toHaveBeenCalledWith("price_website_completion");
+    expect(productsRetrieve).toHaveBeenCalledWith("prod_website_completion");
     expect(sessionsCreate).toHaveBeenCalledWith(
       expect.objectContaining({
         mode: "payment",

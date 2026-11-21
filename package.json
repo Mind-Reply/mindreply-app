@@ -20,7 +20,9 @@
     "db:pull": "drizzle-kit pull",
     "db:check": "drizzle-kit check",
     "db:up": "drizzle-kit up",
-    "test": "pnpm exec playwright test"
+    "test": "pnpm exec playwright test",
+    "route-map": "node scripts/route-map-check.mjs",
+    "verify:routes": "pnpm route-map"
   },
   "dependencies": {
     "@ai-sdk/otel": "^1.0.159",

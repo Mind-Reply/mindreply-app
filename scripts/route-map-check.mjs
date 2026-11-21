@@ -107,12 +107,23 @@ function scanClientFile(file, frontend, warnings, navigationReferences) {
   }
   const externalTemplate = /\bfetch\s*\(\s*\x60https?:\/\//g;
   const externalOffsets = new Set([...source.matchAll(externalTemplate)].map((item) => item.index || 0));
-  const classified = new Set(frontend.filter((item) => item.file === relative(file)).map((item) => item.route));
+  const configurableTemplate = /\bfetch\s*\(\s*\x60\$\{[^}]+\}[\s\S]{0,300}?\/api/g;
+  const configurableMatches = [...source.matchAll(configurableTemplate)];
+  const configurableOffsets = new Set(configurableMatches.map((item) => item.index || 0));
+  for (const match of configurableMatches) warnings.push({
+    type: "configurable-api-origin", file: relative(file),
+    line: source.slice(0, match.index || 0).split("\n").length,
+    message: "API request uses a configurable base URL; verify the target origin and backend contract separately."
+  });
   const navRe = /<a\b[^>]*\bhref\s*=\s*(["'])(\/api(?:\/[^"']*)?)\1/gi;
   for (const match of source.matchAll(navRe)) {
     const route = clientRoute(match[2]);
     if (route) navigationReferences.push({ route, method: "GET", file: relative(file), line: source.slice(0, match.index || 0).split("\n").length, source: "anchor-href" });
   }
+  const classified = new Set([
+    ...frontend.filter((item) => item.file === relative(file)).map((item) => item.route),
+    ...navigationReferences.filter((item) => item.file === relative(file)).map((item) => item.route)
+  ]);
   const literalRe = /(["'\x60])(\/api(?:\/[A-Za-z0-9_./:[\]$-]+)?)\1/g;
   for (const match of source.matchAll(literalRe)) {
     const route = clientRoute(match[2]);
@@ -122,7 +133,7 @@ function scanClientFile(file, frontend, warnings, navigationReferences) {
       message: "API path literal found outside a recognized fetch/axios call; inspect the custom request wrapper."
     });
   }
-  const dynamicCalls = [...source.matchAll(/\b(?:fetch|axios(?:\.request)?)\s*\(\s*(?!["'\x60{])/g)].filter((match) => !helperRanges.some(([start, end]) => (match.index || 0) >= start && (match.index || 0) < end)).filter((match) => !externalOffsets.has(match.index || 0));
+  const dynamicCalls = [...source.matchAll(/\b(?:fetch|axios(?:\.request)?)\s*\(\s*(?!["'\x60{])/g)].filter((match) => !helperRanges.some(([start, end]) => (match.index || 0) >= start && (match.index || 0) < end)).filter((match) => !externalOffsets.has(match.index || 0)).filter((match) => !configurableOffsets.has(match.index || 0));
   for (const match of dynamicCalls) warnings.push({
     type: "dynamic-client-call", file: relative(file),
     line: source.slice(0, match.index || 0).split("\n").length,

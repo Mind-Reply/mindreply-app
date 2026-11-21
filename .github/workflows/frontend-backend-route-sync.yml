@@ -1,0 +1,41 @@
+name: Frontend Backend Route Sync
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: route-sync-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  route-sync:
+    name: Validate frontend and backend route contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+
+      - name: Build route map and validate contracts
+        run: node scripts/route-map-check.mjs
+
+      - name: Publish route map report
+        if: always() && hashFiles('route-map-report.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-backend-route-map
+          path: route-map-report.json
+          if-no-files-found: warn
+          retention-days: 14

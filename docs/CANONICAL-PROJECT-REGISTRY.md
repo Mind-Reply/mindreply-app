@@ -36,7 +36,7 @@ Repository identity has been reconciled to `Mind-Reply/mindreply-app` using the 
 | Real-estate radar | `angellllkr-eng/real-estate-value-radar` | — | |
 | Agentic commerce CP | `angellllkr-eng/agentic-commerce-control-plane` | — | |
 | PatchTalk | `angellllkr-eng/patchtalk` | `patchtalk` | |
-| Nexus command plane | `angellllkr-eng/nexus-core` | `nexus-core` | |
+| Nexus / Quiet Routing infrastructure | `Mind-Reply/mindreply-app` (`infrastructure/nexus/`) | — | Source canonicalization under review; satellite `angellllkr-eng/nexus-core` preserved until parity review |
 | Private opportunity core | `angellllkr-eng/private-opportunity-core` | `private-opportunity-core` | |
 
 ### Competitive + brand (load on maintenance)

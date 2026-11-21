@@ -1,0 +1,46 @@
+# Codex - entire directory contains captured secrets in state/attachments, never commit
+.codex/
+
+# Vault secrets - NEVER commit plaintext secrets
+.vault/secrets/
+
+# Docker model blobs - too large for git
+.docker/models/
+.docker/*/blobs/
+
+# Raycast extension cache - not estate
+.config/raycast-x/
+
+# ── Agent local config ── NEVER commit AI agent state, tokens, sessions, or keys
+.grok/
+.claude.json
+.claude/
+.gemini/
+.kube/
+.copilot/
+.config/cagent/
+.config/fish/
+.agents/
+.mindreply-agents/
+
+# Node
+node_modules/
+.next/
+.vercel/
+.turbo/
+dist/
+build/
+
+# Env
+.env
+.env.local
+*.env
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Locks
+*.lock
+!package-lock.json
+!pnpm-lock.yaml

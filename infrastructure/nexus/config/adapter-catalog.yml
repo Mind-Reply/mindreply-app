@@ -1,0 +1,26 @@
+version: 1
+adapters:
+  workflow:
+    primary: n8n
+    fallback: webhook
+    purpose: orchestrate-multi-step-work
+  lightweight_automation:
+    primary: zapier-compatible-webhook
+    fallback: webhook
+    purpose: small-cross-app-automations
+  retrieval:
+    primary: vector-provider-adapter
+    fallback: postgres-full-text-search
+    purpose: grounded-memory-and-search
+  billing:
+    primary: stripe
+    purpose: signed-payment-events
+  source_control:
+    primary: github
+    purpose: code-release-governance
+  database:
+    primary: postgres
+    compatible: [supabase, neon, self-hosted-postgres]
+health:
+  stale_after_minutes: 15
+  unknown_is_not_healthy: true
